@@ -1,0 +1,65 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.fade:not(.show) {
+    display: none!important;
+}
+
+body{
+    background-color: #F5F5F5;
+    color: #000000;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    overflow-x: hidden!important;
+
+}
+
+main{
+    max-height: 100vh;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.inverse {
+    filter:invert(100);
+    //dark mode background
+    background-color: #000000;
+}
+
+.min-width-20{
+    min-width: 20%!important;
+}
+
+.min-width-30{
+    min-width: 31%!important;
+}
+
+.small-td{
+    width:20px!important;
+}
+
+// Path: src\app\styles\variables.scss
+$primary-color: #1E90FF;
+$secondary-color: #FF6347;
+$tertiary-color: #FFA500;
+$quaternary-color: #FFD700;
+$quinary-color: #00FF7F;
+$senary-color: #FF1493;
+$septenary-color: #FF00FF;
+$octonary-color: #FF4500;
+$nonary-color: #FF8C00;
+$denary-color: #FFDAB9;
+$background-color: #F5F5F5;
+$font-color: #000000;
+$font-color-light: #FFFFFF;
+$font-color-dark: #000000;
+$font-color-secondary: #808080;
+$font-color-tertiary: #A9A9A9;
+$font-color-quaternary: #C0C0C0;

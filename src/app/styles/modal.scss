@@ -1,0 +1,76 @@
+.btn-close {
+    margin: 0 !important;
+}
+
+.section {
+    margin-bottom: 15px;
+    border: 1px solid gray;
+    padding: 5px;
+    align-items: center;
+
+    label {
+        font-size: 11px;
+        white-space: nowrap;
+        min-width: 80px;
+    }
+
+    .normal-label {
+        min-width: inherit !important;
+    }
+
+    h6 {
+        font-size: 14px;
+    }
+
+    .date-input {
+        width: 30px;
+        height: 25px;
+        padding: 4px;
+        font-size: 10px;
+        margin-left: 5px;
+    }
+
+    input {
+        width: 90px;
+        margin: 0px 10px;
+        text-align: right;
+        max-width: 100%;
+        height: 25px;
+        font-size: 12px;
+        padding: 0px 5px;
+    }
+    input[type="checkbox"] {
+        width: 15px;
+        height: 15px;
+    }
+}
+input[type="color"] {
+    width: 50px;
+    height: 20px;
+    padding: 0px;
+    margin: 0px 10px;
+}
+
+.min-width {
+    min-width: 56px !important;
+}
+
+.table-wrapper {
+    position: relative;
+    overflow: auto;
+    height: 300px;
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 0;
+        border-spacing: 0;
+        tr:last-child {
+            position: sticky;
+            bottom: 0;
+            font-weight: bold;
+            text-align: center;
+            background-color: white; /* optional: set the background color to match the table */
+        }
+    }
+}

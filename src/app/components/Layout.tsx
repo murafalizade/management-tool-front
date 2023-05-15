@@ -1,0 +1,301 @@
+import React, { useEffect, useState } from "react";
+import { Dropdown, Nav, NavDropdown, Navbar } from "react-bootstrap";
+import "../styles/navbar.scss";
+import DarkModeToggler from "./DarkModeToggler";
+import SalaryModal from "./SalaryModal";
+import { useDispatch, useSelector } from "react-redux";
+import { changeModalInfo } from "../redux/showModalSlice";
+import Cookie from "../utility/Cookie";
+import { RootState } from "../redux/store";
+
+function Layout() {
+  const [showFileDropdown, setShowFileDropdown] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<string>("");
+  const dispatch = useDispatch();
+
+  const toggleOpenDropdown = () => {
+    setShowFileDropdown(!showFileDropdown);
+  };
+
+  const state = useSelector((root: RootState) => root.showModal);
+
+  useEffect(() => {
+    // get theme from cookie
+    const theme = localStorage.getItem("theme");
+    // if theme is dark then toggle checked state
+    if (theme === "dark") {
+      document.body.classList.add("inverse");
+    } else {
+      document.body.classList.remove("inverse");
+    }
+  }, []);
+
+  const openModal = (tab: string) => {
+    setActiveTab(tab);
+    setShowModal(true);
+  };
+
+  const logout = () => {
+    Cookie.eraseCookie(process.env.SECRET_TOKEN_KEY as string);
+    window.location.href = "/login";
+  };
+
+  return (
+    <>
+      <SalaryModal show={showModal} tab={activeTab} />
+      <Navbar bg='white' className="border-bottom mx-1 p-0" expand="lg">
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            <NavDropdown
+              title={<>Hərbi qulluqçular</>}
+              id="basic-nav-dropdown"
+              onToggle={toggleOpenDropdown}
+              show={showFileDropdown}
+            >
+              <NavDropdown.Item href="/">HQ siyahı</NavDropdown.Item>
+              <NavDropdown.Item href={state.selectedRow?.name?`/detail/${state.selectedRow?.name}`:'/'}>
+                HQ Şəxsi hesab
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/create">
+                HQ bu aydan əlavə et
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/create">
+                HQ vəzifəni dəyiş
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/create">
+                HQ bu aydan cədvəldən sil
+              </NavDropdown.Item>
+            </NavDropdown>
+
+            <NavDropdown title={"Məlumatlar"} id="basic-nav-dropdown">
+              <NavDropdown.Item
+                href="#idarələr"
+                onClick={() =>
+                  dispatch(
+                    changeModalInfo({
+                      tab: "idarələr",
+                      show: true,
+                    })
+                  )
+                }
+              >
+                Ştat və vəzifə maaşları
+              </NavDropdown.Item>
+              <NavDropdown.Item
+                onClick={() =>
+                  dispatch(
+                    changeModalInfo({
+                      tab: "Bölmə_və_Şöbələr",
+                      show: true,
+                    })
+                  )
+                }
+                href="#Bölmə_və_Şöbələr"
+              >
+                Hərbi rütbə maaşları
+              </NavDropdown.Item>
+              <NavDropdown.Item
+                onClick={() =>
+                  dispatch(
+                    changeModalInfo({
+                      tab: "Vəzifə_maaşları",
+                      show: true,
+                    })
+                  )
+                }
+                href="#Vəzifə_maaşları"
+              >
+                Digər faiz və kompen.
+              </NavDropdown.Item>
+            </NavDropdown>
+
+            <NavDropdown title={"Əməliyyatlar"} id="basic-nav-dropdown">
+              <NavDropdown.Item onClick={() => window.location.reload()}>
+                Maaşları yenidən hesabla
+              </NavDropdown.Item>
+              <NavDropdown
+                title={"Kirayə kompens. bu ay"}
+                id="basic-nav-dropdown"
+                drop="end"
+              >
+                <NavDropdown.Item href="#">Verilmir</NavDropdown.Item>
+                <NavDropdown.Item href="#">1 qat</NavDropdown.Item>
+                <NavDropdown.Item href="#">2 qat</NavDropdown.Item>
+                <NavDropdown.Item href="#">3 qat</NavDropdown.Item>
+              </NavDropdown>
+              <NavDropdown
+                title={"Ərzad kompens. bu ay"}
+                id="basic-nav-dropdown"
+                drop="end"
+              >
+                <NavDropdown.Item href="#">Verilmir</NavDropdown.Item>
+                <NavDropdown.Item href="#">1 qat</NavDropdown.Item>
+                <NavDropdown.Item href="#">2 qat</NavDropdown.Item>
+                <NavDropdown.Item href="#">3 qat</NavDropdown.Item>
+              </NavDropdown>
+              <NavDropdown
+                title={"BPM bu ay hamsına"}
+                id="basic-nav-dropdown"
+                drop="end"
+              >
+                <NavDropdown.Item href="#">Verilmir</NavDropdown.Item>
+                <NavDropdown.Item href="#">1 qat</NavDropdown.Item>
+                <NavDropdown.Item href="#">2 qat</NavDropdown.Item>
+                <NavDropdown.Item href="#">3 qat</NavDropdown.Item>
+              </NavDropdown>
+              <NavDropdown.Item href="#">
+                Bu ayın cədvəlini gələn aya köçür
+              </NavDropdown.Item>
+              <NavDropdown.Item onClick={() => window.location.reload()}>
+                Vakant vəzifələri yenilə
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#">Yoxlamalar</NavDropdown.Item>
+            </NavDropdown>
+
+            <NavDropdown title={"Cədvəllər"} id="basic-nav-dropdown">
+              <NavDropdown title={"Əsas"} id="basic-nav-dropdown" drop="end">
+                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
+                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
+              </NavDropdown>
+
+              <NavDropdown title={"Ərzaq"} id="basic-nav-dropdown" drop="end">
+                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
+                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
+              </NavDropdown>
+
+              <NavDropdown title={"Kirayə"} id="basic-nav-dropdown" drop="end">
+                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
+                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
+              </NavDropdown>
+
+              <NavDropdown
+                title={"Məzuniyyət"}
+                id="basic-nav-dropdown"
+                drop="end"
+              >
+                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
+                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
+              </NavDropdown>
+
+              <NavDropdown
+                title={"Ezamiyyət"}
+                id="basic-nav-dropdown"
+                drop="end"
+              >
+                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
+                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
+              </NavDropdown>
+
+              <NavDropdown
+                title={"Səhra pulu"}
+                id="basic-nav-dropdown"
+                drop="end"
+              >
+                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
+                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
+              </NavDropdown>
+
+              <NavDropdown
+                title={"Maddi yardım"}
+                id="basic-nav-dropdown"
+                drop="end"
+              >
+                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
+                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
+              </NavDropdown>
+
+              <NavDropdown
+                title={"Kəşf. Məzun."}
+                id="basic-nav-dropdown"
+                drop="end"
+              >
+                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
+                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
+              </NavDropdown>
+
+              <NavDropdown
+                title={"Kəşf. Xəstə."}
+                id="basic-nav-dropdown"
+                drop="end"
+              >
+                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
+                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
+              </NavDropdown>
+
+              <NavDropdown
+                title={"Kəşf. Mükafat."}
+                id="basic-nav-dropdown"
+                drop="end"
+              >
+                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
+                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
+              </NavDropdown>
+
+              <NavDropdown
+                title={"Yol xərci"}
+                id="basic-nav-dropdown"
+                drop="end"
+              >
+                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
+                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
+              </NavDropdown>
+
+              <NavDropdown
+                title={"Yük xərci"}
+                id="basic-nav-dropdown"
+                drop="end"
+              >
+                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
+                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
+              </NavDropdown>
+
+              <NavDropdown title={"Təxris"} id="basic-nav-dropdown" drop="end">
+                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
+                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
+              </NavDropdown>
+
+              <NavDropdown title={"BPM"} id="basic-nav-dropdown" drop="end">
+                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
+                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
+              </NavDropdown>
+
+              <NavDropdown title={"2 qat"} id="basic-nav-dropdown" drop="end">
+                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
+                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
+              </NavDropdown>
+
+              <NavDropdown title={"Aliment"} id="basic-nav-dropdown" drop="end">
+                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
+                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
+              </NavDropdown>
+            </NavDropdown>
+
+            <NavDropdown title={"Hesabatlar"} id="basic-nav-dropdown">
+              <NavDropdown.Item href="#">Icmal cədvəli</NavDropdown.Item>
+              <NavDropdown.Item href="#">Statistik məlumatlar</NavDropdown.Item>
+              <NavDropdown.Item href="#">6.MX saylı forma</NavDropdown.Item>
+              <NavDropdown.Item href="#">
+                Maddi yardım almayanlar
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#">
+                Məzuniyyət pulu almayanlar
+              </NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        </Navbar.Collapse>
+        <Navbar expand="lg" className="justify-content-end mx-2">
+          <DarkModeToggler />
+          <Navbar.Text onClick={() => logout()}>
+            <a href="#logout" className="text-decoration-none ">
+              Çıxış
+            </a>
+          </Navbar.Text>
+        </Navbar>
+      </Navbar>
+    </>
+  );
+}
+
+export default Layout;
