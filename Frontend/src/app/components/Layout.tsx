@@ -12,6 +12,7 @@ function Layout() {
   const [showFileDropdown, setShowFileDropdown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>("");
+  const [selectedRow, setSelectedRow] = useState<string>("");
   const dispatch = useDispatch();
 
   const toggleOpenDropdown = () => {
@@ -41,21 +42,43 @@ function Layout() {
     window.location.href = "/login";
   };
 
+  const chooseRow = (row: string) => {
+    if (row === selectedRow) return setSelectedRow("");
+    setSelectedRow(row);
+  };
+
   return (
     <>
       <SalaryModal show={showModal} tab={activeTab} />
-      <Navbar bg='white' className="border-bottom mx-1 p-0" expand="lg">
+      <Navbar
+        style={{ height: "35px" }}
+        bg="white"
+        className="border-bottom  p-0"
+        expand="lg"
+      >
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
             <NavDropdown
               title={<>Hərbi qulluqçular</>}
               id="basic-nav-dropdown"
+              onClick={() => chooseRow("Hərbi qulluqçular")}
+              style={
+                selectedRow === "Hərbi qulluqçular"
+                  ? { backgroundColor: "#1E90FF",color:"white" }
+                  : {}
+              }
               onToggle={toggleOpenDropdown}
               show={showFileDropdown}
             >
               <NavDropdown.Item href="/">HQ siyahı</NavDropdown.Item>
-              <NavDropdown.Item href={state.selectedRow?.name?`/detail/${state.selectedRow?.name}`:'/'}>
+              <NavDropdown.Item
+                href={
+                  state.selectedRow?.name
+                    ? `/detail/${state.selectedRow?.name}`
+                    : "/"
+                }
+              >
                 HQ Şəxsi hesab
               </NavDropdown.Item>
               <NavDropdown.Item href="/create">
@@ -69,7 +92,14 @@ function Layout() {
               </NavDropdown.Item>
             </NavDropdown>
 
-            <NavDropdown title={"Məlumatlar"} id="basic-nav-dropdown">
+            <NavDropdown
+              title={"Məlumatlar"}
+              onClick={() => chooseRow("Məlumatlar")}
+              style={
+                selectedRow === "Məlumatlar" ? { backgroundColor: "#1E90FF",color:"white" } : {}
+              }
+              id="basic-nav-dropdown"
+            >
               <NavDropdown.Item
                 href="#idarələr"
                 onClick={() =>
@@ -111,7 +141,14 @@ function Layout() {
               </NavDropdown.Item>
             </NavDropdown>
 
-            <NavDropdown title={"Əməliyyatlar"} id="basic-nav-dropdown">
+            <NavDropdown
+              onClick={() => chooseRow("Əməliyyatlar")}
+              style={
+                selectedRow === "Əməliyyatlar" ? { backgroundColor: "#1E90FF",color:"white" } : {}
+              }
+              title={"Əməliyyatlar"}
+              id="basic-nav-dropdown"
+            >
               <NavDropdown.Item onClick={() => window.location.reload()}>
                 Maaşları yenidən hesabla
               </NavDropdown.Item>
@@ -154,7 +191,8 @@ function Layout() {
               <NavDropdown.Item href="#">Yoxlamalar</NavDropdown.Item>
             </NavDropdown>
 
-            <NavDropdown title={"Cədvəllər"} id="basic-nav-dropdown">
+            <NavDropdown onClick={()=>chooseRow("Cədvəllər")}
+              style={selectedRow==="Cədvəllər"?{backgroundColor:"#1E90FF",color:"white"}:{}}  title={"Cədvəllər"} id="basic-nav-dropdown">
               <NavDropdown title={"Əsas"} id="basic-nav-dropdown" drop="end">
                 <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
                 <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
@@ -272,7 +310,8 @@ function Layout() {
               </NavDropdown>
             </NavDropdown>
 
-            <NavDropdown title={"Hesabatlar"} id="basic-nav-dropdown">
+            <NavDropdown  onClick={()=>chooseRow("Hesabatlar")}
+              style={selectedRow==="Hesabatlar"?{backgroundColor:"#1E90FF",color:"white"}:{}} title={"Hesabatlar"} id="basic-nav-dropdown">
               <NavDropdown.Item href="#">Icmal cədvəli</NavDropdown.Item>
               <NavDropdown.Item href="#">Statistik məlumatlar</NavDropdown.Item>
               <NavDropdown.Item href="#">6.MX saylı forma</NavDropdown.Item>

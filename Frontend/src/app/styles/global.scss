@@ -7,6 +7,16 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.selected-item{
+    background-color: #1E90FF!important;
+    color: #FFFFFF!important;
+}
+
+.dropdown-item.selected-item {
+    background-color: #1E90FF!important;
+    color: #FFFFFF!important;
+  }
+
 .fade:not(.show) {
     display: none!important;
 }

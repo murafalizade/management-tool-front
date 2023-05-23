@@ -242,6 +242,15 @@ const CalculatingModal = () => {
                 </div>
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
+                  <label>Kibertəhlük. əlav.</label>
+                  <input
+                    type="text"
+                    className="form-control w-100"
+                    value={"453,21"}
+                  />
+                </div>
+
+                <div className="d-flex  align-items-center justify-content-between my-1">
                   <label>Fəxri ada görə</label>
                   <input
                     type="text"
