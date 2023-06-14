@@ -38,10 +38,10 @@ const Organizations = () => {
       return;
     }
     Swal.fire({
-      title: "Do you want to save the changes?",
+      title: "Silmək istədiyinizə əminsiniz?",
       showDenyButton: true,
-      confirmButtonText: "Save",
-      denyButtonText: `Don't save`,
+      confirmButtonText: "Bəli",
+      denyButtonText: `Xeyr`,
     }).then(async (result: any) => {
       /* Read more about isConfirmed, isDenied below */
       const newOrganizations = organizations.filter(
@@ -53,7 +53,7 @@ const Organizations = () => {
         }
         setOrganizations(newOrganizations);
       } else if (result.isDenied) {
-        Swal.fire("Changes are not saved", "", "info");
+        Swal.fire("Dəyişiklik baş tutmadı", "", "info");
       }
     });
   };

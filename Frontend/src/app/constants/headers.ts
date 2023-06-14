@@ -1,4 +1,5 @@
-import {  Column } from "react-table";
+import { Column } from "react-table";
+import { EmployeeData } from "../types/EmployeeData";
 
 type TableData = {
   name: string;
@@ -8,6 +9,95 @@ type TableData = {
   empty?: string;
   total2?: number;
 };
+
+export const createColumns: Column<EmployeeData>[] = [
+  {
+    Header: "Soyadı",
+    accessor: "lastName",
+  },
+  {
+    Header: "Adı",
+    accessor: "firstName",
+  },
+  {
+    Header: "Atasının adı",
+    accessor: "fatherName",
+  },
+  {
+    Header: "Sosial Sığorta №",
+    accessor: "injuranceNo",
+  },
+  {
+    Header: "Doğum tarixi",
+    accessor: "birthDate",
+  },
+  {
+    Header: "FIN",
+    accessor: "fin",
+  },
+  {
+    Header: "Təyin olunma",
+    columns: [
+      {
+        Header: "vaxtı",
+        id: "date",
+      },
+      {
+        Header: "əmri",
+        id: "order",
+      },
+    ],
+  },
+  {
+    Header: "Qəbul olunma",
+    columns: [
+      {
+        Header: "vaxtı",
+      },
+      {
+        Header: "əmri",
+      },
+    ],
+  },
+  {
+    Header: "Rütbənin dəyişdirilməsi",
+  },
+  {
+    Header: "Vəzifənin dəyişdirilməsi",
+  },
+  {
+    Header: "Məharət dərəcəsi",
+    columns: [
+      {
+        Header: "verilmə tarixi",
+      },
+      {
+        Header: "Məharət dərəcəsi",
+      },
+    ],
+  },
+  {
+    Header: "Təmsilçilik"
+  },
+  {
+    Header: "Məxfilik"
+  },{
+    Header: "Zərərliyə görə"
+  },{
+    Header: "Kibertəhlükəsizlik əlavəsi"
+  },{
+    Header: "Xarici dil",
+  },
+  {
+    Header: "Kəşf. mükaf.",
+  },
+  {
+    Header: "Elmi dərəcə",
+  },
+  {
+    Header: "Fəxri ad",
+  },
+];
 
 const columns: Column<TableData>[] = [
   {
@@ -71,7 +161,7 @@ const columns: Column<TableData>[] = [
         Header: "Zərərliyə görə",
       },
       {
-        Header:"Kibertəhlükəsizlik əlavəsi"
+        Header: "Kibertəhlükəsizlik əlavəsi",
       },
       {
         Header: "Xarici dil",
@@ -201,7 +291,7 @@ const columns: Column<TableData>[] = [
   },
 ];
 
-const columns2= [
+const columns2 = [
   {
     Header: "Rütbə",
   },
@@ -323,7 +413,7 @@ const columns2= [
   },
 ];
 
-const detailsColumns:Column<TableData>[] = [
+const detailsColumns: Column<TableData>[] = [
   {
     Header: "Il",
   },
@@ -514,9 +604,5 @@ const detailsColumns:Column<TableData>[] = [
   },
 ];
 
-
-
-
-
 export default columns;
-export { columns2,detailsColumns };
+export { columns2, detailsColumns };

@@ -1,0 +1,40 @@
+.employee-table{
+    width: 200%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 1px solid #ddd;
+    font-size: 13px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    overflow-x: scroll;
+}
+
+
+
+
+.table_input{
+    font-size: 13px;
+    width: 100%;
+    border:none;
+    background-color: #f5f5f5;
+    word-break: nowrap;
+    word-wrap: nowrap;
+    white-space: nowrap;
+}
+
+.cell{
+    white-space: nowrap;
+}
+
+ .selected{
+    background-color: #d8e4eb!important;
+}
+
+
+tr:hover .table_input{
+        background-color: #e3e3e3!important;
+}
+
+tr:hover .selected{
+    background-color: #c8d3d9!important;
+}

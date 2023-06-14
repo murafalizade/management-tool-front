@@ -40,6 +40,8 @@ namespace WebApplication1
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IPositionRepository, PositionRepository>();
             services.AddScoped<IPositionService, PositionService>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
 
             services.AddCors(
                 options =>

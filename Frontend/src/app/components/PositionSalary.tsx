@@ -45,7 +45,7 @@ const PositionSalary = () => {
           <input
             type="number"
             max="2023"
-            value={2023}
+            defaultValue={2023}
             className="form-control w-50 me-2 text-rigth"
           />
           <select  defaultValue={5} className="form-control w-75 mx-2">

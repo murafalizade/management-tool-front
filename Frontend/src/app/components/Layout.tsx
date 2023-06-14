@@ -4,15 +4,17 @@ import "../styles/navbar.scss";
 import DarkModeToggler from "./DarkModeToggler";
 import SalaryModal from "./SalaryModal";
 import { useDispatch, useSelector } from "react-redux";
-import { changeModalInfo } from "../redux/showModalSlice";
+import { changeModalInfo, showModalCreate } from "../redux/showModalSlice";
 import Cookie from "../utility/Cookie";
 import { RootState } from "../redux/store";
+import CreateEmployeeModal from "./CreateEmployeeModal";
 
 function Layout() {
   const [showFileDropdown, setShowFileDropdown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>("");
   const [selectedRow, setSelectedRow] = useState<string>("");
+  const [selectedSubRow, setSelectedSubRow] = useState<string>("");
   const dispatch = useDispatch();
 
   const toggleOpenDropdown = () => {
@@ -47,12 +49,19 @@ function Layout() {
     setSelectedRow(row);
   };
 
+  const chooseSubRow = (row: string) => {
+    if (row === selectedSubRow) return setSelectedSubRow("");
+    setSelectedSubRow(row);
+  };
+
   return (
     <>
       <SalaryModal show={showModal} tab={activeTab} />
+      <CreateEmployeeModal  />
       <Navbar
         style={{ height: "35px" }}
         bg="white"
+        
         className="border-bottom  p-0"
         expand="lg"
       >
@@ -81,7 +90,7 @@ function Layout() {
               >
                 HQ Şəxsi hesab
               </NavDropdown.Item>
-              <NavDropdown.Item href="/create">
+              <NavDropdown.Item onClick={()=>dispatch(showModalCreate())}>
                 HQ bu aydan əlavə et
               </NavDropdown.Item>
               <NavDropdown.Item href="/create">
@@ -153,6 +162,10 @@ function Layout() {
                 Maaşları yenidən hesabla
               </NavDropdown.Item>
               <NavDropdown
+                onClick={() => chooseSubRow("Kirayə kompens. bu ay")}
+                style={
+                  selectedSubRow === "Kirayə kompens. bu ay" ? { backgroundColor: "#1E90FF",color:"white" } : {}
+                }
                 title={"Kirayə kompens. bu ay"}
                 id="basic-nav-dropdown"
                 drop="end"
@@ -163,6 +176,10 @@ function Layout() {
                 <NavDropdown.Item href="#">3 qat</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown
+                  onClick={() => chooseSubRow("Ərzad kompens. bu ay")}
+                  style={
+                    selectedSubRow === "Ərzad kompens. bu ay" ? { backgroundColor: "#1E90FF",color:"white" } : {}
+                  }
                 title={"Ərzad kompens. bu ay"}
                 id="basic-nav-dropdown"
                 drop="end"
@@ -173,6 +190,10 @@ function Layout() {
                 <NavDropdown.Item href="#">3 qat</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown
+               onClick={() => chooseSubRow("BPM bu ay hamsına")}
+               style={
+                 selectedSubRow === "BPM bu ay hamsına" ? { backgroundColor: "#1E90FF",color:"white" } : {}
+               }
                 title={"BPM bu ay hamsına"}
                 id="basic-nav-dropdown"
                 drop="end"

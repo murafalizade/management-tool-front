@@ -9,6 +9,7 @@ export interface ModalShowType {
   show: boolean;
   modalInfo: IModalTabProps;
   selectedRow: any;
+  showCreateModal: boolean;
 }
 
 const initialState: ModalShowType = {
@@ -17,6 +18,7 @@ const initialState: ModalShowType = {
     tab: "",
     show: false,
   },
+  showCreateModal: false,
   selectedRow: {},
 };
 
@@ -27,6 +29,15 @@ export const showModalSlicer = createSlice({
     showModal: (state) => {
       state.show = true;
     },
+
+    showModalCreate: (state) => {
+      state.showCreateModal = true;
+    },
+
+    hideModalCreate: (state) => {
+      state.showCreateModal = false;
+    },
+
     hideModal: (state) => {
       state.show = false;
     },
@@ -39,7 +50,13 @@ export const showModalSlicer = createSlice({
   },
 });
 
-export const { showModal, hideModal, changeModalInfo, setSelectedRow } =
-  showModalSlicer.actions;
+export const {
+  showModal,
+  hideModal,
+  changeModalInfo,
+  setSelectedRow,
+  showModalCreate,
+  hideModalCreate,
+} = showModalSlicer.actions;
 
 export default showModalSlicer.reducer;

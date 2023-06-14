@@ -17,6 +17,7 @@ namespace WebApplication1
             CreateMap<PositionInputcDto, Position>();
             CreateMap<Position, PositionResultDto>();
             CreateMap<Position, PositionBasicDto>().ReverseMap();
+            CreateMap<EmployeeInputDto, Employee>();
         }
     }
 }
