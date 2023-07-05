@@ -73,29 +73,40 @@ export const createColumns: Column<EmployeeData>[] = [
       },
       {
         Header: "Məharət dərəcəsi",
+        accessor: "meharetlilik",
       },
     ],
   },
   {
-    Header: "Təmsilçilik"
+    Header: "Təmsilçilik",
+    accessor: "temsilcilik",
   },
   {
-    Header: "Məxfilik"
-  },{
-    Header: "Zərərliyə görə"
-  },{
-    Header: "Kibertəhlükəsizlik əlavəsi"
-  },{
+    Header: "Məxfilik",
+    accessor: "mexfilik",
+  },
+  {
+    Header: "Zərərliyə görə",
+    accessor: "zererlilik",
+  },
+  {
+    Header: "Kibertəhlükəsizlik əlavəsi",
+  },
+  {
     Header: "Xarici dil",
+    accessor: "xariciDil",
   },
   {
     Header: "Kəşf. mükaf.",
+    accessor: "kesfiyyat",
   },
   {
     Header: "Elmi dərəcə",
+    accessor: "elmiDerece",
   },
   {
     Header: "Fəxri ad",
+    accessor: "fexriAd",
   },
 ];
 

@@ -196,3 +196,4 @@ C:\Users\HP\OneDrive\Desktop\WEB\MyProjects\hr\API\WebApplication1\obj\Debug\net
 C:\Users\HP\OneDrive\Desktop\WEB\MyProjects\hr\API\WebApplication1\obj\Debug\net5.0\ref\WebApplication1.dll
 C:\Users\HP\OneDrive\Desktop\WEB\MyProjects\hr\API\WebApplication1\obj\Debug\net5.0\WebApplication1.pdb
 C:\Users\HP\OneDrive\Desktop\WEB\MyProjects\hr\API\WebApplication1\obj\Debug\net5.0\WebApplication1.genruntimeconfig.cache
+C:\Users\HP\OneDrive\Desktop\WEB\MyProjects\hr\API\WebApplication1\bin\Debug\net5.0\WebApplication1.Views.dll

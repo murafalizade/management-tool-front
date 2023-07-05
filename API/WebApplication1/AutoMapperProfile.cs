@@ -18,6 +18,9 @@ namespace WebApplication1
             CreateMap<Position, PositionResultDto>();
             CreateMap<Position, PositionBasicDto>().ReverseMap();
             CreateMap<EmployeeInputDto, Employee>();
+            CreateMap<EmployeeEditDto,Employee>();
+            CreateMap<RecordCreationDto,EmployeeSalaryRecord>();
+            CreateMap<EmployeeSalaryRecord, EmployeeSalaryResultDto>();
         }
     }
 }

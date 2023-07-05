@@ -16,5 +16,6 @@ namespace WebApplication1.Data
         public DbSet<Position> Positions { get; set; }
         public DbSet<Rank> Ranks { get; set; }
         public DbSet<Employee> Employees { get; set; }
-    }
+        public DbSet<EmployeeSalaryRecord> EmployeeSalaryRecords { get; set; }
+     }
 }

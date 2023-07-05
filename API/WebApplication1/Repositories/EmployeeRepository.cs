@@ -24,7 +24,7 @@ namespace WebApplication1.Repositories
         {
             _context.Employees.Remove(_context.Employees.Find(employeeId));
             await _context.SaveChangesAsync();
-           
+
         }
 
         public async Task<Employee> GetEmployeeByFin(string fin)
@@ -34,8 +34,9 @@ namespace WebApplication1.Repositories
 
         public async Task<Employee> GetEmployeeById(int employeeId)
         {
-           return await _context.Employees.FindAsync(employeeId);
-
+            return await _context.Employees.Include(x => x.Rank).
+             Include(x => x.Position).
+            FirstOrDefaultAsync(x => x.Id == employeeId);
         }
 
         public async Task<List<Employee>> GetEmployees()

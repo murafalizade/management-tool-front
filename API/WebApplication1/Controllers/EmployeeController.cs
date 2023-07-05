@@ -59,7 +59,7 @@ namespace WebApplication1.Controllers{
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateEmployee([FromBody] Employee employee){
+        public async Task<IActionResult> UpdateEmployee([FromBody] EmployeeEditDto employee){
             ErrorHandelerDto obj = await _employeeService.UpdateEmployee(employee);
             if(obj.StatusCode == 200){
                 return Ok(obj.data);

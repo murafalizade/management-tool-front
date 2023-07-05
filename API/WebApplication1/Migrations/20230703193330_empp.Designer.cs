@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230703193330_empp")]
+    partial class empp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,7 +78,7 @@ namespace WebApplication1.Migrations
                     b.Property<string>("ExtraMoney")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ExtraMoney2")
+                    b.Property<string>("ExtraMoneyReason")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FatherName")
@@ -106,9 +108,6 @@ namespace WebApplication1.Migrations
                     b.Property<string>("Mexfilik")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PTMoney")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("PositionId")
                         .HasColumnType("int");
 
@@ -134,146 +133,6 @@ namespace WebApplication1.Migrations
                     b.HasIndex("RankId");
 
                     b.ToTable("Employees");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.EmployeeSalaryRecord", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("AccountNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("Aliment")
-                        .HasColumnType("float");
-
-                    b.Property<double>("BPM")
-                        .HasColumnType("float");
-
-                    b.Property<double>("BPMPercentage")
-                        .HasColumnType("float");
-
-                    b.Property<double>("CixisMuv")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("DSMF")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Discount")
-                        .HasColumnType("float");
-
-                    b.Property<double>("ElmiDerece")
-                        .HasColumnType("float");
-
-                    b.Property<int?>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Extra211100")
-                        .HasColumnType("float");
-
-                    b.Property<double>("ExtraGivenMoney")
-                        .HasColumnType("float");
-
-                    b.Property<double>("ExtraMoney")
-                        .HasColumnType("float");
-
-                    b.Property<double>("ExtraMoney2")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Ezamiyyet")
-                        .HasColumnType("float");
-
-                    b.Property<double>("FexriAd")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Food")
-                        .HasColumnType("float");
-
-                    b.Property<double>("HealthInsurance")
-                        .HasColumnType("float");
-
-                    b.Property<double>("KesfMezun")
-                        .HasColumnType("float");
-
-                    b.Property<double>("KesfXeste")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Kesfiyyat")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Kesirler")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Kibertehlukesizlik")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Kiraye")
-                        .HasColumnType("float");
-
-                    b.Property<double>("MaddiYardim")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Meharetlilik")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Mexfilik")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Mezuniyyet")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Muavin")
-                        .HasColumnType("float");
-
-                    b.Property<double>("PTMoney")
-                        .HasColumnType("float");
-
-                    b.Property<double>("PositionSalary")
-                        .HasColumnType("float");
-
-                    b.Property<double>("RankSalary")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime>("RecordDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Sehra")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Tax")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Temsilcilik")
-                        .HasColumnType("float");
-
-                    b.Property<double>("TotalDSMF")
-                        .HasColumnType("float");
-
-                    b.Property<double>("XIMoney")
-                        .HasColumnType("float");
-
-                    b.Property<double>("XariciDil")
-                        .HasColumnType("float");
-
-                    b.Property<double>("YolXerci")
-                        .HasColumnType("float");
-
-                    b.Property<double>("YukPulu")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Zererlilik")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("EmployeeSalaryRecords");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Position", b =>
@@ -365,15 +224,6 @@ namespace WebApplication1.Migrations
                     b.Navigation("Position");
 
                     b.Navigation("Rank");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.EmployeeSalaryRecord", b =>
-                {
-                    b.HasOne("WebApplication1.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId");
-
-                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Position", b =>

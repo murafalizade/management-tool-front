@@ -42,6 +42,10 @@ namespace WebApplication1
             services.AddScoped<IPositionService, PositionService>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IRankRepository, RankRepository>();
+            services.AddScoped<IRankService,RankService>();
+            services.AddScoped<IEmployeeSalaryRecordRepository,EmployeeSalaryRecordRepository>();
+            services.AddScoped<IEmployeeSalaryRecordService, EmployeeSalaryRecordService>();
 
             services.AddCors(
                 options =>

@@ -10,10 +10,12 @@ namespace WebApplication1.Services
     class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IEmployeeSalaryRecordRepository _employeeSalaryRecordRepository;
         private readonly IMapper _mapper;
-        public EmployeeService(IEmployeeRepository employeeRepository, IMapper mapper)
+        public EmployeeService(IEmployeeRepository employeeRepository, IEmployeeSalaryRecordRepository employeeSalaryRecordRepository, IMapper mapper)
         {
             _employeeRepository = employeeRepository;
+            _employeeSalaryRecordRepository = employeeSalaryRecordRepository;
             _mapper = mapper;
         }
         public async Task<ErrorHandelerDto> AddEmployee(EmployeeInputDto employee)
@@ -33,6 +35,8 @@ namespace WebApplication1.Services
                 }
                 Employee obj1 = _mapper.Map<Employee>(employee);
                 await _employeeRepository.AddEmployee(obj1);
+                RecordCreationDto x = new RecordCreationDto { EmployeeId = 9 };
+                await _employeeSalaryRecordRepository.AddEmployee(_mapper.Map<EmployeeSalaryRecord>(x));
                 return new ErrorHandelerDto
                 {
                     data = "Employee Added Successfully",
@@ -140,11 +144,11 @@ namespace WebApplication1.Services
             }
         }
 
-        public async Task<ErrorHandelerDto> UpdateEmployee(Employee employee)
+        public async Task<ErrorHandelerDto> UpdateEmployee(EmployeeEditDto employee)
         {
             try
             {
-                await _employeeRepository.UpdateEmployee(employee);
+                await _employeeRepository.UpdateEmployee(_mapper.Map<Employee>(employee));
                 return new ErrorHandelerDto
                 {
                     data = "Employee Updated Successfully",
