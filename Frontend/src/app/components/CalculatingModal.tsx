@@ -4,12 +4,14 @@ import { Button, Col, Container, Modal, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { hideModal } from "../redux/showModalSlice";
+import EmployeeService from "../api/employeeService";
 
 const CalculatingModal = () => {
   const state = useSelector((state: RootState) => state.showModal);
   const dispatch = useDispatch();
 
-  const [info, setInfo] = useState({
+  const [info, setInfo] = useState<any>({
+    recordDateYear: "2021",
     rankSalary: "12,23",
     rankSalaryByHand: false,
     positionSalary: "234,23",
@@ -54,20 +56,35 @@ const CalculatingModal = () => {
     setInfo({ ...info, [e.target.name]: e.target.value });
   };
 
+  const getRecord = async () => {
+    const record = await EmployeeService.getEmployeeSalaryRecordById(26);
+    console.log(record);
+    setInfo(record);
+  };
+
+  useEffect(() => {
+    console.log(info);
+    getRecord();
+  }, []);
+
   return (
     <Modal size="xl" show={state.show} onHide={() => dispatch(hideModal())}>
       <Modal.Header closeButton>
-        <Modal.Title className="fs-6">2023 il May</Modal.Title>
-        <Modal.Title className="fs-6">Ismayilov Qurban Adil</Modal.Title>
+        <Modal.Title className="fs-6">
+          {info?.recordDateYear} il {info.recordDateMonth}
+        </Modal.Title>
+        <Modal.Title className="fs-6">{info.fullName}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="section pt-4">
           <ul>
             <li className="list-group-item">
-              İdarə: Şəxsi heyət Baş idarəsi(Q1)
+              İdarə: {info.employeePositionDepartmentAdminstrationName}
             </li>
             <li className="list-group-item">Ştat üzrə: KATİBLİK</li>
-            <li className="list-group-item">Vəzifə: Katibliyin rəsi</li>
+            <li className="list-group-item">
+              Vəzifə: {info.employeePositionName}
+            </li>
             <li className="list-group-item">İcra edir: KATİBLİK</li>
             <li className="list-group-item">Vezife: Katibliyin rəisi</li>
           </ul>
@@ -75,7 +92,7 @@ const CalculatingModal = () => {
 
         <div className="d-flex section">
           <label>H/rütbə</label>
-          <input type="text" className="form-control" />
+          <input type="text" value={info.employeeRankName} className="form-control" />
 
           <label>Bu ayn 1-nə olan Xİ (il,ay,gün)</label>
           <input type="text" className="form-control date-input" />
@@ -130,8 +147,14 @@ const CalculatingModal = () => {
                   >
                     əl ilə
                   </label>
-                  <input type="text" className="form-control" disabled={!info.positionSalaryByHand}
-                  name="positionSalary" value={info.positionSalary} onChange={handleInput} />
+                  <input
+                    type="text"
+                    className="form-control"
+                    disabled={!info.positionSalaryByHand}
+                    name="positionSalary"
+                    value={info.positionSalary}
+                    onChange={handleInput}
+                  />
                 </div>
 
                 <div className="d-flex justify-content-between my-1">
@@ -165,7 +188,7 @@ const CalculatingModal = () => {
                       <option key={item}>{item}</option>
                     ))}
                   </select>
-                  %<label className="normal-label">507,60</label>
+                  %<label className="normal-label">{info.meharetlilik}</label>
                 </div>
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
@@ -175,7 +198,7 @@ const CalculatingModal = () => {
                       <option key={item}>{item}</option>
                     ))}
                   </select>
-                  %<label className="normal-label">507,60</label>
+                  %<label className="normal-label">{info.temsilcilik}</label>
                 </div>
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
@@ -185,7 +208,7 @@ const CalculatingModal = () => {
                       <option key={item}>{item}</option>
                     ))}
                   </select>
-                  %<label className="normal-label">507,60</label>
+                  %<label className="normal-label">{info.zererlilik}</label>
                 </div>
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
@@ -195,7 +218,7 @@ const CalculatingModal = () => {
                       <option key={item}>{item}</option>
                     ))}
                   </select>
-                  %<label className="normal-label">507,60</label>
+                  %<label className="normal-label">{info.mexfilik}</label>
                 </div>
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
@@ -211,7 +234,7 @@ const CalculatingModal = () => {
                   <input
                     type="text"
                     className="form-control w-50"
-                    value={"453,21"}
+                    value={info.xariciDil}
                   />
                 </div>
 
@@ -228,7 +251,7 @@ const CalculatingModal = () => {
                   <input
                     type="text"
                     className="form-control w-75"
-                    value={"453,21"}
+                    value={info.kesfiyyat}
                   />
                 </div>
 
@@ -237,7 +260,7 @@ const CalculatingModal = () => {
                   <input
                     type="text"
                     className="form-control w-100"
-                    value={"453,21"}
+                    value={info.elmiDerece}
                   />
                 </div>
 
@@ -246,7 +269,7 @@ const CalculatingModal = () => {
                   <input
                     type="text"
                     className="form-control w-100"
-                    value={"453,21"}
+                    value={info.kibertehlukesizlik}
                   />
                 </div>
 
@@ -255,7 +278,7 @@ const CalculatingModal = () => {
                   <input
                     type="text"
                     className="form-control w-100"
-                    value={"453,21"}
+                    value={info.fexriAd}
                   />
                 </div>
 
@@ -264,7 +287,7 @@ const CalculatingModal = () => {
                   <input
                     type="text"
                     className="form-control w-100"
-                    value={"453,21"}
+                    value={info.ExtraMoney}
                   />
                 </div>
 
@@ -273,13 +296,30 @@ const CalculatingModal = () => {
                   <input
                     type="text"
                     className="form-control w-100"
-                    value={"453,21"}
+                    value={info.ExtraMoney2}
                   />
                 </div>
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
                   <label>Cəmi hesablanıb:</label>
-                  <b>1233.23</b>
+                  <b>
+                    {
+                      // sum of all
+                      info.meharetlilik +
+                        info.temsilcilik +
+                        info.zererlilik +
+                        info.rankSalary+
+                        info.positionSalary+
+                        info.mexfilik +
+                        info.xariciDil +
+                        info.kesfiyyat +
+                        info.elmiDerece +
+                        // info.kibertehlukesizlik +
+                        info.fexriAd
+                      // info.ExtraMoney +
+                      // info.ExtraMoney2
+                    }
+                  </b>
                 </div>
               </div>
             </Col>

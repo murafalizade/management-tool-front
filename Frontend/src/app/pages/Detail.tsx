@@ -1,56 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import { detailsColumns } from "../constants/headers";
 import { useTable } from "react-table";
-type TableData = {
-  name: string;
-  age: number;
-  email: string;
-  total?: number;
-  date?: string;
-  total2?: number;
-  empty?: string;
-};
+import EmployeeService from "../api/employeeService";
+import { SalaryRecordData } from "../types/SalaryRecordData";
+import { useParams } from "react-router-dom";
+
+
 const Detail = () => {
-  const data: TableData[] = [
-    {
-      name: "John Doe",
-      age: 30,
-      email: "johndoe@example.com",
-      date: "2021-05-05",
-    },
-    {
-      name: "John Doe",
-      age: 30,
-      email: "johndoe@example.com",
-      date: "2021-05-05",
-    },
-    {
-      name: "John Doe",
-      age: 30,
-      email: "johndoe@example.com",
-      date: "2021-05-05",
-    },
-    {
-      name: "John Doe",
-      age: 30,
-      email: "johndoe@example.com",
-      date: "2021-05-05",
-    },
-    {
-      name: "John Doe",
-      age: 30,
-      email: "johndoe@example.com",
-      date: "2021-05-05",
-    },
-    {
-      name: "John Doe",
-      age: 30,
-      email: "johndoe@example.com",
-      date: "2021-05-05",
-    },
-  ];
-  const tableInstance = useTable({ columns: detailsColumns, data });
+
+  const [salaryRecord, setSalaryRecord] = useState<SalaryRecordData[]>([]);
+  const [year, setYear] = useState<number>(new Date().getFullYear());
+
+  const { id } = useParams<{ id: string }>();
+
+  // fetch employees from API
+  const getEmployees = async (id: number) => {
+    const response = await EmployeeService.getEmployeeSalaryRecordByEmployeeId(
+      id,
+      year
+    );
+    console.log(response);
+    setSalaryRecord(response);
+  };
+
+  useEffect(() => {
+    getEmployees(parseInt(id!));
+  }, [id]);
+
+  const tableInstance = useTable({
+    columns: detailsColumns,
+    data: salaryRecord,
+  });
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     tableInstance;
@@ -63,14 +44,16 @@ const Detail = () => {
             type="number"
             className="mini-input form-control"
             placeholder="Total"
-            value={2023}
+            min={2000}
+            defaultValue={new Date().getFullYear()}
+            value={year}
+            onChange={(e) => setYear(parseInt(e.target.value))}
           />
-
-          <Button variant="primary" className="btn btn-primary mx-2">
+          <Button variant="primary" className="btn btn-primary mx-2" onClick={()=> getEmployees(parseInt(id!))}>
             Göstər
           </Button>
         </div>
-        <h6 className="mx-2 text-center">Abbasov Zakir Hesen</h6>
+        <h6 className="mx-2 text-center">{salaryRecord?.[0]?.fullName}</h6>
 
         <div>
           <Button variant="primary" className="btn btn-primary">

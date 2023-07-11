@@ -11,6 +11,7 @@ namespace WebApplication1.Repositories
         Task<Employee> GetEmployeeById(int employeeId);
         Task<List<Employee>> GetEmployees();
         Task<Employee> GetEmployeeByFin(string fin);
+        Task<List<Employee>> GetEmployeeByPosition(int positionId);
         Task<Employee> UpdateEmployee(Employee employee);
     }
 }

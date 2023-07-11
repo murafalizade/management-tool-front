@@ -7,33 +7,39 @@ import {
   addDepartment,
   addPosition,
   setDepartment,
+  setEmployees,
   setPositions,
 } from "../redux/organizationSlice";
 import Swal from "sweetalert2";
+import EmployeeService from "../api/employeeService";
 
 export default function Departments() {
   const [organization, setOrganization] = useState<any[]>([]);
   const [newEdit, setNewEdit] = useState<boolean>(false);
   const [choosenOrganization, setChoosenOrganizetion] = useState<any>(null);
   const [choosenDepartment, setChoosenDepartment] = useState<any>(null);
+
   const Toast = Swal.mixin({
     toast: true,
-    position: 'bottom-end',
+    position: "bottom-end",
     showConfirmButton: false,
     timer: 3000,
     timerProgressBar: true,
     didOpen: (toast) => {
-      toast.addEventListener('mouseenter', Swal.stopTimer)
-      toast.addEventListener('mouseleave', Swal.resumeTimer)
-    }
-  })
-  
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
+
   const departmentsData = useSelector(
     (state: any) => state.organization
   ).departments;
   const positionsData = useSelector(
     (state: any) => state.organization
   ).positions;
+  const employeesData = useSelector(
+    (state: any) => state.organization
+  ).employees;
   const dispatch = useDispatch();
 
   const getOrganizationData = async () => {
@@ -75,7 +81,7 @@ export default function Departments() {
 
   // bolme elave etmek ucun
   const addDepartments = () => {
-    if(!choosenOrganization) {
+    if (!choosenOrganization) {
       alert("Zəhmət olmasa ilk öncə idarəni seçin");
       return;
     }
@@ -108,8 +114,8 @@ export default function Departments() {
         if (id > 0) {
           await OperationService.deleteOrganizationById(id);
           Toast.fire({
-            icon: 'success',
-            title: 'Bölmə silindi'
+            icon: "success",
+            title: "Bölmə silindi",
           });
         }
         dispatch(setDepartment(newDepartments));
@@ -137,8 +143,8 @@ export default function Departments() {
   const saveDepartment = async () => {
     await OperationService.saveOrganization(departmentsData);
     Toast.fire({
-      icon: 'success',
-      title: 'Bölmələr yadda saxlanıldı'
+      icon: "success",
+      title: "Bölmələr yadda saxlanıldı",
     });
     setNewEdit(false);
   };
@@ -163,8 +169,8 @@ export default function Departments() {
         if (id > 0) {
           await OperationService.deletePositionById(id);
           Toast.fire({
-            icon: 'success',
-            title: 'Vəzifə silindi'
+            icon: "success",
+            title: "Vəzifə silindi",
           });
         }
         dispatch(setPositions(newPositions));
@@ -175,7 +181,7 @@ export default function Departments() {
 
   // vezife elave etmek ucun
   const addPositions = () => {
-    if(!choosenDepartment) {
+    if (!choosenDepartment) {
       alert("Zəhmət olmasa ilk öncə şöbə və bölmə seçin");
       return;
     }
@@ -212,10 +218,17 @@ export default function Departments() {
   const savePosition = async () => {
     await OperationService.savePosition(positionsData);
     Toast.fire({
-      icon: 'success',
-      title: 'Vəzifələr yadda saxlanıldı'
+      icon: "success",
+      title: "Vəzifələr yadda saxlanıldı",
     });
     setNewEdit(false);
+  };
+
+  // vezifeni secdikde
+  const selectPosition = async (id: number) => {
+    if (id < 0) return;
+    const res = await EmployeeService.getEmployeeByPositionId(id);
+    dispatch(setEmployees(res??[]));
   };
 
   useEffect(() => {
@@ -273,6 +286,7 @@ export default function Departments() {
             data={positionsData}
             change={changePosition}
             add={addPositions}
+            select={selectPosition}
             save={savePosition}
             delete={deletePosition}
             columns={[
@@ -299,7 +313,7 @@ export default function Departments() {
 
           <TableLayout
             isEditable={false}
-            data={[]}
+            data={employeesData}
             columns={[
               {
                 title: "İl",
@@ -312,9 +326,9 @@ export default function Departments() {
 
               {
                 title: "Soyadı",
-                field: "surname",
+                field: "lastName",
               },
-              { title: "Adı", field: "name" },
+              { title: "Adı", field: "firstName" },
               {
                 field: "fatherName",
                 title: "Atasının adı",
@@ -327,12 +341,12 @@ export default function Departments() {
               {
                 title: "H_ID",
 
-                field: "H_ID",
+                field: "rankId",
               },
               {
                 title: "VZF_ID",
 
-                field: "VZF_ID",
+                field: "positionId",
               },
             ]}
           />

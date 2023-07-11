@@ -1,5 +1,6 @@
 import { Column } from "react-table";
 import { EmployeeData } from "../types/EmployeeData";
+import { SalaryRecordData } from "../types/SalaryRecordData";
 
 type TableData = {
   name: string;
@@ -110,22 +111,26 @@ export const createColumns: Column<EmployeeData>[] = [
   },
 ];
 
-const columns: Column<TableData>[] = [
+const columns: Column<SalaryRecordData>[] = [
   {
     Header: "idarə",
+    accessor: "employeePositionDepartmentAdminstrationName",
   },
   {
     Header: "Şöbə, bölmə",
+    accessor: "employeePositionDepartmentName",
   },
   {
     Header: "Vəzifə",
+    accessor: "employeePositionName",
   },
   {
     Header: "Hərbi rütbə",
+    accessor: "employeeRankName",
   },
   {
     Header: "S.A.A.",
-    accessor: "name",
+    accessor: "fullName",
   },
   {
     Header: "Uzun müddətli Xİ",
@@ -149,51 +154,67 @@ const columns: Column<TableData>[] = [
     columns: [
       {
         Header: "Rütbə maaşı",
+        accessor: "rankSalary",
       },
       {
         Header: "Vəzifə maaşı",
+        accessor: "positionSalary",
       },
       {
         Header: "Xİ  görə əlavə",
+        accessor: "xIMoney",
       },
       {
         Header: "P.t qatı",
+        accessor: "pTMoney",
       },
       {
         Header: "Məharət dər.",
+        accessor: "meharetlilik",
       },
       {
         Header: "Təmsilçilik",
+        accessor: "temsilcilik",
       },
       {
         Header: "Məxfiçilik",
+        accessor: "mexfilik",
       },
       {
         Header: "Zərərliyə görə",
+        accessor: "zererlilik",
       },
       {
         Header: "Kibertəhlükəsizlik əlavəsi",
+        accessor: "kibertehlukesizlik",
       },
       {
         Header: "Xarici dil",
+        accessor: "xariciDil",
       },
       {
         Header: "Kəşf. mükaf.",
+        accessor: "kesfiyyat",
       },
       {
         Header: "Elmi dərəcə",
+        accessor: "elmiDerece",
       },
       {
         Header: "Fəxri ad",
+        accessor: "fexriAd",
       },
       {
         Header: "Əlavə öd. (gvti)",
+        accessor: "extraMoney",
       },
       {
         Header: "Əlavə ödəniş",
+        accessor: "extraMoney2",
       },
       {
         Header: "Cəmi",
+        accessor: "totalIncome",
       },
     ],
   },
@@ -202,91 +223,116 @@ const columns: Column<TableData>[] = [
     columns: [
       {
         Header: "Gəlir vergisi",
+        accessor: "tax",
       },
       {
         Header: "DSMF",
+        accessor: "dSMF",
       },
       {
         Header: "Tibbi sığorta",
+        accessor: "healthInsurance",
       },
       {
         Header: "Kəsirlər",
+        accessor: "kesirler",
       },
       {
         Header: "Aliment",
+        accessor: "aliment",
       },
       {
         Header: "Artıq 211100",
+        accessor: "extra211100",
       },
       {
         Header: "Güzəşt",
+        accessor: "discount",
       },
       {
-        Header: "Cəmi",
-        accessor: "total",
+        Header: "Cəmi2",
+        // accessor: "total",
       },
     ],
   },
   {
     Header: "Ələ veriləcək məbləğ",
+    accessor: "extraGivenMoney",
   },
   {
     Header: "Ərzaq komp-sı",
+    accessor: "food",
   },
   {
     Header: "MV müavin.",
+    accessor: "muavin",
   },
   {
     Header: "Məzuniyyət",
+    accessor: "mezuniyyet",
   },
   {
     Header: "Kəşf. məzun.",
+    accessor: "kesfMezun",
   },
   {
     Header: "Kəşf. xəstə",
+    accessor: "kesfXeste",
   },
   {
     Header: "Kirayə. komp.",
+    accessor: "kiraye",
   },
   {
     Header: "Maddi yardım",
+    accessor: "maddiYardim",
   },
   {
     Header: "Ezamiyyət",
+    accessor: "ezamiyyet",
   },
   {
     Header: "Səhra pulu",
+    accessor: "sehra",
   },
   {
     Header: "Yol xərci",
+    accessor: "yolXerci",
   },
   {
     Header: "Yük pulu",
+    accessor: "yukPulu",
   },
   {
     Header: "Çıxış müav.",
+    accessor: "cixisMuv",
   },
   {
     Header: "BPM faiz",
+    accessor: "bPMPercentage",
   },
   {
     Header: "BPM",
+    accessor: "bPM",
   },
   {
     Header: "DSMF ümumi",
+    accessor: "totalDSMF",
   },
   {
     Header: "Cəmi",
-    accessor: "total2",
+    // accessor: "total2",
   },
   {
     Header: "Qeyd",
+    accessor: "comment",
   },
   {
     Header: "MV müav. verilir",
   },
   {
     Header: "Hesab nömrəsi",
+    accessor: "accountNumber",
   },
   {
     Header: "Məh. %",
@@ -424,24 +470,30 @@ const columns2 = [
   },
 ];
 
-const detailsColumns: Column<TableData>[] = [
+const detailsColumns: Column<SalaryRecordData>[] = [
   {
     Header: "Il",
+    accessor:"recordDateYear"
   },
   {
     Header: "Ay",
+    accessor:"recordDateMonth"
   },
   {
     Header: "idarə",
+    accessor:"employeePositionDepartmentAdminstrationName"
   },
   {
     Header: "Şöbə, bölmə",
+    accessor:"employeePositionDepartmentName"
   },
   {
     Header: "Vəzifə",
+    accessor:"employeePositionName"
   },
   {
     Header: "Hərbi rütbə",
+    accessor:"employeeRankName"
   },
   {
     Header: "Uzun müddətli Xİ",
@@ -465,48 +517,63 @@ const detailsColumns: Column<TableData>[] = [
     columns: [
       {
         Header: "Rütbə maaşı",
+        accessor: "rankSalary",
       },
       {
         Header: "Vəzifə maaşı",
+        accessor: "positionSalary",
       },
       {
         Header: "Xİ  görə əlavə",
+        accessor: "xIMoney",
       },
       {
         Header: "P.t qatı",
+        accessor: "pTMoney",
       },
       {
         Header: "Məharət dər.",
+        accessor: "meharetlilik",
       },
       {
         Header: "Təmsilçilik",
+        accessor: "temsilcilik",
       },
       {
         Header: "Məxfiçilik",
+        accessor: "mexfilik",
       },
       {
         Header: "Zərərliyə görə",
+        accessor: "zererlilik",
       },
       {
         Header: "Xarici dil",
+        accessor: "xariciDil",
       },
       {
         Header: "Kəşf. mükaf.",
+        accessor: "kesfiyyat",
       },
       {
         Header: "Elmi dərəcə",
+        accessor: "elmiDerece",
       },
       {
         Header: "Fəxri ad",
+        accessor: "fexriAd",
       },
       {
         Header: "Əlavə öd. (gvti)",
+        accessor: "extraMoney",
       },
       {
         Header: "Əlavə ödəniş",
+        accessor: "extraMoney2",
       },
       {
         Header: "Cəmi",
+        accessor: "totalIncome",
       },
     ],
   },
@@ -515,91 +582,116 @@ const detailsColumns: Column<TableData>[] = [
     columns: [
       {
         Header: "Gəlir vergisi",
+        accessor:"tax"
       },
       {
         Header: "DSMF",
+        accessor:"dSMF"
       },
       {
         Header: "Tibbi sığorta",
+        accessor:"healthInsurance"
       },
       {
         Header: "Kəsirlər",
+        accessor:"kesirler"
       },
       {
         Header: "Aliment",
+        accessor:"aliment"
       },
       {
         Header: "Artıq 211100",
+        accessor:"extra211100"
       },
       {
         Header: "Güzəşt",
+        accessor:"discount"
       },
       {
-        Header: "Cəmi",
-        accessor: "total",
+        Header: "Cəmi7",
+        // accessor: "total",
       },
     ],
   },
   {
     Header: "Ələ veriləcək məbləğ",
+    accessor: "extraGivenMoney",
   },
   {
     Header: "Ərzaq komp-sı",
+    accessor:"food"
   },
   {
     Header: "MV müavin.",
+    accessor: "muavin",
   },
   {
     Header: "Məzuniyyət",
+    accessor: "mezuniyyet",
   },
   {
     Header: "Kəşf. məzun.",
+    accessor: "kesfMezun",
   },
   {
     Header: "Kəşf. xəstə",
+    accessor: "kesfXeste",
   },
   {
     Header: "Kirayə. komp.",
+    accessor: "kiraye",
   },
   {
     Header: "Maddi yardım",
+    accessor: "maddiYardim",
   },
   {
     Header: "Ezamiyyət",
+    accessor: "ezamiyyet",
   },
   {
     Header: "Səhra pulu",
+    accessor: "sehra",
   },
   {
     Header: "Yol xərci",
+    accessor: "yolXerci",
   },
   {
     Header: "Yük pulu",
+    accessor: "yukPulu",
   },
   {
     Header: "Çıxış müav.",
+    accessor: "cixisMuv",
   },
   {
     Header: "BPM faiz",
+    accessor: "bPMPercentage",
   },
   {
     Header: "BPM",
+    accessor: "bPM",
   },
   {
     Header: "DSMF ümumi",
+    accessor: "totalDSMF",
   },
   {
-    Header: "Cəmi",
-    accessor: "total2",
+    Header: "Cəmiw",
+// /    accessor: "total2",
   },
   {
     Header: "Qeyd",
+    accessor: "comment",
   },
   {
     Header: "MV müav. verilir",
   },
   {
     Header: "Hesab nömrəsi",
+    accessor: "accountNumber",
   },
   {
     Header: "Məh. %",

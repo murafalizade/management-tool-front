@@ -1,25 +1,57 @@
-import fetch from './interceptor';
+import fetch from "./interceptor";
 
-export default class EmployeeService{
+export default class EmployeeService {
+  static async getEmployeeById(id: number): Promise<any> {
+    return await fetch.get(`/api/employee/${id}`);
+  }
 
-    static async getEmployeeById(id: number): Promise<any> {
-        return await fetch.get(`/api/employee/${id}`);
-    }
+  static async getEmployeeByAll(): Promise<any> {
+    return await fetch.get(`/api/employee`);
+  }
 
-    static async getEmployeeByAll(): Promise<any> {
-        return await fetch.get(`/api/employee`);
-    }
+  static async deleteEmployeeById(id: number): Promise<any> {
+    return await fetch.delete(`/api/employee/${id}`);
+  }
 
+  static async addEmployee(data: any): Promise<any> {
+    return await fetch.post(`/api/employee`, data);
+  }
 
-    static async deleteEmployeeById(id: number): Promise<any> {
-        return await fetch.delete(`/api/employee/${id}`);
-    }
+  static async updateEmployee(data: any): Promise<any> {
+    return await fetch.put(`/api/employee`, data);
+  }
 
-    static async addEmployee(data: any): Promise<any> {
-        return await fetch.post(`/api/employee`, data);
-    }
+  static async getEmployeeSalaryRecord(
+    month: number,
+    year: number
+  ): Promise<any> {
+    return await fetch.get(
+      `/api/employee/salary/record/?month=${month}&year=${year}`
+    );
+  }
 
-    static async updateEmployee(data: any): Promise<any> {
-        return await fetch.put(`/api/employee`, data);
-    }
+  static async getEmployeeSalaryRecordByEmployeeId(
+    id: number,
+    year: number
+  ): Promise<any> {
+    return await fetch.get(
+      `/api/employee/salary/record/employee?employeeId=${id}&year=${year}`
+    );
+  }
+
+  static async getEmployeeSalaryRecordById(
+    id: number
+  ): Promise<any> {
+    return await fetch.get(
+      `/api/employee/salary/record/${id}`
+    );
+  }
+
+  static async getEmployeeByPositionId(id: number): Promise<any> {
+    return await fetch.get(`/api/employee/position/${id}`);
+  }
+
+  static async updateNextMonth(): Promise<any> {
+    return await fetch.post(`/api/employee/salary/record/nextmonth`);
+  }
 }

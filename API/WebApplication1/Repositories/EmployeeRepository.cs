@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
@@ -29,7 +30,8 @@ namespace WebApplication1.Repositories
 
         public async Task<Employee> GetEmployeeByFin(string fin)
         {
-            return await _context.Employees.FirstOrDefaultAsync(x => x.Fin == fin);
+            return await _context.Employees.Include(x => x.Rank).
+             Include(x => x.Position).FirstOrDefaultAsync(x => x.Fin == fin);
         }
 
         public async Task<Employee> GetEmployeeById(int employeeId)
@@ -37,6 +39,11 @@ namespace WebApplication1.Repositories
             return await _context.Employees.Include(x => x.Rank).
              Include(x => x.Position).
             FirstOrDefaultAsync(x => x.Id == employeeId);
+        }
+
+        public async Task<List<Employee>> GetEmployeeByPosition(int positionId)
+        {
+            return await _context.Employees.Where(x => x.PositionId == positionId).ToListAsync();
         }
 
         public async Task<List<Employee>> GetEmployees()

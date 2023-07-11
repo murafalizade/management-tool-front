@@ -10,7 +10,7 @@ namespace WebApplication1.Services{
         Task<ErrorHandelerDto> AddEmployee(EmployeeInputDto employee);
         Task<ErrorHandelerDto> GetAllEmployee();
         Task<ErrorHandelerDto> DeleteEmployee(int id);
-
+        Task<ErrorHandelerDto> GetEmployeeByPosition(int positionId);
         Task<ErrorHandelerDto> UpdateEmployee(EmployeeEditDto employee);
     }
 }

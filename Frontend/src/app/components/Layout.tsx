@@ -8,6 +8,7 @@ import { changeModalInfo, showModalCreate } from "../redux/showModalSlice";
 import Cookie from "../utility/Cookie";
 import { RootState } from "../redux/store";
 import CreateEmployeeModal from "./CreateEmployeeModal";
+import EmployeeService from "../api/employeeService";
 
 function Layout() {
   const [showFileDropdown, setShowFileDropdown] = useState<boolean>(false);
@@ -203,7 +204,7 @@ function Layout() {
                 <NavDropdown.Item href="#">2 qat</NavDropdown.Item>
                 <NavDropdown.Item href="#">3 qat</NavDropdown.Item>
               </NavDropdown>
-              <NavDropdown.Item href="#">
+              <NavDropdown.Item href="#" onClick={async()=> await EmployeeService.updateNextMonth()}>
                 Bu ayın cədvəlini gələn aya köçür
               </NavDropdown.Item>
               <NavDropdown.Item onClick={() => window.location.reload()}>

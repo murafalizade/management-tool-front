@@ -20,8 +20,8 @@ namespace WebApplication1.Services
         }
         public async Task<ErrorHandelerDto> AddEmployee(EmployeeInputDto employee)
         {
-            try
-            {
+            // try
+            // {
                 var obj = await _employeeRepository.GetEmployeeByFin(employee.Fin);
                 if (obj != null)
                 {
@@ -35,7 +35,7 @@ namespace WebApplication1.Services
                 }
                 Employee obj1 = _mapper.Map<Employee>(employee);
                 await _employeeRepository.AddEmployee(obj1);
-                RecordCreationDto x = new RecordCreationDto { EmployeeId = 9 };
+                RecordCreationDto x = new RecordCreationDto { Employee = obj1 };
                 await _employeeSalaryRecordRepository.AddEmployee(_mapper.Map<EmployeeSalaryRecord>(x));
                 return new ErrorHandelerDto
                 {
@@ -43,19 +43,19 @@ namespace WebApplication1.Services
                     StatusCode = 200
                 };
             }
-            catch (System.Exception)
-            {
+            // catch (System.Exception)
+            // {
 
-                return new ErrorHandelerDto
-                {
-                    data = "Employee Added Failed",
-                    StatusCode = 400,
-                    isError = true
+            //     return new ErrorHandelerDto
+            //     {
+            //         data = "Employee Added Failed",
+            //         StatusCode = 400,
+            //         isError = true
 
-                };
+            //     };
 
-            }
-        }
+            // }
+        // }
 
         public async Task<ErrorHandelerDto> DeleteEmployee(int id)
         {
@@ -142,6 +142,16 @@ namespace WebApplication1.Services
 
                 };
             }
+        }
+
+        public async Task<ErrorHandelerDto> GetEmployeeByPosition(int positionId)
+        {
+            List<Employee> obj = await _employeeRepository.GetEmployeeByPosition(positionId);
+            return new ErrorHandelerDto
+            {
+                data = obj,
+                StatusCode = 200
+            };
         }
 
         public async Task<ErrorHandelerDto> UpdateEmployee(EmployeeEditDto employee)

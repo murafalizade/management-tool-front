@@ -5,45 +5,67 @@ namespace WebApplication1.Models
     public class EmployeeSalaryRecord
     {
         public int Id { get; set; }
+        public int EmployeeId { get; set; }
+        public Employee Employee { get; set; }
+        private string fullName = "";
+        public string FullName
+        {
+            set
+            {
+                if (Employee != null)
+                {
+                    fullName = Employee.FirstName + " " + Employee.LastName + " " + Employee.FatherName;
+                }
+            }
+            get
+            {
+                return fullName;
+            }
+        }
+
         private double rankSalary = 0;
         public double RankSalary
         {
-            get
+            get { return rankSalary; }
+
+            set
             {
-                if (Employee != null && rankSalary == 0)
+                if (Employee != null && (value == Employee.Rank.Salary || value == 0))
                 {
+                    Console.WriteLine("Employee is not null");
                     // Set default value based on Employee's rank
-                    rankSalary = Employee.Rank.Salary;
+                    rankSalary = (double)Employee.Rank.Salary;
                 }
-                return rankSalary;
+                else
+                {
+                    Console.WriteLine("Employee is null");
+                    rankSalary = value;
+                }
             }
-            set { rankSalary = value; }
         }
         private double positionSalary = 0;
         public double PositionSalary
         {
-            get
+            set
             {
-                if (Employee != null && positionSalary == 0)
+                if (Employee != null && (value == Employee.Position.Salary || value == 0))
                 {
                     positionSalary = Employee.Position.Salary;
                 }
-                return positionSalary;
             }
-            set { positionSalary = value; }
+            get { return positionSalary; }
         }
-    //    public double positionSalary { get; set; } = 0;
         public double XIMoney { get; set; } = 0;
         private double pTMoney = 0;
         public double PTMoney
         {
-            set
-            {
-                pTMoney = value;
-            }
             get
             {
-                if (Employee != null && pTMoney == 0)
+                return pTMoney;
+            }
+            set
+            {
+                if (Employee != null && value == 0)
                 {
                     if (Employee.PTMoney == "5")
                     {
@@ -62,16 +84,15 @@ namespace WebApplication1.Models
                         pTMoney *= 0.1;
                     }
                 }
-                return pTMoney;
             }
         }
         public DateTime RecordDate { get; set; } = DateTime.Now;
         private double meharetlilik = 0;
         public double Meharetlilik
         {
-            get
+            set
             {
-                if (Employee != null && meharetlilik == 0)
+                if (Employee != null && value == 0)
                 {
                     if (Employee.Position.Name == "zabit")
                     {
@@ -119,20 +140,19 @@ namespace WebApplication1.Models
                         }
                     }
                 }
-                return meharetlilik;
             }
-            set
+            get
             {
-                meharetlilik = value;
+                return meharetlilik;
             }
         }
         public double Temsilcilik { get; set; } = 0;
         private double mexfilik = 0;
         public double Mexfilik
         {
-            get
+            set
             {
-                if (Employee != null && mexfilik == 0)
+                if (Employee != null && value == 0)
                 {
                     if (Employee.Mexfilik == "10")
                     {
@@ -147,20 +167,19 @@ namespace WebApplication1.Models
                         mexfilik = positionSalary * 20 / 100;
                     }
                 }
-                return mexfilik;
             }
-            set
+            get
             {
-                mexfilik = value;
+                return mexfilik;
             }
         }
         public double Zererlilik { get; set; } = 0;
         private double xariciDil = 0;
         public double XariciDil
         {
-            get
+            set
             {
-                if (Employee != null && xariciDil == 0)
+                if (Employee != null && value == 0)
                 {
                     if (Employee.XariciDil == "15")
                     {
@@ -171,11 +190,10 @@ namespace WebApplication1.Models
                         xariciDil = positionSalary * 10 / 100;
                     }
                 }
-                return xariciDil;
             }
-            set
+            get
             {
-                xariciDil = value;
+                return xariciDil;
             }
         }
         public double Kibertehlukesizlik { get; set; } = 0;
@@ -183,9 +201,9 @@ namespace WebApplication1.Models
         private double elmiDerece { get; set; } = 0;
         public double ElmiDerece
         {
-            get
+            set
             {
-                if (Employee != null && elmiDerece == 0)
+                if (Employee != null && value == 0)
                 {
                     int workExperience = DateTime.Now.Year - Employee.StartDate.Year;
                     switch (Employee.ElmiDerece)
@@ -246,19 +264,18 @@ namespace WebApplication1.Models
                             break;
                     }
                 }
-                return elmiDerece;
             }
-            set
+            get
             {
-                elmiDerece = value;
+                return elmiDerece;
             }
         }
         private double fexriAd = 0;
         public double FexriAd
         {
-            get
+            set
             {
-                if (Employee != null && fexriAd == 0)
+                if (Employee != null && value == 0)
                 {
                     if (Employee.XariciDil == "1")
                     {
@@ -269,15 +286,26 @@ namespace WebApplication1.Models
                         fexriAd = 60;
                     }
                 }
-                return fexriAd;
             }
-            set
+            get
             {
-                fexriAd = value;
+                return fexriAd;
             }
         }
         public double ExtraMoney { get; set; } = 0;
         public double ExtraMoney2 { get; set; } = 0;
+        private double totalIncome { get; set; }
+        public double TotalIncome
+        {
+            get
+            {
+                return totalIncome;
+            }
+            set
+            {
+                totalIncome = XIMoney + pTMoney + rankSalary + positionSalary + meharetlilik + Temsilcilik + Mexfilik + Zererlilik + XariciDil + Kibertehlukesizlik + Kesfiyyat + ElmiDerece + FexriAd + ExtraMoney + ExtraMoney2;
+            }
+        }
         public double Tax { get; set; } = 0;
         public double DSMF { get; set; }
         public double HealthInsurance { get; set; }
@@ -303,7 +331,5 @@ namespace WebApplication1.Models
         public double TotalDSMF { get; set; }
         public string Comment { get; set; }
         public string AccountNumber { get; set; }
-        public int? EmployeeId { get; set; }
-        public virtual Employee Employee { get; set; }
     }
 }

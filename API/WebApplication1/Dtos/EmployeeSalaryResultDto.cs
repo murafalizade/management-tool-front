@@ -1,12 +1,16 @@
 using System;
 
 namespace WebApplication1.Dtos{
-    public class  EmployeeSalaryResultDto
+    public class  EmployeeSalaryResultDto 
     {
         public int Id { get; set; }
-        public string EmployeeFirstName { get; set; }
-        public string EmployeeLastName { get; set; }
-        public string EmployeeFatherName{ get; set; }
+        public string recordDateMonth { get; set; }
+        public string recordDateYear { get; set; }
+        public string EmployeePositionName { get; set; }
+        public string EmployeeRankName { get; set; }
+        public string EmployeePositionDepartmentName { get; set; }
+        public string EmployeePositionDepartmentAdminstrationName { get; set; }
+        public string FullName {get; set;}
         public DateTime RecordDate { get; set; }
         public double RankSalary { get; set; }
         public double PositionSalary { get; set; }
@@ -21,5 +25,7 @@ namespace WebApplication1.Dtos{
         public double ExtraMoney { get; set; }
         public double ExtraMoney2 { get; set; } 
         public string Comment { get; set; }
+        public int EmployeeId { get; set; }
+        public double TotalIncome { get; set; }
     }
 }

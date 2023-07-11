@@ -12,96 +12,57 @@ import { useDispatch, useSelector } from "react-redux";
 import { showModal, setSelectedRow } from "../redux/showModalSlice";
 import withAuth from "../hoc/withAuth";
 import { RootState } from "../redux/store";
-
-type TableData = {
-  name: string;
-  age: number;
-  email: string;
-  total?: number;
-  date?: string;
-  total2?: number;
-  empty?: string;
-};
-
-const data: TableData[] = [
-  {
-    name: "John Doe",
-    age: 30,
-    email: "johndoe@example.com",
-    date: "2021-05-05",
-  },
-  {
-    name: "John Doe",
-    age: 30,
-    email: "johndoe@example.com",
-    date: "2021-05-05",
-  },
-  {
-    name: "John Doe",
-    age: 30,
-    email: "johndoe@example.com",
-    date: "2021-05-05",
-  },
-  {
-    name: "John Doe",
-    age: 30,
-    email: "johndoe@example.com",
-    date: "2021-05-05",
-  },
-  {
-    name: "John Doe",
-    age: 30,
-    email: "johndoe@example.com",
-    date: "2021-05-05",
-  },
-  {
-    name: "John Doe",
-    age: 30,
-    email: "johndoe@example.com",
-    date: "2021-05-05",
-  },
-];
-
-const data2: TableData[] = [
-  {
-    name: "John Doe",
-    age: 30,
-    email: "johndoe@example.com",
-    date: "2021-05-05",
-  },
-];
+import EmployeeService from "../api/employeeService";
+import { SalaryRecordData } from "../types/SalaryRecordData";
 
 function Home() {
   const state = useSelector((state: RootState) => state.showModal);
   const [selectedColumn, setSelectedColumn] = useState<any>(state.selectedRow);
+  const [salaryRecord, setSalaryRecord] = useState<SalaryRecordData[]>([]);
+  const [year, setYear] = useState<number>(new Date().getFullYear());
+  const [month, setMonth] = useState<number>(new Date().getMonth()+1);
 
   const dispatch = useDispatch();
 
   let nav = useNavigate();
+
+  // fetch employees from API
+  const getEmployees = async () => {
+    const response = await EmployeeService.getEmployeeSalaryRecord(month, year);
+    console.log(response);
+    setSalaryRecord(response);
+  };
+
+  useEffect(() => {
+    getEmployees();
+  }, []);
 
   const personalAccount = () => {
     if (!selectedColumn) {
       alert("Please select a row");
       return;
     }
-    nav(`/detail/${selectedColumn.name}`);
+    nav(`/detail/${selectedColumn.employeeId}`);
   };
 
   useEffect(() => {
     setSelectedColumn(state.selectedRow);
   }, [state.selectedRow]);
 
-
   const handleRowClick = (row: any) => {
-    if (row.original === selectedColumn) {dispatch(setSelectedRow(null))}
-    else {dispatch(setSelectedRow(row.original));}
+    if (row.original === selectedColumn) {
+      dispatch(setSelectedRow(null));
+    } else {
+      dispatch(setSelectedRow(row.original));
+    }
   };
 
   const handleRowDoubleClick = (row: any) => {
-    dispatch(showModal())
+    dispatch(showModal());
+    
   };
 
-  const tableInstance = useTable({ columns, data });
+  const tableInstance = useTable({ columns, data: salaryRecord });
   // const tableInstance2 = useTable({ columns: columns2, data: data2 });
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
@@ -115,11 +76,18 @@ function Home() {
             type="number"
             className="mini-input form-control"
             placeholder="Total"
-            value={2023}
+            min={2000}
+            defaultValue={new Date().getFullYear()}
+            value={year}
+            onChange={(e) => setYear(parseInt(e.target.value))}
           />
-          <select className="form-control mini-input">
+          <select
+            onChange={(e) => setMonth(parseInt(e.target.value))}
+            className="form-control mini-input"
+            value={month}
+          >
             {months.map((month: any, index: number) => (
-              <option key={index} value={month.name}>
+              <option key={index} value={month.id}>
                 {month.name}
               </option>
             ))}
@@ -128,7 +96,11 @@ function Home() {
           <input type="checkbox" className="form-check-input" />
           <label className="form-check-label mx-2">Vakant</label>
 
-          <Button variant="primary" className="btn btn-primary mx-2">
+          <Button
+            variant="primary"
+            className="btn btn-primary mx-2"
+            onClick={() => getEmployees()}
+          >
             Göstər
           </Button>
           <Button variant="primary" className="btn btn-primary">
@@ -215,7 +187,7 @@ function Home() {
 
         <CalculatingModal />
 
-        <Table
+        {/* <Table
           style={{ position: "sticky", bottom: "24px",height:'100px' }}
           bordered
           bgcolor="#f5f5f5"
@@ -249,13 +221,13 @@ function Home() {
                 </tr>
               );
             })} */}
-            <tr>
+        {/* <tr>
               <td className="text-center">0</td>
               <td className="text-center">0</td>
               <td className="text-center">0</td>
             </tr>
           </tbody>
-        </Table>
+        </Table> */}
       </div>
       <div className="px-1">
         Elman / 719,17 / 2-ci m/d ver. BQR-nin emr N02 05.01.2022

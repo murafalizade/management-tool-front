@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace WebApplication1.Models
 {
@@ -28,5 +29,6 @@ namespace WebApplication1.Models
         public virtual Rank Rank { get; set; }
         public int? PositionId { get; set; }
         public virtual Position Position { get; set; }
+        public ICollection<EmployeeSalaryRecord> EmployeeSalaryRecords { get; set; }
     }
 }

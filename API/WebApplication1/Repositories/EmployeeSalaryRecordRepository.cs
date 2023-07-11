@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
@@ -20,20 +21,41 @@ namespace WebApplication1.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public Task<EmployeeSalaryRecord> GetEmployeeById(int employeeId)
+        public Task<List<EmployeeSalaryRecord>> GetEmployeeById(int employeeId, int year)
         {
             return _context.EmployeeSalaryRecords.
             Include(x => x.Employee).
             Include(x => x.Employee.Rank).
-            FirstOrDefaultAsync(x => x.Id == employeeId);
+            Include(x => x.Employee.Position).
+            Include(x => x.Employee.Position.Department).
+            Include(x => x.Employee.Position.Department.Adminstration).
+            Where(x => x.EmployeeId == employeeId && x.RecordDate.Year == year).ToListAsync();
         }
 
-        public async Task<List<EmployeeSalaryRecord>> GetEmployees()
+        public async Task<EmployeeSalaryRecord> GetEmployeeById(int id)
         {
             return await _context.EmployeeSalaryRecords.Include(x => x.Employee).
             Include(x => x.Employee.Rank).
             Include(x => x.Employee.Position).
+            Include(x => x.Employee.Position.Department).
+            Include(x => x.Employee.Position.Department.Adminstration).
+            FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<List<EmployeeSalaryRecord>> GetEmployees(int month, int year)
+        {
+            return await _context.EmployeeSalaryRecords.Include(x => x.Employee).
+            Include(x => x.Employee.Rank).
+            Include(x => x.Employee.Position).
+            Include(x => x.Employee.Position.Department).
+            Include(x => x.Employee.Position.Department.Adminstration).
+            Where(x => x.RecordDate.Year == year && x.RecordDate.Month == month).
             ToListAsync();
+        }
+
+        public async Task<EmployeeSalaryRecord> GetLastEmployeeRecord()
+        {
+            return await _context.EmployeeSalaryRecords.OrderByDescending(e => e.Id).FirstAsync();
         }
 
         public async Task<EmployeeSalaryRecord> UpdateEmployee(EmployeeSalaryRecord employee)

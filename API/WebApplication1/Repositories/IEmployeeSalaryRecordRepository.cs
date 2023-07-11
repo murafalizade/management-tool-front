@@ -7,8 +7,10 @@ namespace WebApplication1.Repositories
     public interface IEmployeeSalaryRecordRepository
     {
         Task AddEmployee(EmployeeSalaryRecord employee);
-        Task<List<EmployeeSalaryRecord>> GetEmployees();
-        Task<EmployeeSalaryRecord> GetEmployeeById(int employeeId);
+        Task<List<EmployeeSalaryRecord>> GetEmployees(int month, int year);
+        Task<EmployeeSalaryRecord> GetEmployeeById(int id);
+        Task<List<EmployeeSalaryRecord>> GetEmployeeById(int employeeId, int year);
         Task<EmployeeSalaryRecord> UpdateEmployee(EmployeeSalaryRecord employee);
+        Task<EmployeeSalaryRecord> GetLastEmployeeRecord();
     }
 }

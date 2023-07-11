@@ -66,7 +66,7 @@ function Create() {
           dispatch(setSelectedRow(null));
           Toast.fire({
             icon: "success",
-            title: "Bölmə silindi",
+            title: "Məlumat silindi",
           });
           await getEmployees();
         } else {
