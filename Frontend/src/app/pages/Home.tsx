@@ -20,7 +20,7 @@ function Home() {
   const [selectedColumn, setSelectedColumn] = useState<any>(state.selectedRow);
   const [salaryRecord, setSalaryRecord] = useState<SalaryRecordData[]>([]);
   const [year, setYear] = useState<number>(new Date().getFullYear());
-  const [month, setMonth] = useState<number>(new Date().getMonth()+1);
+  const [month, setMonth] = useState<number>(new Date().getMonth() + 1);
 
   const dispatch = useDispatch();
 
@@ -58,8 +58,8 @@ function Home() {
   };
 
   const handleRowDoubleClick = (row: any) => {
-    dispatch(showModal());
-    
+    console.log(row.original.id)
+    dispatch(showModal(row.original.id));
   };
 
   const tableInstance = useTable({ columns, data: salaryRecord });

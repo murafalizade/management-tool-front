@@ -15,10 +15,11 @@ namespace WebApplication1.Repositories
         {
             _context = context;
         }
-        public async Task AddEmployee(Employee employee)
+        public async Task<int> AddEmployee(Employee employee)
         {
             await _context.Employees.AddAsync(employee);
             await _context.SaveChangesAsync();
+            return employee.Id;
         }
 
         public async Task DeleteEmployee(int employeeId)

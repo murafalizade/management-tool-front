@@ -43,7 +43,7 @@ export default function CreateEmployeeModal() {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: e.toString() || "Xəta baş verdi!",
+        text: e || "Xəta baş verdi!",
       });
     }
   };

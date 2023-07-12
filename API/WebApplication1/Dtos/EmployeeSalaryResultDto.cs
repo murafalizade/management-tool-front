@@ -6,6 +6,10 @@ namespace WebApplication1.Dtos{
         public int Id { get; set; }
         public string recordDateMonth { get; set; }
         public string recordDateYear { get; set; }
+        public double PTMoney { get; set; }
+        public DateTime EmployeeStartDate { get; set; }
+        public string AccountNumber { get; set; }
+        public double Kibertehlukesizlik { get; set; }
         public string EmployeePositionName { get; set; }
         public string EmployeeRankName { get; set; }
         public string EmployeePositionDepartmentName { get; set; }

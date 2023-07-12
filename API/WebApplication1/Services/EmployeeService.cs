@@ -22,39 +22,41 @@ namespace WebApplication1.Services
         {
             // try
             // {
-                var obj = await _employeeRepository.GetEmployeeByFin(employee.Fin);
-                if (obj != null)
-                {
-                    return new ErrorHandelerDto
-                    {
-                        data = "Employee Already Exist",
-                        StatusCode = 400,
-                        isError = true
-
-                    };
-                }
-                Employee obj1 = _mapper.Map<Employee>(employee);
-                await _employeeRepository.AddEmployee(obj1);
-                RecordCreationDto x = new RecordCreationDto { Employee = obj1 };
-                await _employeeSalaryRecordRepository.AddEmployee(_mapper.Map<EmployeeSalaryRecord>(x));
+            var obj = await _employeeRepository.GetEmployeeByFin(employee.Fin);
+            if (obj != null)
+            {
                 return new ErrorHandelerDto
                 {
-                    data = "Employee Added Successfully",
-                    StatusCode = 200
+                    data = "Employee Already Exist",
+                    StatusCode = 400,
+                    isError = true
+
                 };
             }
-            // catch (System.Exception)
-            // {
+            Employee obj1 = _mapper.Map<Employee>(employee);
+            int id = await _employeeRepository.AddEmployee(obj1);
+            System.Console.WriteLine(id);
+            Employee emp = await _employeeRepository.GetEmployeeById(id);
+            RecordCreationDto x = new RecordCreationDto { Employee = emp };
+            await _employeeSalaryRecordRepository.AddEmployee(_mapper.Map<EmployeeSalaryRecord>(x));
+            return new ErrorHandelerDto
+            {
+                data = "Employee Added Successfully",
+                StatusCode = 200
+            };
+        }
+        // catch (System.Exception)
+        // {
 
-            //     return new ErrorHandelerDto
-            //     {
-            //         data = "Employee Added Failed",
-            //         StatusCode = 400,
-            //         isError = true
+        //     return new ErrorHandelerDto
+        //     {
+        //         data = "Employee Added Failed",
+        //         StatusCode = 400,
+        //         isError = true
 
-            //     };
+        //     };
 
-            // }
+        // }
         // }
 
         public async Task<ErrorHandelerDto> DeleteEmployee(int id)

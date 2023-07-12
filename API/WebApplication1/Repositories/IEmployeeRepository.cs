@@ -6,7 +6,7 @@ namespace WebApplication1.Repositories
 {
     public interface IEmployeeRepository
     {
-        Task AddEmployee(Employee employee);
+        Task<int> AddEmployee(Employee employee);
         Task DeleteEmployee(int employeeId);
         Task<Employee> GetEmployeeById(int employeeId);
         Task<List<Employee>> GetEmployees();

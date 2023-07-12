@@ -1,6 +1,9 @@
 export type SalaryRecordData = {
   recordDateMonth: number;
   recordDateYear: number;
+  employeeStartDateMonth: number;
+  employeeStartDateYear: number;
+  employeeStartDateDay: number;
   fullName: string;
   employeeRankName: string;
   employeePositionName: string;
@@ -9,7 +12,7 @@ export type SalaryRecordData = {
   rankSalary: number;
   positionSalary: number;
   xIMoney: number;
-  pTMoney: number;
+  ptMoney: number;
   meharetlilik: number;
   temsilcilik: number;
   mexfilik: number;

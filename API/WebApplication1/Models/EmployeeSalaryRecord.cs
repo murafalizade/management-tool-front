@@ -30,7 +30,7 @@ namespace WebApplication1.Models
 
             set
             {
-                if (Employee != null && (value == Employee.Rank.Salary || value == 0))
+                if (Employee != null )
                 {
                     Console.WriteLine("Employee is not null");
                     // Set default value based on Employee's rank
@@ -48,7 +48,7 @@ namespace WebApplication1.Models
         {
             set
             {
-                if (Employee != null && (value == Employee.Position.Salary || value == 0))
+                if (Employee != null)
                 {
                     positionSalary = Employee.Position.Salary;
                 }

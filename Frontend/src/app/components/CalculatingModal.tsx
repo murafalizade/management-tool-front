@@ -5,73 +5,142 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { hideModal } from "../redux/showModalSlice";
 import EmployeeService from "../api/employeeService";
+import months from "../constants/months";
 
 const CalculatingModal = () => {
   const state = useSelector((state: RootState) => state.showModal);
   const dispatch = useDispatch();
 
   const [info, setInfo] = useState<any>({
-    recordDateYear: "2021",
-    rankSalary: "12,23",
     rankSalaryByHand: false,
-    positionSalary: "234,23",
     positionSalaryByHand: false,
-    serviceYears: "21",
-    serviceYearPercent: "30",
-    additionalService: false,
     additionalServiceByHand: false,
-    additionalServiceMulti: "",
-    additionalServiceMonths: "",
-    additionalServiceDays: "",
-    skillDegree: "",
-    skillDegreePercent: "",
-    representation: "",
-    representationPercent: "",
-    harmful: "",
-    harmfulPercent: "",
-    security: "",
-    securityPercent: "",
-    languageSkill: "",
-    languageSkillPercent: "",
+    skillDegreePercent: 0,
+    representationPercent: 0,
+    harmfulPercent: 0,
+    securityPercent: 0,
+    languageSkillPercent: 0,
     languageSkillByHand: false,
-    discovery: "",
-    discoveryPercent: "",
+    discoveryPercent: 0,
     discoveryByHand: false,
-    scientific: "",
-    award: "",
-    extraGvt: "",
-    extra: "",
-    total: "",
-    totalPercent: "",
-    totalByHand: false,
-    totalByHandPercent: "",
-    totalByHandAmount: "",
   });
+
+  // Xidmet illeri
+  const [serviceYears, setServiceYears] = useState<any>(0);
+  const [serviceMonths, setServiceMonths] = useState<any>(0);
+  const [serviceDays, setServiceDays] = useState<any>(0);
+
+  const [totalGiven, setTotalGiven] = useState<number>(0);
+  const [totalDiscount, setTotalDiscount] = useState<number>(0);
+  const [totalTaken, setTotalTaken] = useState<number>(0);
+  const [totalDSMF, setTotalDSMF] = useState<number>(0);
 
   const handleCheckbox = (e: any) => {
     setInfo({ ...info, [e.target.name]: e.target.checked });
   };
 
   const handleInput = (e: any) => {
-    setInfo({ ...info, [e.target.name]: e.target.value });
+    setInfo({ ...info, [e.target.name]: parseFloat(e.target.value) });
   };
 
   const getRecord = async () => {
-    const record = await EmployeeService.getEmployeeSalaryRecordById(26);
-    console.log(record);
-    setInfo(record);
+    console.log(state.show);
+    if (state.show === 0) return;
+    const record = await EmployeeService.getEmployeeSalaryRecordById(
+      state.show
+    );
+    setInfo({ ...info, ...record });
   };
 
   useEffect(() => {
-    console.log(info);
     getRecord();
-  }, []);
+    console.log(info);
+  }, [state.show]);
+
+  useEffect(() => {
+    setTotalGiven(
+      info.meharetlilik +
+        info.temsilcilik +
+        info.zererlilik +
+        info.rankSalary +
+        info.positionSalary +
+        info.mexfilik +
+        info.xariciDil +
+        info.kesfiyyat +
+        info.elmiDerece +
+        info.kibertehlukesizlik +
+        info.fexriAd +
+        info.extraMoney +
+        info.extraMoney2
+    );
+  }, [info]);
+
+  useEffect(() => {
+    // Assuming you have the startDate in the form of a Date object
+    const startDate = new Date(info?.employeeStartDate); // Example startDate
+    console.log(startDate);
+    // Get the first day of the current month
+    const currentDate = new Date();
+    const firstDayOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1
+    );
+
+    // Calculate the difference in milliseconds
+    const differenceInMilliseconds =
+      startDate.getTime() - firstDayOfMonth.getTime();
+
+    // Calculate the difference in days
+    const differenceInDays = Math.floor(
+      differenceInMilliseconds / (1000 * 3600 * 24)
+    );
+
+    // Calculate the difference in years, months, and remaining days
+    let diffYears = startDate.getFullYear() - firstDayOfMonth.getFullYear();
+    let diffMonths = startDate.getMonth() - firstDayOfMonth.getMonth();
+    let diffDays = startDate.getDate() - firstDayOfMonth.getDate();
+
+    // Adjust the difference if diffDays is negative
+    if (diffDays < 0) {
+      const daysInLastMonth = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        0
+      ).getDate();
+      diffDays += daysInLastMonth;
+      diffMonths--;
+    }
+
+    setServiceYears(Math.abs(diffYears));
+    setServiceMonths(Math.abs(diffMonths));
+    setServiceDays(Math.abs(diffDays));
+  }, [info?.employeeStartDate]);
+
+  console.log(
+    info.meharetlilik,
+    info.temsilcilik,
+    info.zererlilik,
+    info.rankSalary,
+    info.positionSalary,
+    info.mexfilik,
+    info.xariciDil,
+    info.kesfiyyat,
+    info.elmiDerece,
+    info.kibertehlukesizlik,
+    info.ExtraMoney,
+    info.ExtraMoney2
+  );
 
   return (
-    <Modal size="xl" show={state.show} onHide={() => dispatch(hideModal())}>
+    <Modal
+      size="xl"
+      show={state.show !== 0}
+      onHide={() => dispatch(hideModal())}
+    >
       <Modal.Header closeButton>
         <Modal.Title className="fs-6">
-          {info?.recordDateYear} il {info.recordDateMonth}
+          {info?.recordDateYear} il {months[info.recordDateMonth-1]?.name}
         </Modal.Title>
         <Modal.Title className="fs-6">{info.fullName}</Modal.Title>
       </Modal.Header>
@@ -92,14 +161,38 @@ const CalculatingModal = () => {
 
         <div className="d-flex section">
           <label>H/rütbə</label>
-          <input type="text" value={info.employeeRankName} className="form-control" />
+          <input
+            type="text"
+            disabled
+            value={info.employeeRankName}
+            className="form-control"
+          />
 
           <label>Bu ayn 1-nə olan Xİ (il,ay,gün)</label>
-          <input type="text" className="form-control date-input" />
-          <input type="text" className="form-control date-input" />
-          <input type="text" className="form-control date-input" />
+          <input
+            type="text"
+            disabled
+            value={serviceYears}
+            className="form-control date-input"
+          />
+          <input
+            type="text"
+            disabled
+            value={serviceMonths}
+            className="form-control date-input"
+          />
+          <input
+            type="text"
+            disabled
+            className="form-control date-input"
+            value={serviceDays}
+          />
           <label>Hesab №</label>
-          <input type="text" className="form-control long-input w-25" />
+          <input
+            type="text"
+            value={info?.accountNumber}
+            className="form-control long-input w-25"
+          />
         </div>
 
         <Container fluid>
@@ -127,7 +220,7 @@ const CalculatingModal = () => {
                     disabled={!info.rankSalaryByHand}
                     onChange={handleInput}
                     value={info.rankSalary}
-                    type="text"
+                    type="number"
                     className="form-control"
                   />
                 </div>
@@ -148,7 +241,7 @@ const CalculatingModal = () => {
                     əl ilə
                   </label>
                   <input
-                    type="text"
+                    type="number"
                     className="form-control"
                     disabled={!info.positionSalaryByHand}
                     name="positionSalary"
@@ -159,7 +252,7 @@ const CalculatingModal = () => {
 
                 <div className="d-flex justify-content-between my-1">
                   <label>Xidmət illəri</label>
-                  <label>{info.serviceYearPercent} %</label>
+                  <label>67 %</label>
                   <label className="normal-label">{info.serviceYears}</label>
                 </div>
 
@@ -172,93 +265,155 @@ const CalculatingModal = () => {
                 </div>
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
-                  <input type="text" className="form-control date-input" />
+                  <input type="number" className="form-control date-input" />
                   <label className="normal-label">qat</label>
-                  <input type="text" className="form-control date-input" />
+                  <input type="number" className="form-control date-input" />
                   <label className="normal-label">gün</label>
-                  <input type="text" className="form-control date-input" />
+                  <input type="number" className="form-control date-input" />
                   <label className="normal-label">ay</label>
-                  <input type="text" className="form-control w-100" />
+                  <input type="number" className="form-control w-100" />
                 </div>
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
                   <label>Məharət dərəcəsi</label>
-                  <select className="form-control date-input">
-                    {Array.from(Array(100).keys()).map((item) => (
-                      <option key={item}>{item}</option>
-                    ))}
-                  </select>
-                  %<label className="normal-label">{info.meharetlilik}</label>
+                  <input
+                    type="number"
+                    className="form-control date-input"
+                    min={0}
+                    onChange={handleInput}
+                    name="skillDegreePercent"
+                    value={info.skillDegreePercent}
+                    max={100}
+                  />
+                  %
+                  <label className="normal-label">
+                    {(info.positionSalary * info.skillDegreePercent) / 100}
+                  </label>
                 </div>
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
                   <label>Təmsilçilik</label>
-                  <select className="form-control date-input">
-                    {Array.from(Array(100).keys()).map((item) => (
-                      <option key={item}>{item}</option>
-                    ))}
-                  </select>
-                  %<label className="normal-label">{info.temsilcilik}</label>
+                  <input
+                    type="number"
+                    className="form-control date-input"
+                    onChange={handleInput}
+                    name="representationPercent"
+                    value={info.representationPercent}
+                    min={0}
+                    max={100}
+                  />
+                  %
+                  <label className="normal-label">
+                    {(info.positionSalary * info.representationPercent) / 100}
+                  </label>
                 </div>
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
                   <label>Zərərlik</label>
-                  <select className="form-control date-input">
-                    {Array.from(Array(100).keys()).map((item) => (
-                      <option key={item}>{item}</option>
-                    ))}
-                  </select>
-                  %<label className="normal-label">{info.zererlilik}</label>
+                  <input
+                    type="number"
+                    className="form-control date-input"
+                    min={0}
+                    onChange={handleInput}
+                    name="harmfulPercent"
+                    value={info.harmfulPercent}
+                    max={100}
+                  />
+                  %
+                  <label className="normal-label">
+                    {(info.positionSalary * info.harmfulPercent) / 100}
+                  </label>
                 </div>
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
                   <label>Məxfilik</label>
-                  <select className="form-control date-input">
-                    {Array.from(Array(100).keys()).map((item) => (
-                      <option key={item}>{item}</option>
-                    ))}
-                  </select>
-                  %<label className="normal-label">{info.mexfilik}</label>
+                  <input
+                    type="number"
+                    className="form-control date-input"
+                    min={0}
+                    onChange={handleInput}
+                    name="securityPercent"
+                    value={info.securityPercent}
+                    max={100}
+                  />
+                  %
+                  <label className="normal-label">
+                    {(info.securityPercent * info.positionSalary) / 100}
+                  </label>
                 </div>
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
                   <label>Xarici dil</label>
-                  <input type="checkbox" />
+                  <input
+                    type="checkbox"
+                    name="languageSkillByHand"
+                    checked={info.languageSkillByHand}
+                    onChange={handleCheckbox}
+                  />
                   <label className="normal-label">əl ilə</label>
-                  <select className="form-control date-input">
-                    {Array.from(Array(100).keys()).map((item) => (
-                      <option key={item}>{item}</option>
-                    ))}
-                  </select>
+                  <input
+                    type="number"
+                    className="form-control date-input"
+                    min={0}
+                    name="languageSkillPercent"
+                    value={info.languageSkillPercent}
+                    onChange={handleInput}
+                    max={100}
+                  />
                   %
                   <input
                     type="text"
+                    disabled={!info.languageSkillByHand}
                     className="form-control w-50"
-                    value={info.xariciDil}
+                    onChange={handleInput}
+                    name="xariciDil"
+                    value={
+                      !info.languageSkillByHand
+                        ? (info.positionSalary * info.languageSkillPercent) /
+                          100
+                        : info.xariciDil
+                    }
                   />
                 </div>
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
                   <label>Kəş.mük.</label>
-                  <input type="checkbox" />
+                  <input
+                    type="checkbox"
+                    name="discoveryByHand"
+                    checked={info.discoveryByHand}
+                    onChange={handleCheckbox}
+                  />
                   <label className="normal-label">əl ilə</label>
-                  <select className="form-control date-input">
-                    {Array.from(Array(100).keys()).map((item) => (
-                      <option key={item}>{item}</option>
-                    ))}
-                  </select>
+                  <input
+                    type="number"
+                    className="form-control date-input"
+                    min={0}
+                    name="discoveryPercent"
+                    value={info.discoveryPercent}
+                    onChange={handleInput}
+                    max={100}
+                  />
                   %
                   <input
-                    type="text"
+                    type="number"
                     className="form-control w-75"
-                    value={info.kesfiyyat}
+                    disabled={!info.discoveryByHand}
+                    onChange={handleInput}
+                    value={
+                      !info.discoveryByHand
+                        ? (info.positionSalary * info.discoveryPercent) / 100
+                        : info.kesfiyyat
+                    }
                   />
                 </div>
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
                   <label>Elmi dərəc. görə</label>
                   <input
-                    type="text"
+                    type="number"
+                    name="elmiDerece"
+                    onChange={handleInput}
                     className="form-control w-100"
                     value={info.elmiDerece}
                   />
@@ -267,8 +422,10 @@ const CalculatingModal = () => {
                 <div className="d-flex  align-items-center justify-content-between my-1">
                   <label>Kibertəhlük. əlav.</label>
                   <input
-                    type="text"
+                    type="number"
                     className="form-control w-100"
+                    onChange={handleInput}
+                    name="kibertehlukesizlik"
                     value={info.kibertehlukesizlik}
                   />
                 </div>
@@ -276,8 +433,10 @@ const CalculatingModal = () => {
                 <div className="d-flex  align-items-center justify-content-between my-1">
                   <label>Fəxri ada görə</label>
                   <input
-                    type="text"
+                    type="number"
                     className="form-control w-100"
+                    onChange={handleInput}
+                    name="fexriAd"
                     value={info.fexriAd}
                   />
                 </div>
@@ -285,41 +444,28 @@ const CalculatingModal = () => {
                 <div className="d-flex  align-items-center justify-content-between my-1">
                   <label>Əlavə ödən.(gvt)</label>
                   <input
-                    type="text"
+                    type="number"
                     className="form-control w-100"
-                    value={info.ExtraMoney}
+                    onChange={handleInput}
+                    name="extraMoney"
+                    value={info.extraMoney}
                   />
                 </div>
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
                   <label>Əlavə ödəniş</label>
                   <input
-                    type="text"
+                    type="number"
+                    onChange={handleInput}
+                    name="extraMoney2"
                     className="form-control w-100"
-                    value={info.ExtraMoney2}
+                    value={info.extraMoney2}
                   />
                 </div>
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
                   <label>Cəmi hesablanıb:</label>
-                  <b>
-                    {
-                      // sum of all
-                      info.meharetlilik +
-                        info.temsilcilik +
-                        info.zererlilik +
-                        info.rankSalary+
-                        info.positionSalary+
-                        info.mexfilik +
-                        info.xariciDil +
-                        info.kesfiyyat +
-                        info.elmiDerece +
-                        // info.kibertehlukesizlik +
-                        info.fexriAd
-                      // info.ExtraMoney +
-                      // info.ExtraMoney2
-                    }
-                  </b>
+                  <b>{totalGiven}</b>
                 </div>
               </div>
             </Col>
@@ -376,7 +522,7 @@ const CalculatingModal = () => {
                         <input type="text" className="form-control w-100" />
                       </div>
                       <span className="text-center">
-                        Güzəştli məbləğ: 3241.123
+                        Güzəştli məbləğ: {totalDiscount}
                       </span>
                     </Col>
                   </Row>
@@ -426,14 +572,14 @@ const CalculatingModal = () => {
 
                   <div className="d-flex  align-items-center justify-content-between my-1">
                     <label>Cəmi tutulur:</label>
-                    <b>1233.23</b>
+                    <b>{totalTaken}</b>
                   </div>
                 </div>
 
                 <div className="section">
                   <div className="d-flex  align-items-center justify-content-between my-1">
                     <label>Veriləcək məbləğ:</label>
-                    <b>1233.23</b>
+                    <b>{totalGiven - totalTaken + totalDiscount}</b>
                   </div>
                 </div>
               </div>
@@ -577,12 +723,12 @@ const CalculatingModal = () => {
                 <div className="d-flex justify-content-between">
                   <div className="section w-75 d-flex justify-content-between">
                     <label>DSMF Cəmi:</label>
-                    <b>1233.23</b>
+                    <b>{totalDSMF}</b>
                   </div>
 
                   <div className="section w-75 d-flex justify-content-between ms-2">
                     <label>Cəmi verilir:</label>
-                    <b>1233.23</b>
+                    <b>{totalGiven - totalTaken + totalDiscount - totalDSMF}</b>
                   </div>
                 </div>
               </div>
@@ -599,7 +745,13 @@ const CalculatingModal = () => {
             <hr className="my-2" />
             <div className="d-flex section border-0">
               <label>Qeyd</label>
-              <input type="text" className="form-control w-25" />
+              <input
+                value={info.comment}
+                name="comment"
+                onChange={handleInput}
+                type="text"
+                className="form-control w-25"
+              />
             </div>
             <div className="d-flex">
               <label>Rəng</label>

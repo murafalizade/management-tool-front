@@ -137,12 +137,15 @@ const columns: Column<SalaryRecordData>[] = [
     columns: [
       {
         Header: "gün",
+        accessor: "employeeStartDateDay",
       },
       {
         Header: "ay",
+        accessor: "employeeStartDateMonth",
       },
       {
         Header: "il",
+        accessor: "employeeStartDateYear",
       },
     ],
   },
@@ -166,7 +169,7 @@ const columns: Column<SalaryRecordData>[] = [
       },
       {
         Header: "P.t qatı",
-        accessor: "pTMoney",
+        accessor: "ptMoney",
       },
       {
         Header: "Məharət dər.",
@@ -529,7 +532,7 @@ const detailsColumns: Column<SalaryRecordData>[] = [
       },
       {
         Header: "P.t qatı",
-        accessor: "pTMoney",
+        accessor: "ptMoney",
       },
       {
         Header: "Məharət dər.",

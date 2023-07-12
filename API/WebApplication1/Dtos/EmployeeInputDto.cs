@@ -10,6 +10,8 @@ namespace WebApplication1.Dtos{
         public string InjuranceNo { get; set; }
         public DateTime BirthDate { get; set; }
         public DateTime StartDate { get; set; } = DateTime.Now;
+        public int RankId { get; set; } = 2;
+        public double PositionId { get; set; } = 1000.2;
 
     }
 }
