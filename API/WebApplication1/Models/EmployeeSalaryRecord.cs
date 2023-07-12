@@ -22,6 +22,47 @@ namespace WebApplication1.Models
                 return fullName;
             }
         }
+        private int xIDays = 0;
+        public int XIDays
+        {
+            get
+            {
+                return xIDays;
+            }
+            set
+            {
+                // calculate remaining days from RecordDate only return remains days not year or monts
+                xIDays = (int)(DateTime.Now - Employee.StartDate).TotalDays % 365 % 30;
+            }
+        }
+
+        private int xIMonths = 0;
+        public int XIMonths
+        {
+            get
+            {
+                return xIMonths;
+            }
+            set
+            {
+                // calculate remaining months from RecordDate only return remains months not year or days
+                xIMonths = (int)(DateTime.Now - Employee.StartDate).TotalDays % 365 / 30;
+            }
+        }
+
+        private int xIYears = 0;
+        public int XIYears
+        {
+            get
+            {
+                return xIYears;
+            }
+            set
+            {
+                // calculate remaining years from RecordDate only return remains years not months or days
+                xIYears = (int)(DateTime.Now - Employee.StartDate).TotalDays / 365;
+            }
+        }
 
         private double rankSalary = 0;
         public double RankSalary
@@ -30,7 +71,7 @@ namespace WebApplication1.Models
 
             set
             {
-                if (Employee != null )
+                if (Employee != null)
                 {
                     Console.WriteLine("Employee is not null");
                     // Set default value based on Employee's rank
@@ -50,12 +91,61 @@ namespace WebApplication1.Models
             {
                 if (Employee != null)
                 {
-                    positionSalary = Employee.Position.Salary;
+                    positionSalary = (double)Employee.Position.Salary;
                 }
             }
             get { return positionSalary; }
         }
-        public double XIMoney { get; set; } = 0;
+        private double xIMoney = 0;
+        public double XIMoney
+        {
+            get
+            {
+                return xIMoney;
+            }
+            set
+            {
+                if (Employee != null && value == 0)
+                {
+                    if (xIYears <= 2 && xIYears >= 1)
+                    {
+                        xIMoney = positionSalary * 5 / 100;
+                    }
+                    else if (xIYears <= 5 && xIYears >= 3)
+                    {
+                        xIMoney = positionSalary * 10 / 100;
+                    }
+                    else if (xIYears <= 10 && xIYears >= 6)
+                    {
+                        xIMoney = positionSalary * 15 / 100;
+                    }
+                    else if (xIYears <= 15 && xIYears >= 11)
+                    {
+                        xIMoney = positionSalary * 20 / 100;
+                    }
+                    else if (xIYears <= 20 && xIYears >= 16)
+                    {
+                        xIMoney = positionSalary * 25 / 100;
+                    }
+                    else if (xIYears <= 25 && xIYears >= 21)
+                    {
+                        xIMoney = positionSalary * 30 / 100;
+                    }
+                    else if (xIYears <= 30 && xIYears >= 26)
+                    {
+                        xIMoney = positionSalary * 40 / 100;
+                    }
+                    else if (xIYears > 30)
+                    {
+                        xIMoney = positionSalary * 0.5;
+                    }
+                }
+                else
+                {
+                    xIMoney = value;
+                }
+            }
+        }
         private double pTMoney = 0;
         public double PTMoney
         {
@@ -167,6 +257,10 @@ namespace WebApplication1.Models
                         mexfilik = positionSalary * 20 / 100;
                     }
                 }
+                else
+                {
+                    mexfilik = value;
+                }
             }
             get
             {
@@ -189,6 +283,10 @@ namespace WebApplication1.Models
                     {
                         xariciDil = positionSalary * 10 / 100;
                     }
+                }
+                else
+                {
+                    xariciDil = value;
                 }
             }
             get
@@ -264,6 +362,10 @@ namespace WebApplication1.Models
                             break;
                     }
                 }
+                else
+                {
+                    elmiDerece = value;
+                }
             }
             get
             {
@@ -285,6 +387,10 @@ namespace WebApplication1.Models
                     {
                         fexriAd = 60;
                     }
+                }
+                else
+                {
+                    fexriAd = value;
                 }
             }
             get
@@ -311,7 +417,7 @@ namespace WebApplication1.Models
         public double HealthInsurance { get; set; }
         public double Kesirler { get; set; }
         public double Aliment { get; set; }
-        public double Extra211100 { get; set; }
+        public double Extra211100 { get; set; } = 0;
         public double Discount { get; set; }
         public double ExtraGivenMoney { get; set; }
         public double Food { get; set; }

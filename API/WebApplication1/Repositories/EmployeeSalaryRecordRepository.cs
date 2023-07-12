@@ -60,9 +60,47 @@ namespace WebApplication1.Repositories
 
         public async Task<EmployeeSalaryRecord> UpdateEmployee(EmployeeSalaryRecord employee)
         {
-            _context.EmployeeSalaryRecords.Update(employee);
+            var existingEmployee = await _context.EmployeeSalaryRecords.FindAsync(employee.Id);
+
+            if (existingEmployee == null)
+            {
+                System.Console.WriteLine("Employee not found.");
+                // Handle the case where the employee record is not found.
+                // You might throw an exception or return an appropriate response.
+                // For example:
+                // throw new NotFoundException("Employee not found.");
+                // or
+                // return NotFound();
+            }
+
+            // Update the properties of the existingEmployee object with the values from the employee parameter.
+            existingEmployee.XariciDil = employee.XariciDil;
+            existingEmployee.ElmiDerece = employee.ElmiDerece;
+            existingEmployee.Aliment = employee.Aliment;
+            existingEmployee.BPM = employee.BPM;
+            existingEmployee.DSMF = employee.DSMF;
+            existingEmployee.Comment = employee.Comment;
+            existingEmployee.RankSalary = employee.RankSalary;
+            existingEmployee.PositionSalary = employee.PositionSalary;
+            existingEmployee.Kibertehlukesizlik = employee.Kibertehlukesizlik;
+            existingEmployee.FexriAd = employee.FexriAd;
+            existingEmployee.Meharetlilik = employee.Meharetlilik;
+            existingEmployee.Kesfiyyat = employee.Kesfiyyat;
+            existingEmployee.Temsilcilik = employee.Temsilcilik;
+            existingEmployee.Zererlilik = employee.Zererlilik;
+            existingEmployee.Tax = employee.Tax;
+            existingEmployee.Kesirler =  employee.Kesirler;
+            existingEmployee.Extra211100 = employee.Extra211100;
+            existingEmployee.HealthInsurance = employee.HealthInsurance;
+            existingEmployee.AccountNumber = employee.AccountNumber;
+
+            // existingEmployee.TotalSalary = employee.TotalSalary;
+
+
+
             await _context.SaveChangesAsync();
-            return employee;
+            return existingEmployee;
         }
+
     }
 }

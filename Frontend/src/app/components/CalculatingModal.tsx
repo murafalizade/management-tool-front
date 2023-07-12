@@ -12,13 +12,18 @@ const CalculatingModal = () => {
   const dispatch = useDispatch();
 
   const [info, setInfo] = useState<any>({
+    takenByHand: false,
     rankSalaryByHand: false,
     positionSalaryByHand: false,
+    tax: 0,
+    dsmf: 0,
     additionalServiceByHand: false,
     skillDegreePercent: 0,
     representationPercent: 0,
     harmfulPercent: 0,
+    // extra211100:0,
     securityPercent: 0,
+    alimentPercent: 0,
     languageSkillPercent: 0,
     languageSkillByHand: false,
     discoveryPercent: 0,
@@ -44,7 +49,6 @@ const CalculatingModal = () => {
   };
 
   const getRecord = async () => {
-    console.log(state.show);
     if (state.show === 0) return;
     const record = await EmployeeService.getEmployeeSalaryRecordById(
       state.show
@@ -54,7 +58,6 @@ const CalculatingModal = () => {
 
   useEffect(() => {
     getRecord();
-    console.log(info);
   }, [state.show]);
 
   useEffect(() => {
@@ -72,6 +75,15 @@ const CalculatingModal = () => {
         info.fexriAd +
         info.extraMoney +
         info.extraMoney2
+    );
+
+    setTotalTaken(
+      info.aliment +
+        info.extra211100 +
+        info.kesirler +
+        info.tax +
+        info.dsmf +
+        info.healthInsurance
     );
   }, [info]);
 
@@ -117,20 +129,11 @@ const CalculatingModal = () => {
     setServiceDays(Math.abs(diffDays));
   }, [info?.employeeStartDate]);
 
-  console.log(
-    info.meharetlilik,
-    info.temsilcilik,
-    info.zererlilik,
-    info.rankSalary,
-    info.positionSalary,
-    info.mexfilik,
-    info.xariciDil,
-    info.kesfiyyat,
-    info.elmiDerece,
-    info.kibertehlukesizlik,
-    info.ExtraMoney,
-    info.ExtraMoney2
-  );
+  const updateRecord = async () => {
+    console.log(info);
+    await EmployeeService.updateEmployeeSalaryRecord(info);
+    window.location.reload();
+  };
 
   return (
     <Modal
@@ -140,7 +143,7 @@ const CalculatingModal = () => {
     >
       <Modal.Header closeButton>
         <Modal.Title className="fs-6">
-          {info?.recordDateYear} il {months[info.recordDateMonth-1]?.name}
+          {info?.recordDateYear} il {months[info.recordDateMonth - 1]?.name}
         </Modal.Title>
         <Modal.Title className="fs-6">{info.fullName}</Modal.Title>
       </Modal.Header>
@@ -191,6 +194,8 @@ const CalculatingModal = () => {
           <input
             type="text"
             value={info?.accountNumber}
+            onChange={(e:any)=> setInfo({...info, accountNumber: e.target.value})}
+            name="accountNumber"
             className="form-control long-input w-25"
           />
         </div>
@@ -531,43 +536,101 @@ const CalculatingModal = () => {
                 <div className="section">
                   <h6>Tutulur</h6>
                   <div className="d-flex justify-content-end">
-                    <input type="checkbox" />
+                    <input
+                      type="checkbox"
+                      onChange={handleCheckbox}
+                      name="takenByHand"
+                      value={info?.takenByHand}
+                    />
                     <label className="normal-label">əl ilə</label>
                   </div>
                   <div className="d-flex justify-content-between my-1">
                     <label>Gəlir vergisi</label>
-                    <input type="text" className="form-control w-50" />
+                    <input
+                      value={info?.tax}
+                      name="tax"
+                      disabled={!info.takenByHand}
+                      onChange={handleInput}
+                      type="number"
+                      min="0"
+                      className="form-control w-50"
+                    />
                   </div>
 
                   <div className="d-flex justify-content-between my-1">
                     <label>DSMF</label>
-                    <input type="text" className="form-control w-50" />
+                    <input
+                      type="number"
+                      min="0"
+                      value={info.dsmf}
+                      name="dsmf"
+                      onChange={handleInput}
+                      disabled={!info.takenByHand}
+                      className="form-control w-50"
+                    />
                   </div>
 
                   <div className="d-flex justify-content-between my-1">
                     <label>Tibbi sığorta</label>
-                    <input type="text" className="form-control w-50" />
+                    <input
+                      name="healthInsurance"
+                      value={info?.healthInsurance}
+                      onChange={handleInput}
+                      disabled={!info.takenByHand}
+                      type="number"
+                      min="0"
+                      className="form-control w-50"
+                    />
                   </div>
 
                   <div className="d-flex justify-content-between my-1">
                     <label>Kəsirlər</label>
-                    <input type="text" className="form-control w-50" />
+                    <input
+                      type="number"
+                      min="0"
+                      name="kesirler"
+                      disabled={!info.takenByHand}
+                      value={info?.kesirler}
+                      onChange={handleInput}
+                      className="form-control w-50"
+                    />
                   </div>
 
                   <div className="d-flex justify-content-between my-1">
                     <label>Aliment</label>
-                    <select className="form-control date-input">
-                      {Array.from(Array(100).keys()).map((item) => (
-                        <option key={item}>{item}</option>
-                      ))}
-                    </select>
+                    <input
+                      type="number"
+                      min="0"
+                      max="100"
+                      name="alimentPercent"
+                      disabled={!info.takenByHand}
+                      value={info?.alimentPercent}
+                      onChange={handleInput}
+                      className="form-control w-50"
+                    />
                     %
-                    <input type="text" className="form-control w-50" />
+                    <input
+                      type="number"
+                      min="0"
+                      value={info?.aliment}
+                      disabled={!info.takenByHand}
+                      onChange={handleInput}
+                      name="aliment"
+                      className="form-control w-50"
+                    />
                   </div>
 
                   <div className="d-flex justify-content-between my-1">
                     <label>Artıq ödənilən</label>
-                    <input type="text" className="form-control w-50" />
+                    <input
+                      onChange={handleInput}
+                      value={info?.extra21100}
+                      type="number"
+                      min="0"
+                      disabled={!info.takenByHand}
+                      name="extra21100"
+                      className="form-control w-50"
+                    />
                   </div>
 
                   <div className="d-flex  align-items-center justify-content-between my-1">
@@ -748,7 +811,7 @@ const CalculatingModal = () => {
               <input
                 value={info.comment}
                 name="comment"
-                onChange={handleInput}
+                onChange={(e:any)=> setInfo({...info, comment: e.target.value})}
                 type="text"
                 className="form-control w-25"
               />
@@ -763,7 +826,9 @@ const CalculatingModal = () => {
         </Container>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary">Yadda Saxla</Button>
+        <Button onClick={() => updateRecord()} variant="primary">
+          Yadda Saxla
+        </Button>
         <Button variant="light">Hesabla</Button>
         <Button variant="secondary">Bagla</Button>
       </Modal.Footer>

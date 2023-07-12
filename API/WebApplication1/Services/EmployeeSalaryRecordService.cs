@@ -79,7 +79,7 @@ namespace WebApplication1.Services
             }
         }
 
-        public async Task<ErrorHandelerDto> UpdateEmployee(EmployeeEditDto employee)
+        public async Task<ErrorHandelerDto> UpdateEmployee(EmployeeSalaryEditDto employee)
         {
             try
             {

@@ -229,9 +229,9 @@ function Home() {
           </tbody>
         </Table> */}
       </div>
-      <div className="px-1">
+      {/* <div className="px-1">
         Elman / 719,17 / 2-ci m/d ver. BQR-nin emr N02 05.01.2022
-      </div>
+      </div> */}
     </main>
   );
 }

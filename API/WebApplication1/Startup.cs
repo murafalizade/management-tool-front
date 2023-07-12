@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using WebApplication1.Data;
 using WebApplication1.Services;
 using WebApplication1.Repositories;
+using WebApplication1.Helpers;
 
 namespace WebApplication1
 {
@@ -77,7 +78,7 @@ namespace WebApplication1
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -86,6 +87,8 @@ namespace WebApplication1
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApplication1 v1"));
             }
 
+            DataSeeder.SeedData(serviceProvider);
+            
             app.UseHttpsRedirection();
 
             app.UseAuthentication();

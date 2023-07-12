@@ -165,7 +165,7 @@ const columns: Column<SalaryRecordData>[] = [
       },
       {
         Header: "Xİ  görə əlavə",
-        accessor: "xIMoney",
+        accessor: "xiMoney",
       },
       {
         Header: "P.t qatı",
@@ -230,7 +230,7 @@ const columns: Column<SalaryRecordData>[] = [
       },
       {
         Header: "DSMF",
-        accessor: "dSMF",
+        accessor: "dsmf",
       },
       {
         Header: "Tibbi sığorta",
@@ -528,7 +528,7 @@ const detailsColumns: Column<SalaryRecordData>[] = [
       },
       {
         Header: "Xİ  görə əlavə",
-        accessor: "xIMoney",
+        accessor: "xiMoney",
       },
       {
         Header: "P.t qatı",
@@ -589,7 +589,7 @@ const detailsColumns: Column<SalaryRecordData>[] = [
       },
       {
         Header: "DSMF",
-        accessor:"dSMF"
+        accessor:"dsmf"
       },
       {
         Header: "Tibbi sığorta",

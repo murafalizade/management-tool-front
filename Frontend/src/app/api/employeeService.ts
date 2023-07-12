@@ -54,4 +54,8 @@ export default class EmployeeService {
   static async updateNextMonth(): Promise<any> {
     return await fetch.post(`/api/employee/salary/record/nextmonth`);
   }
+
+  static async updateEmployeeSalaryRecord(data: any): Promise<any> {
+    return await fetch.put(`/api/employee/salary/record`, data);
+  }
 }
