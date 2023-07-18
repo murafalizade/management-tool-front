@@ -12,22 +12,24 @@ namespace WebApplication1.Services
     {
         private readonly IEmployeeSalaryRecordRepository _employeeSalaryRecordRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IDiscountRepository _discountRepository;
         private readonly IMapper _mapper;
-        public EmployeeSalaryRecordService(IEmployeeSalaryRecordRepository employeeSalaryRecordRepository, IEmployeeRepository employeeRepository, IMapper mapper)
+        public EmployeeSalaryRecordService(IEmployeeSalaryRecordRepository employeeSalaryRecordRepository, IEmployeeRepository employeeRepository, IDiscountRepository discountRepository ,IMapper mapper)
         {
             _employeeSalaryRecordRepository = employeeSalaryRecordRepository;
             _employeeRepository = employeeRepository;
+            _discountRepository = discountRepository;
             _mapper = mapper;
         }
 
-        public async Task<ErrorHandelerDto> GetAllEmployee(int month = 0, int year = 0)
+        public async Task<ErrorHandelerDto> GetAllEmployee(string search, int month = 0, int year = 0)
         {
             try
             {
                 month = month == 0 ? DateTime.Now.Month : month;
                 year = year == 0 ? DateTime.Now.Year : year;
 
-                List<EmployeeSalaryRecord> obj = await _employeeSalaryRecordRepository.GetEmployees(month, year);
+                List<EmployeeSalaryRecord> obj = await _employeeSalaryRecordRepository.GetEmployees(search, month, year);
                 return new ErrorHandelerDto
                 {
                     data = _mapper.Map<List<EmployeeSalaryResultDto>>(obj),
@@ -108,7 +110,7 @@ namespace WebApplication1.Services
             {
                 EmployeeSalaryRecord lastRecord = await _employeeSalaryRecordRepository.GetLastEmployeeRecord();
 
-                List<EmployeeSalaryRecord> employeeSalaryRecordForThisMonth = await _employeeSalaryRecordRepository.GetEmployees(lastRecord.RecordDate.Month, lastRecord.RecordDate.Year);
+                List<EmployeeSalaryRecord> employeeSalaryRecordForThisMonth = await _employeeSalaryRecordRepository.GetEmployees("all",lastRecord.RecordDate.Month, lastRecord.RecordDate.Year);
 
                 foreach (var employee in employeeSalaryRecordForThisMonth)
                 {
@@ -139,7 +141,8 @@ namespace WebApplication1.Services
         {
 
             Employee employee = await _employeeRepository.GetEmployeeById(employeeId);
-            RecordCreationDto x = new RecordCreationDto { Employee = employee, RankSalary = 70 };
+            Discount discount = await _discountRepository.GetDiscounts(1);
+            RecordCreationDto x = new RecordCreationDto { Employee = employee, Discount = discount };
             await _employeeSalaryRecordRepository.AddEmployee(_mapper.Map<EmployeeSalaryRecord>(x));
             return new ErrorHandelerDto
             {
@@ -186,7 +189,7 @@ namespace WebApplication1.Services
             {
                 EmployeeSalaryRecord lastRecord = await _employeeSalaryRecordRepository.GetLastEmployeeRecord();
 
-                List<EmployeeSalaryRecord> employeeSalaryRecordForThisMonth = await _employeeSalaryRecordRepository.GetEmployees(lastRecord.RecordDate.Month, lastRecord.RecordDate.Year);
+                List<EmployeeSalaryRecord> employeeSalaryRecordForThisMonth = await _employeeSalaryRecordRepository.GetEmployees("all",lastRecord.RecordDate.Month, lastRecord.RecordDate.Year);
 
                 foreach (var employee in employeeSalaryRecordForThisMonth)
                 {

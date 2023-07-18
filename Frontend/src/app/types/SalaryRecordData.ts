@@ -11,6 +11,7 @@ export type SalaryRecordData = {
   employeePositionDepartmentAdminstrationName: string;
   rankSalary: number;
   positionSalary: number;
+  total:number;
   xiMoney: number;
   ptMoney: number;
   meharetlilik: number;
@@ -18,6 +19,9 @@ export type SalaryRecordData = {
   mexfilik: number;
   zererlilik: number;
   totalIncome: number;
+  xiYears: number;
+  xiDays: number;
+  xiMonths: number;
   xariciDil: number;
   kibertehlukesizlik: number;
   kesfiyyat: number;

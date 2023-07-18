@@ -6,6 +6,7 @@ namespace WebApplication1.Dtos{
         public int Id { get; set; }
         public double PTMoney { get; set; }
         public string AccountNumber { get; set; }
+        
         public double Kibertehlukesizlik { get; set; }
         public double RankSalary { get; set; }
         public double PositionSalary { get; set; }

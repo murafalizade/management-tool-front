@@ -6,6 +6,7 @@ import Departments from "./Departments";
 import { useDispatch, useSelector } from "react-redux";
 import { changeModalInfo } from "../redux/showModalSlice";
 import { RootState } from "../redux/store";
+import RankSalary from "./RankSalary";
 
 type Props = {
   show: boolean;
@@ -13,7 +14,6 @@ type Props = {
 };
 
 function SalaryModal(props: Props) {
-
   function handleTabSelect(key: any) {
     setActiveTab(key);
   }
@@ -71,17 +71,13 @@ function SalaryModal(props: Props) {
         </Tab.Pane>
         <Tab.Pane
           eventKey="Bölmə_və_Şöbələr"
-          className={
-            activeTab === "Bölmə_və_Şöbələr" ? "show active" : ""
-          }
+          className={activeTab === "Bölmə_və_Şöbələr" ? "show active" : ""}
         >
           <Departments />
         </Tab.Pane>
         <Tab.Pane
           eventKey="Vəzifə_maaşları"
-          className={
-            activeTab === "Vəzifə_maaşları" ? "show active" : ""
-          }
+          className={activeTab === "Vəzifə_maaşları" ? "show active" : ""}
         >
           <PositionSalary />
         </Tab.Pane>

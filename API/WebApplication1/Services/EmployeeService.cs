@@ -11,11 +11,14 @@ namespace WebApplication1.Services
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IEmployeeSalaryRecordRepository _employeeSalaryRecordRepository;
+        private readonly IDiscountRepository _discountRepository;
+
         private readonly IMapper _mapper;
-        public EmployeeService(IEmployeeRepository employeeRepository, IEmployeeSalaryRecordRepository employeeSalaryRecordRepository, IMapper mapper)
+        public EmployeeService(IEmployeeRepository employeeRepository, IEmployeeSalaryRecordRepository employeeSalaryRecordRepository, IDiscountRepository discountRepository, IMapper mapper)
         {
             _employeeRepository = employeeRepository;
             _employeeSalaryRecordRepository = employeeSalaryRecordRepository;
+            _discountRepository = discountRepository;
             _mapper = mapper;
         }
         public async Task<ErrorHandelerDto> AddEmployee(EmployeeInputDto employee)
@@ -35,9 +38,9 @@ namespace WebApplication1.Services
             }
             Employee obj1 = _mapper.Map<Employee>(employee);
             int id = await _employeeRepository.AddEmployee(obj1);
-            System.Console.WriteLine(id);
             Employee emp = await _employeeRepository.GetEmployeeById(id);
-            RecordCreationDto x = new RecordCreationDto { Employee = emp };
+            Discount discount = await _discountRepository.GetDiscounts(2023,7);
+            RecordCreationDto x = new RecordCreationDto { Employee = emp, Discount = discount };
             await _employeeSalaryRecordRepository.AddEmployee(_mapper.Map<EmployeeSalaryRecord>(x));
             return new ErrorHandelerDto
             {

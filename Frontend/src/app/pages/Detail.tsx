@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
-import { detailsColumns } from "../constants/headers";
+import { columns2, detailsColumns } from "../constants/headers";
 import { useTable } from "react-table";
 import EmployeeService from "../api/employeeService";
 import { SalaryRecordData } from "../types/SalaryRecordData";
@@ -11,6 +11,8 @@ const Detail = () => {
 
   const [salaryRecord, setSalaryRecord] = useState<SalaryRecordData[]>([]);
   const [year, setYear] = useState<number>(new Date().getFullYear());
+  const [totalValue, setTotalValue] = useState<any>({});
+
 
   const { id } = useParams<{ id: string }>();
 
@@ -27,6 +29,25 @@ const Detail = () => {
   useEffect(() => {
     getEmployees(parseInt(id!));
   }, [id]);
+
+
+  useEffect(() => {
+      // calculate sum to each fields return object
+      const totals = salaryRecord.reduce((acc: any, curr: any) => {
+        for (const key in curr) {
+          if (typeof curr[key] !== "string") {
+            if (acc[key]) {
+              acc[key] += curr[key];
+            } else {
+              acc[key] = curr[key];
+            }
+          }
+        }
+        return acc;
+      }, []);
+      setTotalValue(totals);
+  }, [salaryRecord]);
+
 
   const tableInstance = useTable({
     columns: detailsColumns,
@@ -64,7 +85,7 @@ const Detail = () => {
 
       <div style={{ overflow: "scroll", maxHeight: "80vh" }}>
         {/* <div style={{maxHeight:'43vh',width:"100%"}}> */}
-        <Table bordered hover {...getTableProps()}>
+        <Table className="main-table" bordered hover {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup: any) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -107,36 +128,16 @@ const Detail = () => {
               );
             })}
           </tbody>
-        </Table>
 
-        <Table bordered hover>
-          <thead></thead>
-          <tbody>
+
+          <tfoot className="position-sticky foot-table w-100" style={{bottom:"0px"}}>
             <tr>
-              <td className="text-center"></td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
+              <td colSpan={10}></td>
+              {columns2.map((column: any) => (
+                <td>{totalValue[column.accessor] ?? 0}</td>
+              ))}
             </tr>
-          </tbody>
+          </tfoot>
         </Table>
       </div>
     </main>

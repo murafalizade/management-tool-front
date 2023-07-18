@@ -194,7 +194,9 @@ const CalculatingModal = () => {
           <input
             type="text"
             value={info?.accountNumber}
-            onChange={(e:any)=> setInfo({...info, accountNumber: e.target.value})}
+            onChange={(e: any) =>
+              setInfo({ ...info, accountNumber: e.target.value })
+            }
             name="accountNumber"
             className="form-control long-input w-25"
           />
@@ -224,7 +226,11 @@ const CalculatingModal = () => {
                     name="rankSalary"
                     disabled={!info.rankSalaryByHand}
                     onChange={handleInput}
-                    value={info.rankSalary}
+                    value={
+                      info.rankSalaryByHand
+                        ? info.rankSalary
+                        : info.employeeRankSalary
+                    }
                     type="number"
                     className="form-control"
                   />
@@ -257,7 +263,7 @@ const CalculatingModal = () => {
 
                 <div className="d-flex justify-content-between my-1">
                   <label>Xidmət illəri</label>
-                  <label>67 %</label>
+                  <label>{info?.xiPercent} %</label>
                   <label className="normal-label">{info.serviceYears}</label>
                 </div>
 
@@ -667,7 +673,7 @@ const CalculatingModal = () => {
                     <div className="d-flex  align-items-center justify-content-between my-1">
                       <input type="checkbox" />
                       <label>verilir</label>
-                      <input type="text" className="form-control" />
+                      <input value={info?.food} name='food' onChange={handleInput} type="text" className="form-control" />
                     </div>
                   </div>
                 </div>
@@ -760,7 +766,7 @@ const CalculatingModal = () => {
                         <label className="d-flex my-2">
                           <label className="min-width-30"></label>
                           <span className="min-width-30">Səhra pulu</span>
-                          <input type="text" className="form-control w-75" />
+                          <input value={info?.sehra} onChange={handleInput} name="sehra" type="text" className="form-control w-75" />
                         </label>
                         <label className="d-flex my-2">
                           <label className="min-width-30"></label>
@@ -811,7 +817,9 @@ const CalculatingModal = () => {
               <input
                 value={info.comment}
                 name="comment"
-                onChange={(e:any)=> setInfo({...info, comment: e.target.value})}
+                onChange={(e: any) =>
+                  setInfo({ ...info, comment: e.target.value })
+                }
                 type="text"
                 className="form-control w-25"
               />

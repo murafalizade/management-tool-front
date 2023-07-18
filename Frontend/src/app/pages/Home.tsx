@@ -13,6 +13,7 @@ import { showModal, setSelectedRow } from "../redux/showModalSlice";
 import withAuth from "../hoc/withAuth";
 import { RootState } from "../redux/store";
 import EmployeeService from "../api/employeeService";
+import Loading from '../components/Loading';
 import { SalaryRecordData } from "../types/SalaryRecordData";
 
 function Home() {
@@ -21,22 +22,61 @@ function Home() {
   const [salaryRecord, setSalaryRecord] = useState<SalaryRecordData[]>([]);
   const [year, setYear] = useState<number>(new Date().getFullYear());
   const [month, setMonth] = useState<number>(new Date().getMonth() + 1);
-
+  const [filter, setFilter] = useState<string>("");
+  const [totalValue, setTotalValue] = useState<any>({});
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const dispatch = useDispatch();
 
   let nav = useNavigate();
 
   // fetch employees from API
   const getEmployees = async () => {
-    const response = await EmployeeService.getEmployeeSalaryRecord(month, year);
-    console.log(response);
+    const response = await EmployeeService.getEmployeeSalaryRecord(
+      month,
+      year,
+      filter
+    );
     setSalaryRecord(response);
   };
 
   useEffect(() => {
     getEmployees();
+    setIsLoading(false);
   }, []);
 
+  useEffect(() => {
+    if (salaryRecord.length >= 0) {
+      // calculate sum to each fields return object
+      const totals = salaryRecord.reduce((acc: any, curr: any) => {
+        for (const key in curr) {
+          if (typeof curr[key] !== "string") {
+            if (acc[key]) {
+              acc[key] += curr[key];
+            } else {
+              acc[key] = curr[key];
+            }
+          } else if (key === "fullName") {
+            if (acc[key]) {
+              acc[key]++;
+            } else {
+              acc[key] = 1;
+            }
+          }
+        }
+        return acc;
+      }, {});
+      setTotalValue(totals);
+    }
+  }, [salaryRecord]);
+
+  console.log(totalValue);
+
+  // Handle filter change
+  const handleFilter = (e: any) => {
+    setFilter(e.target.value);
+  };
+
+  // Navigate to personal account when clicked
   const personalAccount = () => {
     if (!selectedColumn) {
       alert("Please select a row");
@@ -45,10 +85,12 @@ function Home() {
     nav(`/detail/${selectedColumn.employeeId}`);
   };
 
+  // Set selected row
   useEffect(() => {
     setSelectedColumn(state.selectedRow);
   }, [state.selectedRow]);
 
+  // Handle row click
   const handleRowClick = (row: any) => {
     if (row.original === selectedColumn) {
       dispatch(setSelectedRow(null));
@@ -57,19 +99,20 @@ function Home() {
     }
   };
 
+  // Handle row double click
   const handleRowDoubleClick = (row: any) => {
-    console.log(row.original.id)
+    console.log(row.original.id);
     dispatch(showModal(row.original.id));
   };
 
   const tableInstance = useTable({ columns, data: salaryRecord });
-  // const tableInstance2 = useTable({ columns: columns2, data: data2 });
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     tableInstance;
 
   return (
     <main>
+      {isLoading?<Loading/>:null}
       <div className="d-flex justify-content-between m-3">
         <div className="d-flex justify-content-center align-items-center">
           <input
@@ -109,15 +152,19 @@ function Home() {
         </div>
 
         <div className="d-flex">
-          <select className="form-control mx-2">
+          <select onChange={handleFilter} className="form-control mx-2">
             {filterData.map((month: any, index: number) => (
-              <option className="fs-6" key={index} value={month.name}>
+              <option className="fs-6" key={index} value={month.value}>
                 {month.name}
               </option>
             ))}
           </select>
 
-          <Button variant="primary" className="btn btn-primary">
+          <Button
+            variant="primary"
+            className="btn btn-primary"
+            onClick={() => getEmployees()}
+          >
             Göstər
           </Button>
         </div>
@@ -133,9 +180,10 @@ function Home() {
         </div>
       </div>
 
-      <div style={{ overflow: "scroll", maxHeight: "76vh" }}>
+              
+      <div style={{ overflow: "scroll", maxHeight:"80vh" }}>
         {/* <div style={{maxHeight:'43vh',width:"100%"}}> */}
-        <Table bordered hover {...getTableProps()}>
+        <Table className="position-relative main-table" bordered hover {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup: any) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -182,56 +230,31 @@ function Home() {
               );
             })}
           </tbody>
-        </Table>
-        {/* </div> */}
-
-        <CalculatingModal />
-
-        {/* <Table
-          style={{ position: "sticky", bottom: "24px",height:'100px' }}
-          bordered
-          bgcolor="#f5f5f5"
-          hover
-          {...getTableProps()}
-        >
-          <thead>
-            <tr>
-              <th style={{ width: "383px" }} className="d-block"></th>
+          <tfoot className="position-sticky foot-table w-100" style={{bottom:"0px"}}>
+            <tr className="text-center">
+              <th colSpan={4}></th> <th>S.A.A</th>
+              <th colSpan={4}></th>
+              {""}
               {columns2.map((column: any) => (
-                <th className="text-center">{column.Header}</th>
+                <th>{column.Header}</th>
               ))}
             </tr>
-          </thead>
-          <tbody>
-            {/* {tableInstance2.rows.map((row: any) => {
-              prepareRow(row);
-              return (
-                <tr
-                  style={{
-                    cursor: "pointer",
-                    userSelect: "none",
-                  }}
-                  {...row.getRowProps()}
-                >
-                  {row.cells.map((cell: any) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
-                </tr>
-              );
-            })} */}
-        {/* <tr>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
-              <td className="text-center">0</td>
+            <tr>
+              <td colSpan={4}></td>
+              <td>{totalValue.fullName}</td>
+              <td colSpan={4}></td>
+              {columns2.map((column: any) => (
+                <td>{totalValue[column.accessor] ?? 0}</td>
+              ))}
             </tr>
-          </tbody>
-        </Table> */}
+          </tfoot>
+        </Table>
       </div>
-      {/* <div className="px-1">
-        Elman / 719,17 / 2-ci m/d ver. BQR-nin emr N02 05.01.2022
-      </div> */}
+
+      <CalculatingModal />
+      <div className="px-1">
+       {selectedColumn?.comment ?? ""}
+      </div>
     </main>
   );
 }

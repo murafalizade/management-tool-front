@@ -26,6 +26,7 @@ namespace WebApplication1.Repositories
             return _context.EmployeeSalaryRecords.
             Include(x => x.Employee).
             Include(x => x.Employee.Rank).
+            Include(x=> x.Discount).
             Include(x => x.Employee.Position).
             Include(x => x.Employee.Position.Department).
             Include(x => x.Employee.Position.Department.Adminstration).
@@ -37,20 +38,84 @@ namespace WebApplication1.Repositories
             return await _context.EmployeeSalaryRecords.Include(x => x.Employee).
             Include(x => x.Employee.Rank).
             Include(x => x.Employee.Position).
+            Include(x=> x.Discount).
             Include(x => x.Employee.Position.Department).
             Include(x => x.Employee.Position.Department.Adminstration).
             FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<List<EmployeeSalaryRecord>> GetEmployees(int month, int year)
+        public async Task<List<EmployeeSalaryRecord>> GetEmployees(string search,int month, int year)
         {
-            return await _context.EmployeeSalaryRecords.Include(x => x.Employee).
+            var ob =   _context.EmployeeSalaryRecords.Include(x => x.Employee).
             Include(x => x.Employee.Rank).
+            Include(x=> x.Discount).
             Include(x => x.Employee.Position).
             Include(x => x.Employee.Position.Department).
             Include(x => x.Employee.Position.Department.Adminstration).
-            Where(x => x.RecordDate.Year == year && x.RecordDate.Month == month).
-            ToListAsync();
+            Where(x => x.RecordDate.Year == year && x.RecordDate.Month == month);
+
+            switch(search){
+                case "":
+                    break;
+                case "all":
+                    break;
+                case "aliment":
+                    ob = ob.Where(x => x.Aliment > 0);
+                    break;
+                case "extra211100":
+                    ob = ob.Where(x => x.Extra211100 >0);
+                    break;
+                case "ezamiyyet":
+                    ob = ob.Where(x => x.Ezamiyyet >0);
+                    break;
+                case "fexri":
+                    ob = ob.Where(x => x.FexriAd >0);
+                    break;
+                case "kesfiyyat":
+                    ob = ob.Where(x => x.Kesfiyyat >0);
+                    break;
+                case "kesir":
+                    ob = ob.Where(x => x.Kesirler >0);
+                    break;
+                case "zererli":
+                    ob = ob.Where(x => x.Zererlilik >0);
+                    break;
+                case "meharetlilik":
+                    ob = ob.Where(x => x.Meharetlilik >0);
+                    break;
+                case "temsilcilik":
+                    ob = ob.Where(x => x.Temsilcilik >0);
+                    break; 
+                case "yol":
+                    ob = ob.Where(x => x.YolXerci >0);
+                    break;
+                case "kiraye":
+                    ob = ob.Where(x => x.Kiraye >0);
+                    break;
+                case "maddi":
+                    ob = ob.Where(x => x.MaddiYardim >0);
+                    break;
+                case "sahra":
+                    ob = ob.Where(x => x.Sehra >0);
+                    break;
+                case "elmi":
+                    ob = ob.Where(x => x.ElmiDerece >0);
+                    break;
+                case "cixis":
+                    ob = ob.Where(x => x.XariciDil >0);
+                    break;
+                case "elave":
+                    ob = ob.Where(x => x.ExtraGivenMoney >0);
+                    break;
+                case "elaveGvti":
+                    ob = ob.Where(x => x.ExtraMoney2 >0);
+                    break;
+                default:
+                    break;      
+            }
+
+            return await ob.ToListAsync();
+
         }
 
         public async Task<EmployeeSalaryRecord> GetLastEmployeeRecord()

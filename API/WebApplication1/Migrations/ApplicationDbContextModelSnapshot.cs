@@ -57,6 +57,60 @@ namespace WebApplication1.Migrations
                     b.ToTable("Departments");
                 });
 
+            modelBuilder.Entity("WebApplication1.Models.Discount", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<double>("Chernobil")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Desert")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Disability")
+                        .HasColumnType("float");
+
+                    b.Property<int>("Dsmf")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Food")
+                        .HasColumnType("float");
+
+                    b.Property<int>("HealthInjurance")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Martyr")
+                        .HasColumnType("float");
+
+                    b.Property<double>("MinWage")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Owner")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Qachqin")
+                        .HasColumnType("float");
+
+                    b.Property<int>("TaxPercentage")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Veteran")
+                        .HasColumnType("float");
+
+                    b.Property<double>("VeteranTaxDiscount")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Discounts");
+                });
+
             modelBuilder.Entity("WebApplication1.Models.Employee", b =>
                 {
                     b.Property<int>("Id")
@@ -164,8 +218,8 @@ namespace WebApplication1.Migrations
                     b.Property<double>("DSMF")
                         .HasColumnType("float");
 
-                    b.Property<double>("Discount")
-                        .HasColumnType("float");
+                    b.Property<int>("DiscountId")
+                        .HasColumnType("int");
 
                     b.Property<double>("ElmiDerece")
                         .HasColumnType("float");
@@ -257,6 +311,9 @@ namespace WebApplication1.Migrations
                     b.Property<double>("TotalDSMF")
                         .HasColumnType("float");
 
+                    b.Property<double>("TotalDiscount")
+                        .HasColumnType("float");
+
                     b.Property<double>("TotalIncome")
                         .HasColumnType("float");
 
@@ -267,6 +324,9 @@ namespace WebApplication1.Migrations
                         .HasColumnType("float");
 
                     b.Property<int>("XIMonths")
+                        .HasColumnType("int");
+
+                    b.Property<int>("XIPercent")
                         .HasColumnType("int");
 
                     b.Property<int>("XIYears")
@@ -284,7 +344,30 @@ namespace WebApplication1.Migrations
                     b.Property<double>("Zererlilik")
                         .HasColumnType("float");
 
+                    b.Property<bool>("isChernobil")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isDisabled")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isMatry")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isNotGiven")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isOwner")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isQachqin")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isVeteran")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("DiscountId");
 
                     b.HasIndex("EmployeeId");
 
@@ -384,11 +467,19 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.EmployeeSalaryRecord", b =>
                 {
+                    b.HasOne("WebApplication1.Models.Discount", "Discount")
+                        .WithMany("EmployeeSalaryRecords")
+                        .HasForeignKey("DiscountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("WebApplication1.Models.Employee", "Employee")
                         .WithMany("EmployeeSalaryRecords")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Discount");
 
                     b.Navigation("Employee");
                 });
@@ -412,6 +503,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Department", b =>
                 {
                     b.Navigation("Positions");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Discount", b =>
+                {
+                    b.Navigation("EmployeeSalaryRecords");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Employee", b =>

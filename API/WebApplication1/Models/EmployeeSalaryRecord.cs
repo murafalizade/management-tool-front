@@ -49,7 +49,6 @@ namespace WebApplication1.Models
                 xIMonths = (int)(DateTime.Now - Employee.StartDate).TotalDays % 365 / 30;
             }
         }
-
         private int xIYears = 0;
         public int XIYears
         {
@@ -63,7 +62,6 @@ namespace WebApplication1.Models
                 xIYears = (int)(DateTime.Now - Employee.StartDate).TotalDays / 365;
             }
         }
-
         private double rankSalary = 0;
         public double RankSalary
         {
@@ -71,15 +69,12 @@ namespace WebApplication1.Models
 
             set
             {
-                if (Employee != null)
+                if (Employee != null && value == 0)
                 {
-                    Console.WriteLine("Employee is not null");
-                    // Set default value based on Employee's rank
                     rankSalary = (double)Employee.Rank.Salary;
                 }
                 else
                 {
-                    Console.WriteLine("Employee is null");
                     rankSalary = value;
                 }
             }
@@ -89,13 +84,70 @@ namespace WebApplication1.Models
         {
             set
             {
-                if (Employee != null)
+                if (Employee != null && value == 0)
                 {
                     positionSalary = (double)Employee.Position.Salary;
+                }
+                else
+                {
+                    positionSalary = value;
                 }
             }
             get { return positionSalary; }
         }
+
+        private int XIPercentage = 0;
+
+        public int XIPercent
+        {
+            get
+            {
+                return XIPercentage;
+            }
+            set
+            {
+                if (Employee != null && value == 0)
+                {
+                    if (xIYears <= 2 && xIYears >= 1)
+                    {
+                        XIPercentage = 5;
+                    }
+                    else if (xIYears <= 5 && xIYears >= 3)
+                    {
+                        XIPercentage = 10;
+                    }
+                    else if (xIYears <= 10 && xIYears >= 6)
+                    {
+                        XIPercentage = 15;
+                    }
+                    else if (xIYears <= 15 && xIYears >= 11)
+                    {
+                        XIPercentage = 20;
+                    }
+                    else if (xIYears <= 20 && xIYears >= 16)
+                    {
+                        XIPercentage = 25;
+                    }
+                    else if (xIYears <= 25 && xIYears >= 21)
+                    {
+                        XIPercentage = 30;
+                    }
+                    else if (xIYears <= 30 && xIYears >= 26)
+                    {
+                        XIPercentage = 40;
+                    }
+                    else if (xIYears > 30)
+                    {
+                        XIPercentage = 50;
+                    }
+                }
+                else
+                {
+                    XIPercentage = value;
+                }
+            }
+        }
+
         private double xIMoney = 0;
         public double XIMoney
         {
@@ -107,38 +159,7 @@ namespace WebApplication1.Models
             {
                 if (Employee != null && value == 0)
                 {
-                    if (xIYears <= 2 && xIYears >= 1)
-                    {
-                        xIMoney = positionSalary * 5 / 100;
-                    }
-                    else if (xIYears <= 5 && xIYears >= 3)
-                    {
-                        xIMoney = positionSalary * 10 / 100;
-                    }
-                    else if (xIYears <= 10 && xIYears >= 6)
-                    {
-                        xIMoney = positionSalary * 15 / 100;
-                    }
-                    else if (xIYears <= 15 && xIYears >= 11)
-                    {
-                        xIMoney = positionSalary * 20 / 100;
-                    }
-                    else if (xIYears <= 20 && xIYears >= 16)
-                    {
-                        xIMoney = positionSalary * 25 / 100;
-                    }
-                    else if (xIYears <= 25 && xIYears >= 21)
-                    {
-                        xIMoney = positionSalary * 30 / 100;
-                    }
-                    else if (xIYears <= 30 && xIYears >= 26)
-                    {
-                        xIMoney = positionSalary * 40 / 100;
-                    }
-                    else if (xIYears > 30)
-                    {
-                        xIMoney = positionSalary * 0.5;
-                    }
+                    xIMoney = positionSalary * XIPercentage / 100;
                 }
                 else
                 {
@@ -173,6 +194,10 @@ namespace WebApplication1.Models
                     {
                         pTMoney *= 0.1;
                     }
+                }
+                else
+                {
+                    pTMoney = value;
                 }
             }
         }
@@ -229,6 +254,10 @@ namespace WebApplication1.Models
                             meharetlilik = positionSalary * 15 / 100;
                         }
                     }
+                }
+                else
+                {
+                    meharetlilik = value;
                 }
             }
             get
@@ -400,7 +429,7 @@ namespace WebApplication1.Models
         }
         public double ExtraMoney { get; set; } = 0;
         public double ExtraMoney2 { get; set; } = 0;
-        private double totalIncome { get; set; }
+        private double totalIncome { get; set; } = 0;
         public double TotalIncome
         {
             get
@@ -412,23 +441,189 @@ namespace WebApplication1.Models
                 totalIncome = XIMoney + pTMoney + rankSalary + positionSalary + meharetlilik + Temsilcilik + Mexfilik + Zererlilik + XariciDil + Kibertehlukesizlik + Kesfiyyat + ElmiDerece + FexriAd + ExtraMoney + ExtraMoney2;
             }
         }
-        public double Tax { get; set; } = 0;
-        public double DSMF { get; set; }
-        public double HealthInsurance { get; set; }
+
+        // DISCOUNT
+
+        public int DiscountId { get; set; }
+        public Discount Discount { get; set; }
+
+        public bool isMatry { get; set; } = true;
+        public bool isChernobil { get; set; } = false;
+        public bool isVeteran { get; set; } = true;
+        public bool isDisabled { get; set; } = false;
+        public bool isOwner { get; set; } = true;
+        public bool isQachqin { get; set; } = false;
+
+        private double tax = 0;
+        public double Tax
+        {
+            get
+            {
+                return tax;
+            }
+            set
+            {
+                if (Discount != null)
+                {
+                    tax = TotalIncome * Discount.TaxPercentage / 100;
+                }
+                else
+                {
+                    tax = value;
+                }
+            }
+        }
+
+
+        private double totalDiscount { get; set; } = 0;
+
+        public double TotalDiscount
+        {
+            get
+            {
+                return totalDiscount;
+            }
+            set
+            {
+                if (Discount != null)
+                {
+                    if (isMatry)
+                    {
+                        totalDiscount += Discount.Martyr;
+                    }
+                    if (isChernobil)
+                    {
+                        totalDiscount += Discount.Chernobil;
+                    }
+                    if (isVeteran)
+                    {
+                        totalDiscount += Discount.Veteran;
+                        // tax = tax - Discount.VeteranTaxDiscount > 0 ? tax - Discount.VeteranTaxDiscount : 0;
+                    }
+                    if (isDisabled)
+                    {
+                        totalDiscount += Discount.Disability;
+                    }
+                    if (isOwner)
+                    {
+                        totalDiscount += Discount.Owner;
+                    }
+                    if (isQachqin)
+                    {
+                        totalDiscount += Discount.Qachqin;
+                    }
+                }
+            }
+        }
+
+        private double dSMF = 0;
+        public double DSMF
+        {
+            get
+            {
+                return dSMF;
+            }
+            set
+            {
+                if (Discount != null)
+                {
+                    dSMF = TotalIncome * Discount.Dsmf / 100;
+                }
+                else
+                {
+                    dSMF = value;
+                }
+            }
+        }
+
+        private double healthInsurance = 0;
+        public double HealthInsurance
+        {
+            get
+            {
+                return healthInsurance;
+            }
+            set
+            {
+                if (Discount != null)
+                {
+                    healthInsurance = TotalIncome * Discount.HealthInjurance / 100;
+                }
+                else
+                {
+                    healthInsurance = value;
+                }
+            }
+        }
         public double Kesirler { get; set; }
         public double Aliment { get; set; }
         public double Extra211100 { get; set; } = 0;
-        public double Discount { get; set; }
         public double ExtraGivenMoney { get; set; }
-        public double Food { get; set; }
-        public double Muavin { get; set; }
+
+        private double food = 0;
+        public double Food
+        {
+            get
+            {
+                return food;
+            }
+            set
+            {
+                if (Discount != null)
+                {
+                    food = Discount.Food;
+                }
+                else
+                {
+                    food = value;
+                }
+            }
+        }
+        private double muavin = 0;
+        public double Muavin
+        {
+            set
+            {
+                if (Discount != null)
+                {
+                    muavin = Discount.Veteran;
+                    // tax -= Discount.VeteranTaxDiscount;
+                }
+                else
+                {
+                    muavin = value;
+                }
+            }
+            get
+            {
+                return muavin;
+            }
+        }
         public double Mezuniyyet { get; set; }
         public double KesfMezun { get; set; }
         public double KesfXeste { get; set; }
         public double Kiraye { get; set; }
         public double MaddiYardim { get; set; }
         public double Ezamiyyet { get; set; }
-        public double Sehra { get; set; }
+        private double sehra = 0;
+        public double Sehra
+        {
+            set
+            {
+                if (Discount != null)
+                {
+                    sehra = Discount.Desert;
+                }
+                else
+                {
+                    sehra = value;
+                }
+            }
+            get
+            {
+                return sehra;
+            }
+        }
         public double YolXerci { get; set; }
         public double YukPulu { get; set; }
         public double CixisMuv { get; set; }
@@ -437,5 +632,6 @@ namespace WebApplication1.Models
         public double TotalDSMF { get; set; }
         public string Comment { get; set; }
         public string AccountNumber { get; set; }
+        public bool isNotGiven { get; set; } = true;
     }
 }

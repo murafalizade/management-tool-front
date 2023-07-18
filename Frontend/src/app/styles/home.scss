@@ -5,9 +5,17 @@
     margin-right: 5px;
 }
 
-.table{
-    margin-bottom: 0px!important;
+.main-table{
     th, td{
         font-size: 12px;
+        text-align: center;
+        word-break: keep-all;
+        text-wrap:nowrap;
+    }
+
+    .foot-table{
+        background-color: #F5F5F5;
+        // border:1px solid black;
+        z-index: 12;
     }
 }

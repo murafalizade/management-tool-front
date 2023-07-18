@@ -56,9 +56,9 @@ namespace WebApplication1.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAllEmployee([FromQuery] int month, [FromQuery] int year)
+        public async Task<IActionResult> GetAllEmployee([FromQuery] int month, [FromQuery] int year, [FromQuery] string search)
         {
-            ErrorHandelerDto obj = await _employeeSalaryRecordService.GetAllEmployee(month, year);
+            ErrorHandelerDto obj = await _employeeSalaryRecordService.GetAllEmployee(search,month, year);
             if (obj.StatusCode == 200)
             {
                 return Ok(obj.data);
@@ -66,27 +66,7 @@ namespace WebApplication1.Controllers
             return BadRequest(obj.data);
         }
 
-        // [HttpPost]
-        // public async Task<IActionResult> AddEmployee([FromBody] EmployeeInputDto employee)
-        // {
-        //     ErrorHandelerDto obj = await _employeeSalaryRecordService.AddEmployee(employee);
-        //     if (obj.StatusCode == 200)
-        //     {
-        //         return Ok(obj.data);
-        //     }
-        //     return BadRequest(obj.data);
-        // }
-
-        // [HttpDelete("{id}")]
-        // public async Task<IActionResult> DeleteEmployee(int id)
-        // {
-        //     ErrorHandelerDto obj = await _employeeSalaryRecordService.DeleteEmployee(id);
-        //     if (obj.StatusCode == 200)
-        //     {
-        //         return Ok(obj.data);
-        //     }
-        //     return BadRequest(obj.data);
-        // }
+ 
 
         [HttpPut]
         public async Task<IActionResult> UpdateEmployee([FromBody] EmployeeSalaryEditDto employee)

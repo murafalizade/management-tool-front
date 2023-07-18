@@ -9,10 +9,16 @@ import Cookie from "../utility/Cookie";
 import { RootState } from "../redux/store";
 import CreateEmployeeModal from "./CreateEmployeeModal";
 import EmployeeService from "../api/employeeService";
+import ModalLayout from "./ModalLayout";
+import RankSalary from "./RankSalary";
+import Compensation from "./Compensation";
 
 function Layout() {
   const [showFileDropdown, setShowFileDropdown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [showModalRank, setShowModalRank] = useState<boolean>(false);
+  const [showModalCompensation, setShowModalCompensation] =
+    useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>("");
   const [selectedRow, setSelectedRow] = useState<string>("");
   const [selectedSubRow, setSelectedSubRow] = useState<string>("");
@@ -58,11 +64,22 @@ function Layout() {
   return (
     <>
       <SalaryModal show={showModal} tab={activeTab} />
-      <CreateEmployeeModal  />
+      <CreateEmployeeModal />
+      <ModalLayout
+        show={showModalRank}
+        onHide={() => setShowModalRank(false)}
+        title="Hərbi rütbə maaşları"
+        children={<RankSalary />}
+      />
+      <ModalLayout
+        show={showModalCompensation}
+        onHide={() => setShowModalCompensation(false)}
+        title="Kompenzasiya və faizlər"
+        children={<Compensation />}
+      />
       <Navbar
         style={{ height: "35px" }}
         bg="white"
-        
         className="border-bottom  p-0"
         expand="lg"
       >
@@ -75,7 +92,7 @@ function Layout() {
               onClick={() => chooseRow("Hərbi qulluqçular")}
               style={
                 selectedRow === "Hərbi qulluqçular"
-                  ? { backgroundColor: "#1E90FF",color:"white" }
+                  ? { backgroundColor: "#1E90FF", color: "white" }
                   : {}
               }
               onToggle={toggleOpenDropdown}
@@ -91,7 +108,7 @@ function Layout() {
               >
                 HQ Şəxsi hesab
               </NavDropdown.Item>
-              <NavDropdown.Item onClick={()=>dispatch(showModalCreate())}>
+              <NavDropdown.Item onClick={() => dispatch(showModalCreate())}>
                 HQ bu aydan əlavə et
               </NavDropdown.Item>
               <NavDropdown.Item href="/create">
@@ -106,7 +123,9 @@ function Layout() {
               title={"Məlumatlar"}
               onClick={() => chooseRow("Məlumatlar")}
               style={
-                selectedRow === "Məlumatlar" ? { backgroundColor: "#1E90FF",color:"white" } : {}
+                selectedRow === "Məlumatlar"
+                  ? { backgroundColor: "#1E90FF", color: "white" }
+                  : {}
               }
               id="basic-nav-dropdown"
             >
@@ -123,30 +142,10 @@ function Layout() {
               >
                 Ştat və vəzifə maaşları
               </NavDropdown.Item>
-              <NavDropdown.Item
-                onClick={() =>
-                  dispatch(
-                    changeModalInfo({
-                      tab: "Bölmə_və_Şöbələr",
-                      show: true,
-                    })
-                  )
-                }
-                href="#Bölmə_və_Şöbələr"
-              >
+              <NavDropdown.Item onClick={() => setShowModalRank(true)}>
                 Hərbi rütbə maaşları
               </NavDropdown.Item>
-              <NavDropdown.Item
-                onClick={() =>
-                  dispatch(
-                    changeModalInfo({
-                      tab: "Vəzifə_maaşları",
-                      show: true,
-                    })
-                  )
-                }
-                href="#Vəzifə_maaşları"
-              >
+              <NavDropdown.Item onClick={() => setShowModalCompensation(true)}>
                 Digər faiz və kompen.
               </NavDropdown.Item>
             </NavDropdown>
@@ -154,7 +153,9 @@ function Layout() {
             <NavDropdown
               onClick={() => chooseRow("Əməliyyatlar")}
               style={
-                selectedRow === "Əməliyyatlar" ? { backgroundColor: "#1E90FF",color:"white" } : {}
+                selectedRow === "Əməliyyatlar"
+                  ? { backgroundColor: "#1E90FF", color: "white" }
+                  : {}
               }
               title={"Əməliyyatlar"}
               id="basic-nav-dropdown"
@@ -165,7 +166,9 @@ function Layout() {
               <NavDropdown
                 onClick={() => chooseSubRow("Kirayə kompens. bu ay")}
                 style={
-                  selectedSubRow === "Kirayə kompens. bu ay" ? { backgroundColor: "#1E90FF",color:"white" } : {}
+                  selectedSubRow === "Kirayə kompens. bu ay"
+                    ? { backgroundColor: "#1E90FF", color: "white" }
+                    : {}
                 }
                 title={"Kirayə kompens. bu ay"}
                 id="basic-nav-dropdown"
@@ -177,10 +180,12 @@ function Layout() {
                 <NavDropdown.Item href="#">3 qat</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown
-                  onClick={() => chooseSubRow("Ərzad kompens. bu ay")}
-                  style={
-                    selectedSubRow === "Ərzad kompens. bu ay" ? { backgroundColor: "#1E90FF",color:"white" } : {}
-                  }
+                onClick={() => chooseSubRow("Ərzad kompens. bu ay")}
+                style={
+                  selectedSubRow === "Ərzad kompens. bu ay"
+                    ? { backgroundColor: "#1E90FF", color: "white" }
+                    : {}
+                }
                 title={"Ərzad kompens. bu ay"}
                 id="basic-nav-dropdown"
                 drop="end"
@@ -191,10 +196,12 @@ function Layout() {
                 <NavDropdown.Item href="#">3 qat</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown
-               onClick={() => chooseSubRow("BPM bu ay hamsına")}
-               style={
-                 selectedSubRow === "BPM bu ay hamsına" ? { backgroundColor: "#1E90FF",color:"white" } : {}
-               }
+                onClick={() => chooseSubRow("BPM bu ay hamsına")}
+                style={
+                  selectedSubRow === "BPM bu ay hamsına"
+                    ? { backgroundColor: "#1E90FF", color: "white" }
+                    : {}
+                }
                 title={"BPM bu ay hamsına"}
                 id="basic-nav-dropdown"
                 drop="end"
@@ -204,7 +211,10 @@ function Layout() {
                 <NavDropdown.Item href="#">2 qat</NavDropdown.Item>
                 <NavDropdown.Item href="#">3 qat</NavDropdown.Item>
               </NavDropdown>
-              <NavDropdown.Item href="#" onClick={async()=> await EmployeeService.updateNextMonth()}>
+              <NavDropdown.Item
+                href="#"
+                onClick={async () => await EmployeeService.updateNextMonth()}
+              >
                 Bu ayın cədvəlini gələn aya köçür
               </NavDropdown.Item>
               <NavDropdown.Item onClick={() => window.location.reload()}>
@@ -213,8 +223,16 @@ function Layout() {
               <NavDropdown.Item href="#">Yoxlamalar</NavDropdown.Item>
             </NavDropdown>
 
-            <NavDropdown onClick={()=>chooseRow("Cədvəllər")}
-              style={selectedRow==="Cədvəllər"?{backgroundColor:"#1E90FF",color:"white"}:{}}  title={"Cədvəllər"} id="basic-nav-dropdown">
+            <NavDropdown
+              onClick={() => chooseRow("Cədvəllər")}
+              style={
+                selectedRow === "Cədvəllər"
+                  ? { backgroundColor: "#1E90FF", color: "white" }
+                  : {}
+              }
+              title={"Cədvəllər"}
+              id="basic-nav-dropdown"
+            >
               <NavDropdown title={"Əsas"} id="basic-nav-dropdown" drop="end">
                 <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
                 <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
@@ -332,8 +350,16 @@ function Layout() {
               </NavDropdown>
             </NavDropdown>
 
-            <NavDropdown  onClick={()=>chooseRow("Hesabatlar")}
-              style={selectedRow==="Hesabatlar"?{backgroundColor:"#1E90FF",color:"white"}:{}} title={"Hesabatlar"} id="basic-nav-dropdown">
+            <NavDropdown
+              onClick={() => chooseRow("Hesabatlar")}
+              style={
+                selectedRow === "Hesabatlar"
+                  ? { backgroundColor: "#1E90FF", color: "white" }
+                  : {}
+              }
+              title={"Hesabatlar"}
+              id="basic-nav-dropdown"
+            >
               <NavDropdown.Item href="#">Icmal cədvəli</NavDropdown.Item>
               <NavDropdown.Item href="#">Statistik məlumatlar</NavDropdown.Item>
               <NavDropdown.Item href="#">6.MX saylı forma</NavDropdown.Item>

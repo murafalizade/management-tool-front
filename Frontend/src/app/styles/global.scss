@@ -62,8 +62,23 @@ main{
     min-width: 31%!important;
 }
 
+.min-width-50{
+    min-width: 55%!important;
+}
+
 .small-td{
     width:20px!important;
+}
+
+
+.table{
+    margin-bottom: 0px!important;
+    th, td{
+        font-size: 12px;
+        // text-align: center;
+        // word-break: keep-all;
+        // text-wrap:nowrap;
+    }
 }
 
 // Path: src\app\styles\variables.scss

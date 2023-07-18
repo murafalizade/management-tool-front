@@ -137,15 +137,15 @@ const columns: Column<SalaryRecordData>[] = [
     columns: [
       {
         Header: "gün",
-        accessor: "employeeStartDateDay",
+        accessor: "xiDays",
       },
       {
         Header: "ay",
-        accessor: "employeeStartDateMonth",
+        accessor: "xiMonths",
       },
       {
         Header: "il",
-        accessor: "employeeStartDateYear",
+        accessor: "xiYears",
       },
     ],
   },
@@ -354,72 +354,103 @@ const columns: Column<SalaryRecordData>[] = [
 const columns2 = [
   {
     Header: "Rütbə",
+    accessor: "rankSalary",
   },
   {
     Header: "Vəzifə",
+    accessor: "positionSalary",
   },
   {
     Header: "Xİ",
+    accessor: "xiMoney",
   },
   {
     Header: "Qatı",
+    accessor: "qatiSalary",
   },
   {
     Header: "Məhar.",
+    accessor: "meharetlilik",
   },
   {
     Header: "Təmsil",
+    accessor: "temsilcilik",
   },
   {
     Header: "Məxfi",
+    accessor: "mexfilik",
   },
   {
     Header: "Zərər",
+    accessor: "zererlilik",
+  },
+  {
+    Header: "Kibertəhlükəsizlik",
+    accessor: "kibertehlukesizlik",
   },
   {
     Header: "Dil",
+    accessor: "xariciDil",
   },
   {
     Header: "K. mükf.",
+    accessor: "kesfiyyat",
   },
   {
     Header: "Elmi",
+    accessor: "elmiDerece",
+  },
+  {
+    Header: "Fəxri",
+    accessor: "fexriAd",
   },
   {
     Header: "Əl.(gvt)",
+    accessor: "extraMoney",
   },
   {
     Header: "Əlavə",
+    accessor: "extraMoney2",
   },
   {
     Header: "Cəmi h.",
+    accessor: "totalIncome",
   },
   {
     Header: "Vergi",
+    accessor: "tax",
   },
   {
     Header: "DSMF",
+    accessor: "dsmf",
   },
   {
     Header: "Tibbi",
+    accessor: "healthInsurance",
   },
   {
     Header: "Kəsir",
+    accessor: "kesirler",
   },
   {
     Header: "Aliment",
+    accessor: "aliment",
   },
   {
     Header: "Artıq",
+    accessor: "extra211100",
   },
   {
     Header: "961",
+
   },
   {
     Header: "Cəmi t.",
+
   },
   {
     Header: "ƏVM",
+    
   },
   {
     Header: "Ərzaq",
@@ -612,7 +643,7 @@ const detailsColumns: Column<SalaryRecordData>[] = [
         accessor:"discount"
       },
       {
-        Header: "Cəmi7",
+        Header: "Cəmi",
         // accessor: "total",
       },
     ],
@@ -682,7 +713,8 @@ const detailsColumns: Column<SalaryRecordData>[] = [
     accessor: "totalDSMF",
   },
   {
-    Header: "Cəmiw",
+    Header: "Cəmi",
+    accessor: "total",
 // /    accessor: "total2",
   },
   {

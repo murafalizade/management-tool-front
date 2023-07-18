@@ -23,10 +23,11 @@ export default class EmployeeService {
 
   static async getEmployeeSalaryRecord(
     month: number,
-    year: number
+    year: number,
+    filter: string
   ): Promise<any> {
     return await fetch.get(
-      `/api/employee/salary/record/?month=${month}&year=${year}`
+      `/api/employee/salary/record/?month=${month}&year=${year}&search=${filter}`
     );
   }
 

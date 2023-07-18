@@ -45,6 +45,15 @@ export default class OperationService {
         return await fetch.post(`/api/position/save-all`, data);
     }
 
+    static async getRanks(): Promise<any> {
+        return await fetch.get(`/api/rank`);
+    }
+
+    static async getDiscount(): Promise<any> {
+        return await fetch.get(`/api/discount`);
+    }
+    
+
     static async getExcel(): Promise<any> {
         return await fetch.get(`/api/adminstration/export-excel`,
         {
