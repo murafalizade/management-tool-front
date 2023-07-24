@@ -250,11 +250,11 @@ const columns: Column<SalaryRecordData>[] = [
       },
       {
         Header: "Güzəşt",
-        accessor: "discount",
+        accessor: "totalDiscount",
       },
       {
-        Header: "Cəmi2",
-        // accessor: "total",
+        Header: "Cəmi",
+        accessor: "totalGiven",
       },
     ],
   },
@@ -324,7 +324,7 @@ const columns: Column<SalaryRecordData>[] = [
   },
   {
     Header: "Cəmi",
-    // accessor: "total2",
+    accessor: "totalSalary",
   },
   {
     Header: "Qeyd",
@@ -442,15 +442,13 @@ const columns2 = [
   },
   {
     Header: "961",
-
+    accessor: "totalDiscount",
   },
   {
     Header: "Cəmi t.",
-
   },
   {
     Header: "ƏVM",
-    
   },
   {
     Header: "Ərzaq",
@@ -507,27 +505,27 @@ const columns2 = [
 const detailsColumns: Column<SalaryRecordData>[] = [
   {
     Header: "Il",
-    accessor:"recordDateYear"
+    accessor: "recordDateYear",
   },
   {
     Header: "Ay",
-    accessor:"recordDateMonth"
+    accessor: "recordDateMonth",
   },
   {
     Header: "idarə",
-    accessor:"employeePositionDepartmentAdminstrationName"
+    accessor: "employeePositionDepartmentAdminstrationName",
   },
   {
     Header: "Şöbə, bölmə",
-    accessor:"employeePositionDepartmentName"
+    accessor: "employeePositionDepartmentName",
   },
   {
     Header: "Vəzifə",
-    accessor:"employeePositionName"
+    accessor: "employeePositionName",
   },
   {
     Header: "Hərbi rütbə",
-    accessor:"employeeRankName"
+    accessor: "employeeRankName",
   },
   {
     Header: "Uzun müddətli Xİ",
@@ -616,31 +614,31 @@ const detailsColumns: Column<SalaryRecordData>[] = [
     columns: [
       {
         Header: "Gəlir vergisi",
-        accessor:"tax"
+        accessor: "tax",
       },
       {
         Header: "DSMF",
-        accessor:"dsmf"
+        accessor: "dsmf",
       },
       {
         Header: "Tibbi sığorta",
-        accessor:"healthInsurance"
+        accessor: "healthInsurance",
       },
       {
         Header: "Kəsirlər",
-        accessor:"kesirler"
+        accessor: "kesirler",
       },
       {
         Header: "Aliment",
-        accessor:"aliment"
+        accessor: "aliment",
       },
       {
         Header: "Artıq 211100",
-        accessor:"extra211100"
+        accessor: "extra211100",
       },
       {
         Header: "Güzəşt",
-        accessor:"discount"
+        accessor: "totalDiscount",
       },
       {
         Header: "Cəmi",
@@ -654,7 +652,7 @@ const detailsColumns: Column<SalaryRecordData>[] = [
   },
   {
     Header: "Ərzaq komp-sı",
-    accessor:"food"
+    accessor: "food",
   },
   {
     Header: "MV müavin.",
@@ -715,7 +713,7 @@ const detailsColumns: Column<SalaryRecordData>[] = [
   {
     Header: "Cəmi",
     accessor: "total",
-// /    accessor: "total2",
+    // /    accessor: "total2",
   },
   {
     Header: "Qeyd",

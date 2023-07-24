@@ -14,6 +14,7 @@ const CalculatingModal = () => {
   const [info, setInfo] = useState<any>({
     takenByHand: false,
     rankSalaryByHand: false,
+    totalDiscount: 0,
     positionSalaryByHand: false,
     tax: 0,
     dsmf: 0,
@@ -21,7 +22,6 @@ const CalculatingModal = () => {
     skillDegreePercent: 0,
     representationPercent: 0,
     harmfulPercent: 0,
-    // extra211100:0,
     securityPercent: 0,
     alimentPercent: 0,
     languageSkillPercent: 0,
@@ -40,12 +40,31 @@ const CalculatingModal = () => {
   const [totalTaken, setTotalTaken] = useState<number>(0);
   const [totalDSMF, setTotalDSMF] = useState<number>(0);
 
+  // Calculate total discount
+  const handleCheckboxChange = (checkboxIndex: string, isChecked: boolean) => {
+    if (isChecked) {
+      setTotalDiscount((prevTotal) => prevTotal + info[checkboxIndex]);
+    } else {
+      setTotalDiscount((prevTotal) => prevTotal - info[checkboxIndex]);
+    }
+  };
+
   const handleCheckbox = (e: any) => {
+    if (e.target.id) {
+      handleCheckboxChange(`${e.target.id}`, e.target.checked);
+    }
     setInfo({ ...info, [e.target.name]: e.target.checked });
   };
 
   const handleInput = (e: any) => {
     setInfo({ ...info, [e.target.name]: parseFloat(e.target.value) });
+  };
+
+  const handlePercentage = (e: any) => {
+    setInfo({
+      ...info,
+      [e.target.name]: (parseInt(e.target.value) * info.positionSalary) / 100,
+    });
   };
 
   const getRecord = async () => {
@@ -54,6 +73,7 @@ const CalculatingModal = () => {
       state.show
     );
     setInfo({ ...info, ...record });
+    setTotalDiscount(parseInt(record?.totalDiscount));
   };
 
   useEffect(() => {
@@ -90,7 +110,6 @@ const CalculatingModal = () => {
   useEffect(() => {
     // Assuming you have the startDate in the form of a Date object
     const startDate = new Date(info?.employeeStartDate); // Example startDate
-    console.log(startDate);
     // Get the first day of the current month
     const currentDate = new Date();
     const firstDayOfMonth = new Date(
@@ -102,11 +121,6 @@ const CalculatingModal = () => {
     // Calculate the difference in milliseconds
     const differenceInMilliseconds =
       startDate.getTime() - firstDayOfMonth.getTime();
-
-    // Calculate the difference in days
-    const differenceInDays = Math.floor(
-      differenceInMilliseconds / (1000 * 3600 * 24)
-    );
 
     // Calculate the difference in years, months, and remaining days
     let diffYears = startDate.getFullYear() - firstDayOfMonth.getFullYear();
@@ -129,8 +143,9 @@ const CalculatingModal = () => {
     setServiceDays(Math.abs(diffDays));
   }, [info?.employeeStartDate]);
 
+  // update record
   const updateRecord = async () => {
-    console.log(info);
+    setInfo({ ...info, totalGiven, totalDiscount, totalTaken });
     await EmployeeService.updateEmployeeSalaryRecord(info);
     window.location.reload();
   };
@@ -153,12 +168,9 @@ const CalculatingModal = () => {
             <li className="list-group-item">
               İdarə: {info.employeePositionDepartmentAdminstrationName}
             </li>
-            <li className="list-group-item">Ştat üzrə: KATİBLİK</li>
             <li className="list-group-item">
               Vəzifə: {info.employeePositionName}
             </li>
-            <li className="list-group-item">İcra edir: KATİBLİK</li>
-            <li className="list-group-item">Vezife: Katibliyin rəisi</li>
           </ul>
         </div>
 
@@ -197,6 +209,8 @@ const CalculatingModal = () => {
             onChange={(e: any) =>
               setInfo({ ...info, accountNumber: e.target.value })
             }
+            max={16}
+            min={16}
             name="accountNumber"
             className="form-control long-input w-25"
           />
@@ -213,13 +227,9 @@ const CalculatingModal = () => {
                     name="rankSalaryByHand"
                     checked={info.rankSalaryByHand}
                     onChange={handleCheckbox}
-                    id="exampleCheck1"
                     type="checkbox"
                   />
-                  <label
-                    className="form-check-label normal-label"
-                    htmlFor="exampleCheck1"
-                  >
+                  <label className="form-check-label normal-label">
                     əl ilə
                   </label>
                   <input
@@ -239,16 +249,12 @@ const CalculatingModal = () => {
                 <div className="d-flex my-1">
                   <label>Vəzifə maaşı</label>
                   <input
-                    id="exampleCheck1"
                     name="positionSalaryByHand"
                     checked={info.positionSalaryByHand}
                     onChange={handleCheckbox}
                     type="checkbox"
                   />
-                  <label
-                    className="form-check-label normal-label"
-                    htmlFor="exampleCheck1"
-                  >
+                  <label className="form-check-label normal-label">
                     əl ilə
                   </label>
                   <input
@@ -291,15 +297,11 @@ const CalculatingModal = () => {
                     type="number"
                     className="form-control date-input"
                     min={0}
-                    onChange={handleInput}
-                    name="skillDegreePercent"
-                    value={info.skillDegreePercent}
+                    onChange={handlePercentage}
+                    name="meharetlilik"
                     max={100}
                   />
-                  %
-                  <label className="normal-label">
-                    {(info.positionSalary * info.skillDegreePercent) / 100}
-                  </label>
+                  %<label className="normal-label">{info.meharetlilik}</label>
                 </div>
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
@@ -307,16 +309,12 @@ const CalculatingModal = () => {
                   <input
                     type="number"
                     className="form-control date-input"
-                    onChange={handleInput}
-                    name="representationPercent"
-                    value={info.representationPercent}
+                    onChange={handlePercentage}
+                    name="temsilcilik"
                     min={0}
                     max={100}
                   />
-                  %
-                  <label className="normal-label">
-                    {(info.positionSalary * info.representationPercent) / 100}
-                  </label>
+                  %<label className="normal-label">{info.temsilcilik}</label>
                 </div>
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
@@ -325,15 +323,11 @@ const CalculatingModal = () => {
                     type="number"
                     className="form-control date-input"
                     min={0}
-                    onChange={handleInput}
-                    name="harmfulPercent"
-                    value={info.harmfulPercent}
+                    onChange={handlePercentage}
+                    name="zererlilik"
                     max={100}
                   />
-                  %
-                  <label className="normal-label">
-                    {(info.positionSalary * info.harmfulPercent) / 100}
-                  </label>
+                  %<label className="normal-label">{info.zererlilik}</label>
                 </div>
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
@@ -342,15 +336,11 @@ const CalculatingModal = () => {
                     type="number"
                     className="form-control date-input"
                     min={0}
-                    onChange={handleInput}
-                    name="securityPercent"
-                    value={info.securityPercent}
+                    onChange={handlePercentage}
+                    name="mexfilik"
                     max={100}
                   />
-                  %
-                  <label className="normal-label">
-                    {(info.securityPercent * info.positionSalary) / 100}
-                  </label>
+                  %<label className="normal-label">{info.mexfilik}</label>
                 </div>
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
@@ -366,24 +356,18 @@ const CalculatingModal = () => {
                     type="number"
                     className="form-control date-input"
                     min={0}
-                    name="languageSkillPercent"
-                    value={info.languageSkillPercent}
-                    onChange={handleInput}
+                    name="xariciDil"
+                    onChange={handlePercentage}
                     max={100}
                   />
                   %
                   <input
-                    type="text"
+                    type="number"
                     disabled={!info.languageSkillByHand}
                     className="form-control w-50"
                     onChange={handleInput}
                     name="xariciDil"
-                    value={
-                      !info.languageSkillByHand
-                        ? (info.positionSalary * info.languageSkillPercent) /
-                          100
-                        : info.xariciDil
-                    }
+                    value={info.xariciDil}
                   />
                 </div>
 
@@ -400,9 +384,8 @@ const CalculatingModal = () => {
                     type="number"
                     className="form-control date-input"
                     min={0}
-                    name="discoveryPercent"
-                    value={info.discoveryPercent}
-                    onChange={handleInput}
+                    name="kesfiyyat"
+                    onChange={handlePercentage}
                     max={100}
                   />
                   %
@@ -411,11 +394,8 @@ const CalculatingModal = () => {
                     className="form-control w-75"
                     disabled={!info.discoveryByHand}
                     onChange={handleInput}
-                    value={
-                      !info.discoveryByHand
-                        ? (info.positionSalary * info.discoveryPercent) / 100
-                        : info.kesfiyyat
-                    }
+                    name="kesfiyyat"
+                    value={info.kesfiyyat}
                   />
                 </div>
 
@@ -488,42 +468,78 @@ const CalculatingModal = () => {
                     <Col md={6}>
                       <div className="d-flex justify-content-between my-1">
                         <label className="min-width">MV</label>
-                        <input type="checkbox" />
+                        <input
+                          type="checkbox"
+                          onChange={handleCheckbox}
+                          name="isVeteran"
+                          id="discountVeteran"
+                          checked={info.isVeteran}
+                        />
                       </div>
                     </Col>
 
                     <Col md={6}>
                       <div className="d-flex justify-content-between my-1">
                         <label className="min-width">Çernobil</label>
-                        <input type="checkbox" />
+                        <input
+                          type="checkbox"
+                          onChange={handleCheckbox}
+                          name="isChernobil"
+                          id="discountChernobil"
+                          checked={info.isChernobil}
+                        />
                       </div>
                     </Col>
 
                     <Col md={6}>
                       <div className="d-flex justify-content-between my-1">
                         <label className="min-width">Qaçqın</label>
-                        <input type="checkbox" />
+                        <input
+                          type="checkbox"
+                          onChange={handleCheckbox}
+                          name="isQachqin"
+                          id="discountQachqin"
+                          checked={info.isQachqin}
+                        />
                       </div>
                     </Col>
 
                     <Col md={6}>
                       <div className="d-flex justify-content-between my-1">
                         <label className="min-width">Himayədar</label>
-                        <input type="checkbox" />
+                        <input
+                          type="checkbox"
+                          onChange={handleCheckbox}
+                          name="isOwner"
+                          id="discountOwner"
+                          checked={info.isOwner}
+                        />
                       </div>
                     </Col>
 
                     <Col md={6}>
                       <div className="d-flex justify-content-between my-1">
                         <label className="min-width">Əlil</label>
-                        <input type="checkbox" />
+                        <input
+                          type="checkbox"
+                          onChange={handleCheckbox}
+                          id="discountDisability"
+                          name="isDisability"
+                          checked={info?.isDisability}
+                        />
                       </div>
                     </Col>
 
                     <Col md={6}>
                       <div className="d-flex justify-content-between my-1">
                         <label className="min-width">Şəhid ailəsi</label>
-                        <input type="checkbox" />
+                        <input
+                          type="checkbox"
+                          onChange={handleCheckbox}
+                          name="isMatry"
+                          id="discountMartyr"
+                          checked={info?.isMatry}
+                        />
                       </div>
                     </Col>
 
@@ -630,11 +646,11 @@ const CalculatingModal = () => {
                     <label>Artıq ödənilən</label>
                     <input
                       onChange={handleInput}
-                      value={info?.extra21100}
+                      value={info?.extra211100}
                       type="number"
                       min="0"
                       disabled={!info.takenByHand}
-                      name="extra21100"
+                      name="Extra211100"
                       className="form-control w-50"
                     />
                   </div>
@@ -673,7 +689,13 @@ const CalculatingModal = () => {
                     <div className="d-flex  align-items-center justify-content-between my-1">
                       <input type="checkbox" />
                       <label>verilir</label>
-                      <input value={info?.food} name='food' onChange={handleInput} type="text" className="form-control" />
+                      <input
+                        value={info?.food}
+                        name="food"
+                        onChange={handleInput}
+                        type="text"
+                        className="form-control"
+                      />
                     </div>
                   </div>
                 </div>
@@ -766,7 +788,13 @@ const CalculatingModal = () => {
                         <label className="d-flex my-2">
                           <label className="min-width-30"></label>
                           <span className="min-width-30">Səhra pulu</span>
-                          <input value={info?.sehra} onChange={handleInput} name="sehra" type="text" className="form-control w-75" />
+                          <input
+                            value={info?.sehra}
+                            onChange={handleInput}
+                            name="sehra"
+                            type="text"
+                            className="form-control w-75"
+                          />
                         </label>
                         <label className="d-flex my-2">
                           <label className="min-width-30"></label>
@@ -803,7 +831,12 @@ const CalculatingModal = () => {
               </div>
             </Col>
             <div className="d-flex">
-              <input type="checkbox" />
+              <input
+                value={info.isNotGiven}
+                name="isNotGiven"
+                onChange={handleCheckbox}
+                type="checkbox"
+              />
               <label className="mx-2">Bu ay verilmir</label>
               <input type="checkbox" />
               <label className="mx-2">Paylanma cədvəlinə daxil etmə</label>
