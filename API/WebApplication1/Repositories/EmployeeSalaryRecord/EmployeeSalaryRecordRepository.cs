@@ -26,7 +26,7 @@ namespace WebApplication1.Repositories
             return _context.EmployeeSalaryRecords.
             Include(x => x.Employee).
             Include(x => x.Employee.Rank).
-            Include(x=> x.Discount).
+            Include(x => x.Discount).
             Include(x => x.Employee.Position).
             Include(x => x.Employee.Position.Department).
             Include(x => x.Employee.Position.Department.Adminstration).
@@ -38,23 +38,24 @@ namespace WebApplication1.Repositories
             return await _context.EmployeeSalaryRecords.Include(x => x.Employee).
             Include(x => x.Employee.Rank).
             Include(x => x.Employee.Position).
-            Include(x=> x.Discount).
+            Include(x => x.Discount).
             Include(x => x.Employee.Position.Department).
             Include(x => x.Employee.Position.Department.Adminstration).
             FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<List<EmployeeSalaryRecord>> GetEmployees(string search,int month, int year)
+        public async Task<List<EmployeeSalaryRecord>> GetEmployees(string search, int month, int year)
         {
-            var ob =   _context.EmployeeSalaryRecords.Include(x => x.Employee).
+            var ob = _context.EmployeeSalaryRecords.Include(x => x.Employee).
             Include(x => x.Employee.Rank).
-            Include(x=> x.Discount).
+            Include(x => x.Discount).
             Include(x => x.Employee.Position).
             Include(x => x.Employee.Position.Department).
             Include(x => x.Employee.Position.Department.Adminstration).
             Where(x => x.RecordDate.Year == year && x.RecordDate.Month == month);
 
-            switch(search){
+            switch (search)
+            {
                 case "":
                     break;
                 case "all":
@@ -63,55 +64,55 @@ namespace WebApplication1.Repositories
                     ob = ob.Where(x => x.Aliment > 0);
                     break;
                 case "extra211100":
-                    ob = ob.Where(x => x.Extra211100 >0);
+                    ob = ob.Where(x => x.Extra211100 > 0);
                     break;
                 case "ezamiyyet":
-                    ob = ob.Where(x => x.Ezamiyyet >0);
+                    ob = ob.Where(x => x.Ezamiyyet > 0);
                     break;
                 case "fexri":
-                    ob = ob.Where(x => x.FexriAd >0);
+                    ob = ob.Where(x => x.FexriAd > 0);
                     break;
                 case "kesfiyyat":
-                    ob = ob.Where(x => x.Kesfiyyat >0);
+                    ob = ob.Where(x => x.Kesfiyyat > 0);
                     break;
                 case "kesir":
-                    ob = ob.Where(x => x.Kesirler >0);
+                    ob = ob.Where(x => x.Kesirler > 0);
                     break;
                 case "zererli":
-                    ob = ob.Where(x => x.Zererlilik >0);
+                    ob = ob.Where(x => x.Zererlilik > 0);
                     break;
                 case "meharetlilik":
-                    ob = ob.Where(x => x.Meharetlilik >0);
+                    ob = ob.Where(x => x.Meharetlilik > 0);
                     break;
                 case "temsilcilik":
-                    ob = ob.Where(x => x.Temsilcilik >0);
-                    break; 
+                    ob = ob.Where(x => x.Temsilcilik > 0);
+                    break;
                 case "yol":
-                    ob = ob.Where(x => x.YolXerci >0);
+                    ob = ob.Where(x => x.YolXerci > 0);
                     break;
                 case "kiraye":
-                    ob = ob.Where(x => x.Kiraye >0);
+                    ob = ob.Where(x => x.Kiraye > 0);
                     break;
                 case "maddi":
-                    ob = ob.Where(x => x.MaddiYardim >0);
+                    ob = ob.Where(x => x.MaddiYardim > 0);
                     break;
                 case "sahra":
-                    ob = ob.Where(x => x.Sehra >0);
+                    ob = ob.Where(x => x.Sehra > 0);
                     break;
                 case "elmi":
-                    ob = ob.Where(x => x.ElmiDerece >0);
+                    ob = ob.Where(x => x.ElmiDerece > 0);
                     break;
                 case "cixis":
-                    ob = ob.Where(x => x.XariciDil >0);
+                    ob = ob.Where(x => x.XariciDil > 0);
                     break;
                 case "elave":
-                    ob = ob.Where(x => x.ExtraGivenMoney >0);
+                    ob = ob.Where(x => x.ExtraGivenMoney > 0);
                     break;
                 case "elaveGvti":
-                    ob = ob.Where(x => x.ExtraMoney2 >0);
+                    ob = ob.Where(x => x.ExtraMoney2 > 0);
                     break;
                 default:
-                    break;      
+                    break;
             }
 
             return await ob.ToListAsync();
@@ -149,15 +150,43 @@ namespace WebApplication1.Repositories
             existingEmployee.PositionSalary = employee.PositionSalary;
             existingEmployee.Kibertehlukesizlik = employee.Kibertehlukesizlik;
             existingEmployee.FexriAd = employee.FexriAd;
+            existingEmployee.Ezamiyyet = employee.Ezamiyyet;
+            existingEmployee.YolXerci = employee.YolXerci;
+            existingEmployee.MaddiYardim = employee.MaddiYardim;
+            existingEmployee.Sehra = employee.Sehra;
+            existingEmployee.Kiraye = employee.Kiraye;
+            existingEmployee.ExtraGivenMoney = employee.ExtraGivenMoney;
+            existingEmployee.ExtraMoney = employee.ExtraMoney;
+            existingEmployee.ExtraMoney2 = employee.ExtraMoney2;
             existingEmployee.Meharetlilik = employee.Meharetlilik;
             existingEmployee.Kesfiyyat = employee.Kesfiyyat;
             existingEmployee.Temsilcilik = employee.Temsilcilik;
             existingEmployee.Zererlilik = employee.Zererlilik;
+            existingEmployee.Mexfilik = employee.Mexfilik;
+
             existingEmployee.Tax = employee.Tax;
-            existingEmployee.Kesirler =  employee.Kesirler;
+            existingEmployee.Kesirler = employee.Kesirler;
             existingEmployee.Extra211100 = employee.Extra211100;
             existingEmployee.HealthInsurance = employee.HealthInsurance;
             existingEmployee.AccountNumber = employee.AccountNumber;
+
+            existingEmployee.isChernobil = employee.isChernobil;
+            existingEmployee.isDisabled = employee.isDisabled;
+            existingEmployee.isOwner = employee.isOwner;
+            existingEmployee.isVeteran = employee.isVeteran;
+            existingEmployee.isMatry = employee.isMatry;
+            existingEmployee.Muavin = employee.Muavin;
+            existingEmployee.TotalDiscount = employee.TotalDiscount;
+            existingEmployee.TotalIncome = employee.TotalIncome;
+            existingEmployee.TotalTaken = employee.TotalTaken;
+            existingEmployee.TotalDSMF = employee.TotalDSMF;
+            existingEmployee.isNotGiven = employee.isNotGiven;
+
+            existingEmployee.Mezuniyyet = employee.Mezuniyyet;
+            existingEmployee.KesfMezun = employee.KesfMezun;
+            existingEmployee.CixisMuv = employee.CixisMuv;
+
+            
 
             // existingEmployee.TotalSalary = employee.TotalSalary;
 

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "f6CsUpfu92h29O6WaxPsXIX1nrUug+dznQFXRTR9d2ueuZW921Uod/5foAOFUI7NAxKbrWVcHLgYwpjZ/a6XoQ==",
+  "dgSpecHash": "2jVXrb4n7HkcGNSrRwcrRia4qbLeCvdcFnikTupkEYMCUPFPGi+zeyoInf117bhhaFWm18QUkCNQOqcgC1GQ/w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\HP\\OneDrive\\Desktop\\WEB\\MyProjects\\hr\\API\\WebApplication1\\WebApplication1.csproj",
+  "projectFilePath": "C:\\Users\\HP\\OneDrive\\Desktop\\WEB\\MyProjects\\hr\\api\\WebApplication1\\WebApplication1.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\HP\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

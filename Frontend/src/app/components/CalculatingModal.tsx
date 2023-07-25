@@ -105,6 +105,12 @@ const CalculatingModal = () => {
         info.dsmf +
         info.healthInsurance
     );
+
+    setTotalDSMF(
+      (info.discountDsmf *
+        (info.maddiYardim + info.mezuniyyet + info.kesfMezun + info.cixisMuv)) /
+        100
+    );
   }, [info]);
 
   useEffect(() => {
@@ -145,7 +151,8 @@ const CalculatingModal = () => {
 
   // update record
   const updateRecord = async () => {
-    setInfo({ ...info, totalGiven, totalDiscount, totalTaken });
+    setInfo({ ...info, totalIncome:totalGiven, totalDiscount, totalTaken, totalDSMF });
+    console.log(info);
     await EmployeeService.updateEmployeeSalaryRecord(info);
     window.location.reload();
   };
@@ -727,26 +734,74 @@ const CalculatingModal = () => {
                       </div>
                       <div className="d-flex justify-content-between">
                         <label>Maddi yardim</label>
-                        <input type="text" className="form-control w-100" />
                         <input
-                          type="text"
+                          type="number"
+                          value={info.maddiYardim}
+                          onChange={handleInput}
+                          name="maddiYardim"
+                          className="form-control w-100"
+                        />
+                        <input
+                          type="number"
+                          value={(info.discountDsmf * info.maddiYardim) / 100}
                           className="form-control border-0  w-100"
                         />
-                        <input type="text" className="form-control w-100" />
+                        <input
+                          type="number"
+                          value={
+                            info.maddiYardim -
+                            (info.discountDsmf * info.maddiYardim) / 100
+                          }
+                          className="form-control w-100"
+                        />
                       </div>
 
                       <div className="d-flex my-2 justify-content-between">
                         <label>Məzuniyyət</label>
-                        <input type="text" className="form-control w-100" />
-                        <input type="text" className="form-control w-100" />
-                        <input type="text" className="form-control w-100" />
+                        <input
+                          type="number"
+                          value={info.mezuniyyet}
+                          onChange={handleInput}
+                          name="mezuniyyet"
+                          className="form-control w-100"
+                        />
+                        <input
+                          value={(info.discountDsmf * info.mezuniyyet) / 100}
+                          type="number"
+                          className="form-control w-100"
+                        />
+                        <input
+                          type="number"
+                          value={
+                            info.mezuniyyet -
+                            (info.discountDsmf * info.mezuniyyet) / 100
+                          }
+                          className="form-control w-100"
+                        />
                       </div>
 
                       <div className="d-flex my-2 justify-content-between">
                         <label>Kəşf. məzun.</label>
-                        <input type="text" className="form-control w-100" />
-                        <input type="text" className="form-control w-100" />
-                        <input type="text" className="form-control w-100" />
+                        <input
+                          type="number"
+                          value={info.kesfMezun}
+                          onChange={handleInput}
+                          name="kesfMezun"
+                          className="form-control w-100"
+                        />
+                        <input
+                          type="number"
+                          value={(info.discountDsmf * info.kesfMezun) / 100}
+                          className="form-control w-100"
+                        />
+                        <input
+                          value={
+                            info.kesfMezun -
+                            (info.discountDsmf * info.kesfMezun) / 100
+                          }
+                          type="number"
+                          className="form-control w-100"
+                        />
                       </div>
 
                       <div className="d-flex my-2 justify-content-between">
@@ -759,20 +814,33 @@ const CalculatingModal = () => {
                           </select>
                         </label>
 
-                        <input type="text" className="form-control w-100" />
-                        <input type="text" className="form-control w-100" />
-                        <input type="text" className="form-control w-100" />
-                        {/* <input type="checkbox" />
-                    <label className="mx-2 normal-label">əl</label> */}
-                        {/* <label>Yol xərci</label> */}
-                        {/* <input type="text" className="form-control w-100" /> */}
+                        <input type="number" className="form-control w-100" />
+                        <input type="number" className="form-control w-100" />
+                        <input type="number" className="form-control w-100" />
                       </div>
 
                       <div className="d-flex my-2 justify-content-between">
                         <label>Çıxış müavinatı</label>
-                        <input type="text" className="form-control w-100" />
-                        <input type="text" className="form-control w-100" />
-                        <input type="text" className="form-control w-100" />
+                        <input
+                          type="number"
+                          value={info.cixisMuv}
+                          onChange={handleInput}
+                          name="cixisMuv"
+                          className="form-control w-100"
+                        />
+                        <input
+                          type="number"
+                          value={(info.discountDsmf * info.cixisMuv) / 100}
+                          className="form-control w-100"
+                        />
+                        <input
+                          value={
+                            info.cixisMuv -
+                            (info.discountDsmf * info.cixisMuv) / 100
+                          }
+                          type="number"
+                          className="form-control w-100"
+                        />
                       </div>
                     </Col>
                     <Col className="p-0 mt-3" md={4}>
@@ -781,7 +849,10 @@ const CalculatingModal = () => {
                           <label className="min-width-30"></label>
                           <span className="min-wdith-30">Ezamiyyet</span>
                           <input
-                            type="text"
+                            type="number"
+                            value={info.ezamiyyet}
+                            onChange={handleInput}
+                            name="ezamiyyet"
                             className="form-control w-75 d-block"
                           />
                         </label>
@@ -792,25 +863,25 @@ const CalculatingModal = () => {
                             value={info?.sehra}
                             onChange={handleInput}
                             name="sehra"
-                            type="text"
+                            type="number"
                             className="form-control w-75"
                           />
                         </label>
                         <label className="d-flex my-2">
                           <label className="min-width-30"></label>
                           <span className="min-width-30">Kəşf. xəstə.</span>
-                          <input type="text" className="form-control w-75" />
+                          <input type="number" className="form-control w-75" />
                         </label>
                         <label className="d-flex my-2">
                           <input type="checkbox" className="ms-1" />
                           <label className="min-width-20">əl ilə</label>
                           Yol. xərcə.
-                          <input type="text" className="form-control w-75" />
+                          <input type="number" className="form-control w-75" />
                         </label>
                         <label className="d-flex my-2">
                           <label className="min-width-30"></label>
                           <span className="min-width-30">Yük pulu</span>
-                          <input type="text" className="form-control w-75" />
+                          <input type="number" className="form-control w-75" />
                         </label>
                       </div>
                     </Col>
@@ -870,7 +941,6 @@ const CalculatingModal = () => {
         <Button onClick={() => updateRecord()} variant="primary">
           Yadda Saxla
         </Button>
-        <Button variant="light">Hesabla</Button>
         <Button variant="secondary">Bagla</Button>
       </Modal.Footer>
     </Modal>

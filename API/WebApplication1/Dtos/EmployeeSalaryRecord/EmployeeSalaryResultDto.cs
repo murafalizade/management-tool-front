@@ -47,15 +47,31 @@ namespace WebApplication1.Dtos
         public double HealthInsurance { get; set; }
         public double Extra211100 { get; set; }
         public double Food { get; set; }
-        public double TotalDiscount {get;set;} 
-        // public int DiscountChernobil { get; set; }
+        public double TotalDiscount { get; set; }
+        public int DiscountChernobil { get; set; }
+        public int DiscountDsmf { get; set; }
+        public int DiscountMartyr { get; set; }
+        public int DiscountVeteran { get; set; }
+        public int DiscountDisability { get; set; }
+        public int DiscountOwner { get; set; }
+        public int DiscountQachqin { get; set; }
         public double Muavin { get; set; }
         public double Sehra { get; set; }
         public bool isMatry { get; set; }
         public bool isChernobil { get; set; }
-        public bool isVeteran { get; set; } 
+        public bool isVeteran { get; set; }
         public bool isDisabled { get; set; }
-        public bool isOwner { get; set; } 
+        public bool isOwner { get; set; }
         public bool isQachqin { get; set; }
+        public double MaddiYardim {get;set;}
+        public double Ezamiyyet { get; set; }
+        public double KesfMezun { get; set; }
+        public double CixisMuv { get; set; }
+        public double Mezuniyyet {get;set;}
+        public double TotalGiven {get;set;}
+        public double TotalTaken {get;set;}
+        public double TotalDSMF {get;set;}
+        public double TotalSalary { get; set; }
+        public bool IsNotGiven {get;set;}
     }
 }

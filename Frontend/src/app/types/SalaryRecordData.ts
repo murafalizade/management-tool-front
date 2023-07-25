@@ -57,4 +57,5 @@ export type SalaryRecordData = {
   comment: string;
   accountNumber: number;
   totalSalary: number;
+  isMatry: number;
 };

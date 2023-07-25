@@ -332,6 +332,7 @@ const columns: Column<SalaryRecordData>[] = [
   },
   {
     Header: "MV müav. verilir",
+    accessor:"isMatry"
   },
   {
     Header: "Hesab nömrəsi",
@@ -458,9 +459,11 @@ const columns2 = [
   },
   {
     Header: "Məzun",
+    accessor: "mezuniyyet"
   },
   {
     Header: "K.məz.",
+    accessor:"kesfMezun"
   },
   {
     Header: "K.xəs.",
@@ -470,12 +473,15 @@ const columns2 = [
   },
   {
     Header: "Maddi",
+    accessor:"maddiYardim"
   },
   {
     Header: "Ezam",
+    accessor:"ezamiyyet"
   },
   {
     Header: "Səhra",
+    accessor:"sehra"
   },
   {
     Header: "Yol",
@@ -485,6 +491,7 @@ const columns2 = [
   },
   {
     Header: "Çıxış",
+    accessor:"cixisMuv"
   },
   {
     Header: " ",
@@ -495,6 +502,7 @@ const columns2 = [
   },
   {
     Header: "DSMF t.",
+    accessor: "totalDSMF",
   },
   {
     Header: "Cəmi",
@@ -721,6 +729,7 @@ const detailsColumns: Column<SalaryRecordData>[] = [
   },
   {
     Header: "MV müav. verilir",
+    accessor:"isMatry"
   },
   {
     Header: "Hesab nömrəsi",

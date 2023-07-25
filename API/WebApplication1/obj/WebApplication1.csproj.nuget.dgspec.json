@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\HP\\OneDrive\\Desktop\\WEB\\MyProjects\\hr\\API\\WebApplication1\\WebApplication1.csproj": {}
+    "C:\\Users\\HP\\OneDrive\\Desktop\\WEB\\MyProjects\\hr\\api\\WebApplication1\\WebApplication1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\HP\\OneDrive\\Desktop\\WEB\\MyProjects\\hr\\API\\WebApplication1\\WebApplication1.csproj": {
+    "C:\\Users\\HP\\OneDrive\\Desktop\\WEB\\MyProjects\\hr\\api\\WebApplication1\\WebApplication1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\HP\\OneDrive\\Desktop\\WEB\\MyProjects\\hr\\API\\WebApplication1\\WebApplication1.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\OneDrive\\Desktop\\WEB\\MyProjects\\hr\\api\\WebApplication1\\WebApplication1.csproj",
         "projectName": "WebApplication1",
-        "projectPath": "C:\\Users\\HP\\OneDrive\\Desktop\\WEB\\MyProjects\\hr\\API\\WebApplication1\\WebApplication1.csproj",
+        "projectPath": "C:\\Users\\HP\\OneDrive\\Desktop\\WEB\\MyProjects\\hr\\api\\WebApplication1\\WebApplication1.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HP\\OneDrive\\Desktop\\WEB\\MyProjects\\hr\\API\\WebApplication1\\obj\\",
+        "outputPath": "C:\\Users\\HP\\OneDrive\\Desktop\\WEB\\MyProjects\\hr\\api\\WebApplication1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",

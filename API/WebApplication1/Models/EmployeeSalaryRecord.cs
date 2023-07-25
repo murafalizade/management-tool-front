@@ -447,12 +447,12 @@ namespace WebApplication1.Models
         public int DiscountId { get; set; }
         public Discount Discount { get; set; }
 
-        public bool isMatry { get; set; } = true;
-        public bool isChernobil { get; set; } = false;
-        public bool isVeteran { get; set; } = true;
-        public bool isDisabled { get; set; } = false;
-        public bool isOwner { get; set; } = true;
-        public bool isQachqin { get; set; } = false;
+        public bool isMatry { get; set; }
+        public bool isChernobil { get; set; }
+        public bool isVeteran { get; set; }
+        public bool isDisabled { get; set; }
+        public bool isOwner { get; set; }
+        public bool isQachqin { get; set; }
 
         private double tax = 0;
         public double Tax
@@ -476,7 +476,6 @@ namespace WebApplication1.Models
 
 
         private double totalDiscount { get; set; } = 0;
-
         public double TotalDiscount
         {
             get
@@ -485,7 +484,7 @@ namespace WebApplication1.Models
             }
             set
             {
-                if (Discount != null)
+                if (Discount != null && value == 0)
                 {
                     if (isMatry)
                     {
@@ -512,6 +511,14 @@ namespace WebApplication1.Models
                     {
                         totalDiscount += Discount.Qachqin;
                     }
+                    else
+                    {
+                        totalDiscount = 0;
+                    }
+                }
+                else
+                {
+                    totalDiscount = value;
                 }
             }
         }
@@ -610,7 +617,7 @@ namespace WebApplication1.Models
         {
             set
             {
-                if (Discount != null)
+                if (Discount != null && value == 0)
                 {
                     sehra = Discount.Desert;
                 }
@@ -630,6 +637,32 @@ namespace WebApplication1.Models
         public double BPM { get; set; }
         public double BPMPercentage { get; set; }
         public double TotalDSMF { get; set; }
+        public double TotalTaken { get; set; }
+        private double totalGiven { get; set; } = 0;
+        public double TotalGiven
+        {
+            get
+            {
+                return totalGiven;
+            }
+            set
+            {
+                totalGiven = TotalIncome + TotalDiscount - TotalTaken;
+            }
+        }
+        private double totalSalary { get; set; } = 0;
+        public double TotalSalary
+        {
+            get
+            {
+                return totalSalary;
+            }
+            set
+            {
+                totalSalary = TotalGiven - TotalDSMF;
+            }
+        }
+
         public string Comment { get; set; }
         public string AccountNumber { get; set; }
         public bool isNotGiven { get; set; } = true;
