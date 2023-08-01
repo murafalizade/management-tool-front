@@ -126,17 +126,11 @@ namespace WebApplication1.Repositories
 
         public async Task<EmployeeSalaryRecord> UpdateEmployee(EmployeeSalaryRecord employee)
         {
-            var existingEmployee = await _context.EmployeeSalaryRecords.FindAsync(employee.Id);
+            var existingEmployee = await _context.EmployeeSalaryRecords.Include(x => x.Discount).FirstOrDefaultAsync(x => x.Id == employee.Id);
 
             if (existingEmployee == null)
             {
                 System.Console.WriteLine("Employee not found.");
-                // Handle the case where the employee record is not found.
-                // You might throw an exception or return an appropriate response.
-                // For example:
-                // throw new NotFoundException("Employee not found.");
-                // or
-                // return NotFound();
             }
 
             // Update the properties of the existingEmployee object with the values from the employee parameter.
@@ -152,6 +146,7 @@ namespace WebApplication1.Repositories
             existingEmployee.FexriAd = employee.FexriAd;
             existingEmployee.Ezamiyyet = employee.Ezamiyyet;
             existingEmployee.YolXerci = employee.YolXerci;
+            existingEmployee.KesfXeste = employee.KesfXeste;
             existingEmployee.MaddiYardim = employee.MaddiYardim;
             existingEmployee.Sehra = employee.Sehra;
             existingEmployee.Kiraye = employee.Kiraye;
@@ -159,6 +154,7 @@ namespace WebApplication1.Repositories
             existingEmployee.ExtraMoney = employee.ExtraMoney;
             existingEmployee.ExtraMoney2 = employee.ExtraMoney2;
             existingEmployee.Meharetlilik = employee.Meharetlilik;
+            existingEmployee.YukPulu = employee.YukPulu;
             existingEmployee.Kesfiyyat = employee.Kesfiyyat;
             existingEmployee.Temsilcilik = employee.Temsilcilik;
             existingEmployee.Zererlilik = employee.Zererlilik;
@@ -176,21 +172,11 @@ namespace WebApplication1.Repositories
             existingEmployee.isVeteran = employee.isVeteran;
             existingEmployee.isMatry = employee.isMatry;
             existingEmployee.Muavin = employee.Muavin;
-            existingEmployee.TotalDiscount = employee.TotalDiscount;
-            existingEmployee.TotalIncome = employee.TotalIncome;
-            existingEmployee.TotalTaken = employee.TotalTaken;
-            existingEmployee.TotalDSMF = employee.TotalDSMF;
             existingEmployee.isNotGiven = employee.isNotGiven;
-
             existingEmployee.Mezuniyyet = employee.Mezuniyyet;
+            existingEmployee.FoodGiven = employee.FoodGiven;
             existingEmployee.KesfMezun = employee.KesfMezun;
             existingEmployee.CixisMuv = employee.CixisMuv;
-
-            
-
-            // existingEmployee.TotalSalary = employee.TotalSalary;
-
-
 
             await _context.SaveChangesAsync();
             return existingEmployee;

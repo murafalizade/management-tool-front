@@ -10,18 +10,21 @@ namespace WebApplication1.Dtos
         public int XIYears { get; set; }
         public int XIMonths { get; set; }
         public int XIDays { get; set; }
-        public int XIPercentage { get; set; }
+        public int XIPercent { get; set; }
         public double XIMoney { get; set; }
         public string recordDateYear { get; set; }
         public double PTMoney { get; set; }
         public DateTime EmployeeStartDate { get; set; }
+        public int EmployeeMeharetlilik { get; set; }
         public string AccountNumber { get; set; }
         public double Kibertehlukesizlik { get; set; }
         public string EmployeePositionName { get; set; }
         public string EmployeeRankName { get; set; }
         public double EmployeePositionSalary { get; set; }
-        public double EmployeeRankSalary { get; set; }
+        public int EmployeePositionId { get; set; }
+        public int EmployeeRankId { get; set; }
         public string EmployeePositionDepartmentName { get; set; }
+        public DateTime EmployeePositionStartDate { get; set; }
         public string EmployeePositionDepartmentAdminstrationName { get; set; }
         public string FullName { get; set; }
         public DateTime RecordDate { get; set; }
@@ -57,21 +60,27 @@ namespace WebApplication1.Dtos
         public int DiscountQachqin { get; set; }
         public double Muavin { get; set; }
         public double Sehra { get; set; }
+        public double YukPulu { get; set; }
+        public double KesfXeste { get; set; }
+        public double Kiraye { get; set; }
+        public double YolXerci { get; set; }
         public bool isMatry { get; set; }
         public bool isChernobil { get; set; }
         public bool isVeteran { get; set; }
         public bool isDisabled { get; set; }
         public bool isOwner { get; set; }
         public bool isQachqin { get; set; }
-        public double MaddiYardim {get;set;}
+        public double MaddiYardim { get; set; }
         public double Ezamiyyet { get; set; }
         public double KesfMezun { get; set; }
         public double CixisMuv { get; set; }
-        public double Mezuniyyet {get;set;}
-        public double TotalGiven {get;set;}
-        public double TotalTaken {get;set;}
-        public double TotalDSMF {get;set;}
+        public double Mezuniyyet { get; set; }
+        public double TotalGiven { get; set; }
+        public double TotalTaken { get; set; }
+        public double TotalDSMF { get; set; }
         public double TotalSalary { get; set; }
-        public bool IsNotGiven {get;set;}
+        public bool IsNotGiven { get; set; }
+        public bool FoodGiven { get; set; }
+
     }
 }

@@ -2,15 +2,6 @@ import { Column } from "react-table";
 import { EmployeeData } from "../types/EmployeeData";
 import { SalaryRecordData } from "../types/SalaryRecordData";
 
-type TableData = {
-  name: string;
-  age: number;
-  email: string;
-  total?: number;
-  empty?: string;
-  total2?: number;
-};
-
 export const createColumns: Column<EmployeeData>[] = [
   {
     Header: "Soyadı",
@@ -151,6 +142,7 @@ const columns: Column<SalaryRecordData>[] = [
   },
   {
     Header: "Xİ görə (%)",
+    accessor: "xiPercent",
   },
   {
     Header: "Hesablanıb",
@@ -254,13 +246,13 @@ const columns: Column<SalaryRecordData>[] = [
       },
       {
         Header: "Cəmi",
-        accessor: "totalGiven",
+        accessor: "totalTaken",
       },
     ],
   },
   {
     Header: "Ələ veriləcək məbləğ",
-    accessor: "extraGivenMoney",
+    accessor: "totalGiven",
   },
   {
     Header: "Ərzaq komp-sı",
@@ -332,7 +324,7 @@ const columns: Column<SalaryRecordData>[] = [
   },
   {
     Header: "MV müav. verilir",
-    accessor:"isMatry"
+    accessor: "isMatry",
   },
   {
     Header: "Hesab nömrəsi",
@@ -340,6 +332,7 @@ const columns: Column<SalaryRecordData>[] = [
   },
   {
     Header: "Məh. %",
+    accessor: "employeeMeharetlilik",
   },
   {
     Header: "HA_ID",
@@ -349,6 +342,7 @@ const columns: Column<SalaryRecordData>[] = [
   },
   {
     Header: "V2F_ID",
+    accessor: "employeePositionId",
   },
 ];
 
@@ -447,23 +441,27 @@ const columns2 = [
   },
   {
     Header: "Cəmi t.",
+    accessor: "totalTaken",
   },
   {
     Header: "ƏVM",
+    accessor: "totalGiven",
   },
   {
     Header: "Ərzaq",
+    accessor: "food",
   },
   {
     Header: "Veteran",
+    accessor: "veteran",
   },
   {
     Header: "Məzun",
-    accessor: "mezuniyyet"
+    accessor: "mezuniyyet",
   },
   {
     Header: "K.məz.",
-    accessor:"kesfMezun"
+    accessor: "kesfMezun",
   },
   {
     Header: "K.xəs.",
@@ -473,25 +471,27 @@ const columns2 = [
   },
   {
     Header: "Maddi",
-    accessor:"maddiYardim"
+    accessor: "maddiYardim",
   },
   {
     Header: "Ezam",
-    accessor:"ezamiyyet"
+    accessor: "ezamiyyet",
   },
   {
     Header: "Səhra",
-    accessor:"sehra"
+    accessor: "sehra",
   },
   {
     Header: "Yol",
+    accessor: "yolXerci",
   },
   {
     Header: "Yük",
+    accessor: "yukPulu",
   },
   {
     Header: "Çıxış",
-    accessor:"cixisMuv"
+    accessor: "cixisMuv",
   },
   {
     Header: " ",
@@ -506,7 +506,7 @@ const columns2 = [
   },
   {
     Header: "Cəmi",
-    accessor: "total2",
+    accessor: "totalSalary",
   },
 ];
 
@@ -729,7 +729,7 @@ const detailsColumns: Column<SalaryRecordData>[] = [
   },
   {
     Header: "MV müav. verilir",
-    accessor:"isMatry"
+    accessor: "isMatry",
   },
   {
     Header: "Hesab nömrəsi",

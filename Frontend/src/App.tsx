@@ -16,7 +16,6 @@ function App() {
         <Route path="/detail/:id" element={<Detail/>} />
         <Route path="/create" element={<Create/>} />
         <Route path='/login' element={<Login />} />
-
       </Routes>
     </Router>
   );

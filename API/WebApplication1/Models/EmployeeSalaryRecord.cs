@@ -35,7 +35,6 @@ namespace WebApplication1.Models
                 xIDays = (int)(DateTime.Now - Employee.StartDate).TotalDays % 365 % 30;
             }
         }
-
         private int xIMonths = 0;
         public int XIMonths
         {
@@ -95,9 +94,7 @@ namespace WebApplication1.Models
             }
             get { return positionSalary; }
         }
-
         private int XIPercentage = 0;
-
         public int XIPercent
         {
             get
@@ -147,7 +144,6 @@ namespace WebApplication1.Models
                 }
             }
         }
-
         private double xIMoney = 0;
         public double XIMoney
         {
@@ -429,21 +425,13 @@ namespace WebApplication1.Models
         }
         public double ExtraMoney { get; set; } = 0;
         public double ExtraMoney2 { get; set; } = 0;
-        private double totalIncome { get; set; } = 0;
         public double TotalIncome
         {
             get
             {
-                return totalIncome;
-            }
-            set
-            {
-                totalIncome = XIMoney + pTMoney + rankSalary + positionSalary + meharetlilik + Temsilcilik + Mexfilik + Zererlilik + XariciDil + Kibertehlukesizlik + Kesfiyyat + ElmiDerece + FexriAd + ExtraMoney + ExtraMoney2;
+                return XIMoney + pTMoney + rankSalary + positionSalary + meharetlilik + Temsilcilik + Mexfilik + Zererlilik + XariciDil + Kibertehlukesizlik + Kesfiyyat + ElmiDerece + FexriAd + ExtraMoney + ExtraMoney2;
             }
         }
-
-        // DISCOUNT
-
         public int DiscountId { get; set; }
         public Discount Discount { get; set; }
 
@@ -474,52 +462,39 @@ namespace WebApplication1.Models
             }
         }
 
-
         private double totalDiscount { get; set; } = 0;
         public double TotalDiscount
         {
             get
             {
+                double totalDiscount = 0;
+
+                if (isMatry)
+                {
+                    totalDiscount += Discount.Martyr;
+                }
+                if (isChernobil)
+                {
+                    totalDiscount += Discount.Chernobil;
+                }
+                if (isVeteran)
+                {
+                    totalDiscount += Discount.Veteran;
+                    // tax = tax - Discount.VeteranTaxDiscount > 0 ? tax - Discount.VeteranTaxDiscount : 0;
+                }
+                if (isDisabled)
+                {
+                    totalDiscount += Discount.Disability;
+                }
+                if (isOwner)
+                {
+                    totalDiscount += Discount.Owner;
+                }
+                if (isQachqin)
+                {
+                    totalDiscount += Discount.Qachqin;
+                }
                 return totalDiscount;
-            }
-            set
-            {
-                if (Discount != null && value == 0)
-                {
-                    if (isMatry)
-                    {
-                        totalDiscount += Discount.Martyr;
-                    }
-                    if (isChernobil)
-                    {
-                        totalDiscount += Discount.Chernobil;
-                    }
-                    if (isVeteran)
-                    {
-                        totalDiscount += Discount.Veteran;
-                        // tax = tax - Discount.VeteranTaxDiscount > 0 ? tax - Discount.VeteranTaxDiscount : 0;
-                    }
-                    if (isDisabled)
-                    {
-                        totalDiscount += Discount.Disability;
-                    }
-                    if (isOwner)
-                    {
-                        totalDiscount += Discount.Owner;
-                    }
-                    if (isQachqin)
-                    {
-                        totalDiscount += Discount.Qachqin;
-                    }
-                    else
-                    {
-                        totalDiscount = 0;
-                    }
-                }
-                else
-                {
-                    totalDiscount = value;
-                }
             }
         }
 
@@ -576,7 +551,7 @@ namespace WebApplication1.Models
             }
             set
             {
-                if (Discount != null)
+                if (Discount != null && value == 0 && FoodGiven == true)
                 {
                     food = Discount.Food;
                 }
@@ -586,6 +561,7 @@ namespace WebApplication1.Models
                 }
             }
         }
+        public bool FoodGiven { get; set; } = false;
         private double muavin = 0;
         public double Muavin
         {
@@ -637,29 +613,25 @@ namespace WebApplication1.Models
         public double BPM { get; set; }
         public double BPMPercentage { get; set; }
         public double TotalDSMF { get; set; }
-        public double TotalTaken { get; set; }
-        private double totalGiven { get; set; } = 0;
+        public double TotalTaken
+        {
+            get
+            {
+                return Tax + DSMF + HealthInsurance + Kesirler + Aliment + Extra211100 + ExtraGivenMoney;
+            }
+        }
         public double TotalGiven
         {
             get
             {
-                return totalGiven;
-            }
-            set
-            {
-                totalGiven = TotalIncome + TotalDiscount - TotalTaken;
+                return TotalIncome + TotalDiscount - TotalTaken;
             }
         }
-        private double totalSalary { get; set; } = 0;
         public double TotalSalary
         {
             get
             {
-                return totalSalary;
-            }
-            set
-            {
-                totalSalary = TotalGiven - TotalDSMF;
+                return TotalGiven - TotalDSMF;
             }
         }
 

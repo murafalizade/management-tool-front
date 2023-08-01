@@ -6,6 +6,7 @@ import { RootState } from "../redux/store";
 import { hideModal } from "../redux/showModalSlice";
 import EmployeeService from "../api/employeeService";
 import months from "../constants/months";
+import moment from "moment";
 
 const CalculatingModal = () => {
   const state = useSelector((state: RootState) => state.showModal);
@@ -14,10 +15,7 @@ const CalculatingModal = () => {
   const [info, setInfo] = useState<any>({
     takenByHand: false,
     rankSalaryByHand: false,
-    totalDiscount: 0,
     positionSalaryByHand: false,
-    tax: 0,
-    dsmf: 0,
     additionalServiceByHand: false,
     skillDegreePercent: 0,
     representationPercent: 0,
@@ -114,35 +112,15 @@ const CalculatingModal = () => {
   }, [info]);
 
   useEffect(() => {
-    // Assuming you have the startDate in the form of a Date object
-    const startDate = new Date(info?.employeeStartDate); // Example startDate
-    // Get the first day of the current month
-    const currentDate = new Date();
-    const firstDayOfMonth = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      1
-    );
+    const startDate = moment(info?.employeeStartDate, "YYYY-MM-DD");
+    const currentDate = moment();
+    const firstDayOfMonth = moment(currentDate).startOf("month");
 
-    // Calculate the difference in milliseconds
-    const differenceInMilliseconds =
-      startDate.getTime() - firstDayOfMonth.getTime();
-
-    // Calculate the difference in years, months, and remaining days
-    let diffYears = startDate.getFullYear() - firstDayOfMonth.getFullYear();
-    let diffMonths = startDate.getMonth() - firstDayOfMonth.getMonth();
-    let diffDays = startDate.getDate() - firstDayOfMonth.getDate();
-
-    // Adjust the difference if diffDays is negative
-    if (diffDays < 0) {
-      const daysInLastMonth = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        0
-      ).getDate();
-      diffDays += daysInLastMonth;
-      diffMonths--;
-    }
+    // Calculate the difference in years, months, and days
+    const diffDuration = moment.duration(startDate.diff(firstDayOfMonth));
+    const diffYears = diffDuration.years();
+    const diffMonths = diffDuration.months();
+    const diffDays = diffDuration.days();
 
     setServiceYears(Math.abs(diffYears));
     setServiceMonths(Math.abs(diffMonths));
@@ -151,8 +129,6 @@ const CalculatingModal = () => {
 
   // update record
   const updateRecord = async () => {
-    setInfo({ ...info, totalIncome:totalGiven, totalDiscount, totalTaken, totalDSMF });
-    console.log(info);
     await EmployeeService.updateEmployeeSalaryRecord(info);
     window.location.reload();
   };
@@ -243,11 +219,7 @@ const CalculatingModal = () => {
                     name="rankSalary"
                     disabled={!info.rankSalaryByHand}
                     onChange={handleInput}
-                    value={
-                      info.rankSalaryByHand
-                        ? info.rankSalary
-                        : info.employeeRankSalary
-                    }
+                    value={info.rankSalary}
                     type="number"
                     className="form-control"
                   />
@@ -694,11 +666,18 @@ const CalculatingModal = () => {
                   <div className="section">
                     <h6>Ərzaq paylanması</h6>
                     <div className="d-flex  align-items-center justify-content-between my-1">
-                      <input type="checkbox" />
+                      <input
+                        checked={info.foodGiven}
+                        value={info.foodGiven}
+                        name="foodGiven"
+                        onChange={handleCheckbox}
+                        type="checkbox"
+                      />
                       <label>verilir</label>
                       <input
-                        value={info?.food}
+                        value={info.foodGiven ? info?.food : 0}
                         name="food"
+                        disabled={!info.foodGiven}
                         onChange={handleInput}
                         type="text"
                         className="form-control"
@@ -870,18 +849,36 @@ const CalculatingModal = () => {
                         <label className="d-flex my-2">
                           <label className="min-width-30"></label>
                           <span className="min-width-30">Kəşf. xəstə.</span>
-                          <input type="number" className="form-control w-75" />
+                          <input
+                            type="number"
+                            value={info.kesfXeste}
+                            onChange={handleInput}
+                            name="kesfXeste"
+                            className="form-control w-75"
+                          />
                         </label>
                         <label className="d-flex my-2">
                           <input type="checkbox" className="ms-1" />
                           <label className="min-width-20">əl ilə</label>
                           Yol. xərcə.
-                          <input type="number" className="form-control w-75" />
+                          <input
+                            type="number"
+                            name="yolXerci"
+                            value={info.yolXerci}
+                            onChange={handleInput}
+                            className="form-control w-75"
+                          />
                         </label>
                         <label className="d-flex my-2">
                           <label className="min-width-30"></label>
                           <span className="min-width-30">Yük pulu</span>
-                          <input type="number" className="form-control w-75" />
+                          <input
+                            name="yukPulu"
+                            onChange={handleInput}
+                            value={info.yukPulu}
+                            type="number"
+                            className="form-control w-75"
+                          />
                         </label>
                       </div>
                     </Col>
@@ -903,7 +900,7 @@ const CalculatingModal = () => {
             </Col>
             <div className="d-flex">
               <input
-                value={info.isNotGiven}
+                checked={info.isNotGiven}
                 name="isNotGiven"
                 onChange={handleCheckbox}
                 type="checkbox"
@@ -941,7 +938,9 @@ const CalculatingModal = () => {
         <Button onClick={() => updateRecord()} variant="primary">
           Yadda Saxla
         </Button>
-        <Button variant="secondary">Bagla</Button>
+        <Button onClick={() => dispatch(hideModal())} variant="secondary">
+          Bağla
+        </Button>
       </Modal.Footer>
     </Modal>
   );

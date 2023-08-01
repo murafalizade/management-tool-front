@@ -13,6 +13,7 @@ export type SalaryRecordData = {
   positionSalary: number;
   total: number;
   xiMoney: number;
+  xiPercent: number;
   ptMoney: number;
   meharetlilik: number;
   temsilcilik: number;
@@ -27,11 +28,13 @@ export type SalaryRecordData = {
   kesfiyyat: number;
   elmiDerece: number;
   fexriAd: number;
+  employeeMeharetlilik: number;
   //   RecordDate: string;
   extraMoney: number;
   extraMoney2: number;
   tax: number;
   dsmf: number;
+  totalTaken: number;
   healthInsurance: number;
   kesirler: number;
   aliment: number;
@@ -45,6 +48,7 @@ export type SalaryRecordData = {
   kesfMezun: number;
   kesfXeste: number;
   kiraye: number;
+  employeePositionId: number;
   maddiYardim: number;
   ezamiyyet: number;
   sehra: number;
@@ -57,5 +61,5 @@ export type SalaryRecordData = {
   comment: string;
   accountNumber: number;
   totalSalary: number;
-  isMatry: number;
+  isMatry: boolean;
 };

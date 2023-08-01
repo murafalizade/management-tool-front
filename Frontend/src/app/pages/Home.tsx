@@ -13,7 +13,7 @@ import { showModal, setSelectedRow } from "../redux/showModalSlice";
 import withAuth from "../hoc/withAuth";
 import { RootState } from "../redux/store";
 import EmployeeService from "../api/employeeService";
-import Loading from '../components/Loading';
+import Loading from "../components/Loading";
 import { SalaryRecordData } from "../types/SalaryRecordData";
 
 function Home() {
@@ -69,8 +69,6 @@ function Home() {
     }
   }, [salaryRecord]);
 
-  console.log(totalValue);
-
   // Handle filter change
   const handleFilter = (e: any) => {
     setFilter(e.target.value);
@@ -105,6 +103,8 @@ function Home() {
     dispatch(showModal(row.original.id));
   };
 
+  console.log(salaryRecord?.[0]?.isMatry);
+
   const tableInstance = useTable({ columns, data: salaryRecord });
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
@@ -112,7 +112,7 @@ function Home() {
 
   return (
     <main>
-      {isLoading?<Loading/>:null}
+      {isLoading ? <Loading /> : null}
       <div className="d-flex justify-content-between m-3">
         <div className="d-flex justify-content-center align-items-center">
           <input
@@ -180,10 +180,14 @@ function Home() {
         </div>
       </div>
 
-              
-      <div style={{ overflow: "scroll", maxHeight:"80vh" }}>
+      <div style={{ overflow: "scroll", maxHeight: "80vh" }}>
         {/* <div style={{maxHeight:'43vh',width:"100%"}}> */}
-        <Table className="position-relative main-table" bordered hover {...getTableProps()}>
+        <Table
+          className="position-relative main-table"
+          bordered
+          hover
+          {...getTableProps()}
+        >
           <thead>
             {headerGroups.map((headerGroup: any) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -230,7 +234,10 @@ function Home() {
               );
             })}
           </tbody>
-          <tfoot className="position-sticky foot-table w-100" style={{bottom:"0px"}}>
+          <tfoot
+            className="position-sticky foot-table w-100"
+            style={{ bottom: "0px" }}
+          >
             <tr className="text-center">
               <th colSpan={4}></th> <th>S.A.A</th>
               <th colSpan={4}></th>
@@ -252,9 +259,7 @@ function Home() {
       </div>
 
       <CalculatingModal />
-      <div className="px-1">
-       {selectedColumn?.comment ?? ""}
-      </div>
+      <div className="px-1">{selectedColumn?.comment ?? ""}</div>
     </main>
   );
 }
