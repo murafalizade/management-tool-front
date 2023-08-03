@@ -58,15 +58,13 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllEmployee([FromQuery] int month, [FromQuery] int year, [FromQuery] string search)
         {
-            ErrorHandelerDto obj = await _employeeSalaryRecordService.GetAllEmployee(search,month, year);
+            ErrorHandelerDto obj = await _employeeSalaryRecordService.GetAllEmployee(search, month, year);
             if (obj.StatusCode == 200)
             {
                 return Ok(obj.data);
             }
             return BadRequest(obj.data);
         }
-
- 
 
         [HttpPut]
         public async Task<IActionResult> UpdateEmployee([FromBody] EmployeeSalaryEditDto employee)
@@ -113,7 +111,11 @@ namespace WebApplication1.Controllers
             return BadRequest(obj.data);
         }
 
-
+        [HttpGet("export")]
+        public async Task<IActionResult> ExportExcel([FromQuery] int month, [FromQuery] int year, [FromQuery] string search)
+        {
+            return File(await _employeeSalaryRecordService.ExportExcel(search, month, year), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "EmployeeSalaryRecord.xlsx");
+        }
 
     }
 }

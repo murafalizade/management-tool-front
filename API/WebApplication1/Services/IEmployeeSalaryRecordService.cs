@@ -3,7 +3,8 @@ using System.Threading.Tasks;
 using WebApplication1.Dtos;
 using WebApplication1.Models;
 
-namespace WebApplication1.Services{
+namespace WebApplication1.Services
+{
     public interface IEmployeeSalaryRecordService
     {
         Task<ErrorHandelerDto> GetEmployee(int id, int year);
@@ -13,5 +14,6 @@ namespace WebApplication1.Services{
         Task<ErrorHandelerDto> UpdateEmployee(EmployeeSalaryEditDto employee);
         Task<ErrorHandelerDto> AddEmployeeForNextMonth();
         Task<ErrorHandelerDto> CalculateSalary();
+        Task<byte[]> ExportExcel(string search, int month, int year);
     }
 }

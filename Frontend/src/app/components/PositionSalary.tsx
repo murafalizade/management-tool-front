@@ -1,14 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
-import { baseUrl } from "../constants/baseUrl";
+import { BASE_API_URL } from "../constants/baseUrl";
 import OperationService from "../api/operationService";
 
 const PositionSalary = () => {
   
   const [organization,setOrganization] = useState<any[]>([]);
   const getOrganizationData = async () => {
-    const res = await axios(`${baseUrl}/api/adminstration/all`);
+    const res = await axios(`${BASE_API_URL}/api/adminstration/all`);
     const data = res.data;
     return data;
   };

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
@@ -21,6 +23,17 @@ namespace WebApplication1.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task AddKirayeQat(int kirayeQat)
+        {
+            // update kiraye qat for this month
+            var recordsToUpdate = await _context.EmployeeSalaryRecords
+            .Where(x => x.RecordDate.Month == DateTime.Now.Month && x.RecordDate.Year == DateTime.Now.Year)
+            .ToListAsync();
+
+            recordsToUpdate.ForEach(record => { record.KirayeQat = kirayeQat; record.KirayePrice = kirayeQat * record.KirayePrice; record.KirayeId = 1; });
+            await _context.SaveChangesAsync();
+        }
+
         public Task<List<EmployeeSalaryRecord>> GetEmployeeById(int employeeId, int year)
         {
             return _context.EmployeeSalaryRecords.
@@ -38,6 +51,7 @@ namespace WebApplication1.Repositories
             return await _context.EmployeeSalaryRecords.Include(x => x.Employee).
             Include(x => x.Employee.Rank).
             Include(x => x.Employee.Position).
+            Include(x => x.Kiraye).
             Include(x => x.Discount).
             Include(x => x.Employee.Position.Department).
             Include(x => x.Employee.Position.Department.Adminstration).
@@ -46,78 +60,55 @@ namespace WebApplication1.Repositories
 
         public async Task<List<EmployeeSalaryRecord>> GetEmployees(string search, int month, int year)
         {
-            var ob = _context.EmployeeSalaryRecords.Include(x => x.Employee).
-            Include(x => x.Employee.Rank).
-            Include(x => x.Discount).
-            Include(x => x.Employee.Position).
-            Include(x => x.Employee.Position.Department).
-            Include(x => x.Employee.Position.Department.Adminstration).
-            Where(x => x.RecordDate.Year == year && x.RecordDate.Month == month);
+            var query = _context.EmployeeSalaryRecords
+                .Include(x => x.Employee)
+                    .ThenInclude(x => x.Rank)
+                .Include(x => x.Discount)
+                .Include(x => x.Kiraye)
+                .Include(x => x.Employee.Position)
+                    .ThenInclude(x => x.Department)
+                        .ThenInclude(x => x.Adminstration)
+                .Where(x => x.RecordDate.Year == year && x.RecordDate.Month == month);
 
-            switch (search)
+            var searchOptions = new Dictionary<string, Expression<Func<EmployeeSalaryRecord, bool>>>
+                {
+                    { "aliment", x => x.Aliment > 0 },
+                    { "extra211100", x => x.Extra211100 > 0 },
+                    { "fexri", x => x.FexriAd > 0 },
+                    { "kesfiyyat", x => x.Kesfiyyat > 0 },
+                    { "kesfMezun", x => x.KesfMezun > 0 },
+                    { "kesfXeste", x => x.KesfXeste > 0 },
+                    { "food", x => x.Food > 0 },
+                    { "yukPulu", x => x.YukPulu > 0 },
+                    { "cixisMuv", x => x.CixisMuv > 0 },
+                    { "bpm", x => x.BPM > 0 },
+                    {"erzaq", x=> x.FoodGiven==true},
+                    {"texris", x=> x.CixisMuv >0},
+                    { "mezuniyyet", x => x.Mezuniyyet > 0 },
+                    {"ezamiyyet", x=>x.Ezamiyyet > 0},
+                    { "kesir", x => x.Kesirler > 0 },
+                    { "zererli", x => x.Zererlilik > 0 },
+                    { "meharetlilik", x => x.Meharetlilik > 0 },
+                    { "temsilcilik", x => x.Temsilcilik > 0 },
+                    { "yol", x => x.YolXerci > 0 },
+                    {  "yuk", x=> x.YukPulu >0},
+                    { "kiraye", x => x.KirayePrice > 0 },
+                    { "maddi", x => x.MaddiYardim > 0 },
+                    { "sahra", x => x.Sehra > 0 },
+                    { "elmi", x => x.ElmiDerece > 0 },
+                    { "cixis", x => x.XariciDil > 0 },
+                    { "elave", x => x.ExtraGivenMoney > 0 },
+                    { "elaveGvti", x => x.ExtraMoney2 > 0 }
+                };
+
+            if (!string.IsNullOrEmpty(search) && searchOptions.ContainsKey(search))
             {
-                case "":
-                    break;
-                case "all":
-                    break;
-                case "aliment":
-                    ob = ob.Where(x => x.Aliment > 0);
-                    break;
-                case "extra211100":
-                    ob = ob.Where(x => x.Extra211100 > 0);
-                    break;
-                case "ezamiyyet":
-                    ob = ob.Where(x => x.Ezamiyyet > 0);
-                    break;
-                case "fexri":
-                    ob = ob.Where(x => x.FexriAd > 0);
-                    break;
-                case "kesfiyyat":
-                    ob = ob.Where(x => x.Kesfiyyat > 0);
-                    break;
-                case "kesir":
-                    ob = ob.Where(x => x.Kesirler > 0);
-                    break;
-                case "zererli":
-                    ob = ob.Where(x => x.Zererlilik > 0);
-                    break;
-                case "meharetlilik":
-                    ob = ob.Where(x => x.Meharetlilik > 0);
-                    break;
-                case "temsilcilik":
-                    ob = ob.Where(x => x.Temsilcilik > 0);
-                    break;
-                case "yol":
-                    ob = ob.Where(x => x.YolXerci > 0);
-                    break;
-                case "kiraye":
-                    ob = ob.Where(x => x.Kiraye > 0);
-                    break;
-                case "maddi":
-                    ob = ob.Where(x => x.MaddiYardim > 0);
-                    break;
-                case "sahra":
-                    ob = ob.Where(x => x.Sehra > 0);
-                    break;
-                case "elmi":
-                    ob = ob.Where(x => x.ElmiDerece > 0);
-                    break;
-                case "cixis":
-                    ob = ob.Where(x => x.XariciDil > 0);
-                    break;
-                case "elave":
-                    ob = ob.Where(x => x.ExtraGivenMoney > 0);
-                    break;
-                case "elaveGvti":
-                    ob = ob.Where(x => x.ExtraMoney2 > 0);
-                    break;
-                default:
-                    break;
+                query = query.Where(searchOptions[search]);
             }
 
-            return await ob.ToListAsync();
-
+            return await query.ToListAsync();
         }
+
 
         public async Task<EmployeeSalaryRecord> GetLastEmployeeRecord()
         {
@@ -126,8 +117,10 @@ namespace WebApplication1.Repositories
 
         public async Task<EmployeeSalaryRecord> UpdateEmployee(EmployeeSalaryRecord employee)
         {
-            var existingEmployee = await _context.EmployeeSalaryRecords.Include(x => x.Discount).FirstOrDefaultAsync(x => x.Id == employee.Id);
-
+            var existingEmployee = await _context.EmployeeSalaryRecords.
+            Include(x => x.Discount).
+            Include(x => x.Kiraye).
+            FirstOrDefaultAsync(x => x.Id == employee.Id);
             if (existingEmployee == null)
             {
                 System.Console.WriteLine("Employee not found.");
@@ -136,7 +129,14 @@ namespace WebApplication1.Repositories
             // Update the properties of the existingEmployee object with the values from the employee parameter.
             existingEmployee.XariciDil = employee.XariciDil;
             existingEmployee.ElmiDerece = employee.ElmiDerece;
+            existingEmployee.AlimentPercentage = employee.AlimentPercentage;
             existingEmployee.Aliment = employee.Aliment;
+            existingEmployee.KirayeId = employee.KirayeId;
+
+
+            existingEmployee.FamilyCount = employee.FamilyCount;
+            existingEmployee.KirayeQat = employee.KirayeQat;
+            existingEmployee.KirayePrice = employee.KirayePrice;
             existingEmployee.BPM = employee.BPM;
             existingEmployee.DSMF = employee.DSMF;
             existingEmployee.Comment = employee.Comment;
@@ -181,6 +181,5 @@ namespace WebApplication1.Repositories
             await _context.SaveChangesAsync();
             return existingEmployee;
         }
-
     }
 }

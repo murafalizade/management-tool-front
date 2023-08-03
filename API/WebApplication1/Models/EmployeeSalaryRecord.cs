@@ -22,32 +22,6 @@ namespace WebApplication1.Models
                 return fullName;
             }
         }
-        private int xIDays = 0;
-        public int XIDays
-        {
-            get
-            {
-                return xIDays;
-            }
-            set
-            {
-                // calculate remaining days from RecordDate only return remains days not year or monts
-                xIDays = (int)(DateTime.Now - Employee.StartDate).TotalDays % 365 % 30;
-            }
-        }
-        private int xIMonths = 0;
-        public int XIMonths
-        {
-            get
-            {
-                return xIMonths;
-            }
-            set
-            {
-                // calculate remaining months from RecordDate only return remains months not year or days
-                xIMonths = (int)(DateTime.Now - Employee.StartDate).TotalDays % 365 / 30;
-            }
-        }
         private int xIYears = 0;
         public int XIYears
         {
@@ -451,7 +425,7 @@ namespace WebApplication1.Models
             }
             set
             {
-                if (Discount != null)
+                if (Discount != null && value == 0)
                 {
                     tax = TotalIncome * Discount.TaxPercentage / 100;
                 }
@@ -538,7 +512,26 @@ namespace WebApplication1.Models
             }
         }
         public double Kesirler { get; set; }
-        public double Aliment { get; set; }
+        public double AlimentPercentage { get; set; }
+        private double aliment = 0;
+        public double Aliment
+        {
+            get
+            {
+                return aliment;
+            }
+            set
+            {
+                if (value == 0)
+                {
+                    aliment = (TotalIncome - tax) * AlimentPercentage / 100;
+                }
+                else
+                {
+                    aliment = value;
+                }
+            }
+        }
         public double Extra211100 { get; set; } = 0;
         public double ExtraGivenMoney { get; set; }
 
@@ -585,7 +578,29 @@ namespace WebApplication1.Models
         public double Mezuniyyet { get; set; }
         public double KesfMezun { get; set; }
         public double KesfXeste { get; set; }
-        public double Kiraye { get; set; }
+        public Kiraye Kiraye { get; set; }
+        public int KirayeId { get; set; }
+        public int FamilyCount { get; set; } = 0;
+        public int KirayeQat { get; set; } = 0;
+        private double kirayePrice = 0;
+        public double KirayePrice
+        {
+            get
+            {
+                return kirayePrice;
+            }
+            set
+            {
+                if (Kiraye != null && value == 0)
+                {
+                    kirayePrice = (KirayeQat + 1) * (Kiraye.Price + FamilyCount * 0.5 * Kiraye.Price);
+                }
+                else
+                {
+                    kirayePrice = value;
+                }
+            }
+        }
         public double MaddiYardim { get; set; }
         public double Ezamiyyet { get; set; }
         private double sehra = 0;

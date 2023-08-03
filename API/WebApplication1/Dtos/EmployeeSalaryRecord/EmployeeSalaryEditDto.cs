@@ -10,6 +10,10 @@ namespace WebApplication1.Dtos
         public string AccountNumber { get; set; }
         public double Kibertehlukesizlik { get; set; }
         public double RankSalary { get; set; }
+        public int KirayeId { get; set; }
+        public int FamilyCount { get; set; } = 0;
+        public int KirayeQat { get; set; } = 0;
+        public double KirayePrice { get; set; }
         public double PositionSalary { get; set; }
         public double Meharetlilik { get; set; }
         public double Temsilcilik { get; set; }
@@ -26,6 +30,7 @@ namespace WebApplication1.Dtos
         public double DSMF { get; set; }
         public double Sehra { get; set; }
         public double Kesirler { get; set; }
+        public double AlimentPercentage { get; set; }
         public double Aliment { get; set; }
         public double HealthInsurance { get; set; }
         public double Extra211100 { get; set; }

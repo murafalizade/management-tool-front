@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import {baseUrl} from '../constants/baseUrl';
+import {BASE_API_URL} from '../constants/baseUrl';
 // import Cookie from '@/app/utils/Cookie';//
 import axios, {
     AxiosError,
@@ -10,7 +10,7 @@ import axios, {
 
 // Configure request params
 const config: AxiosRequestConfig = {
-    baseURL: baseUrl,
+    baseURL: BASE_API_URL,
     timeout: 30000,
 };
 const service: AxiosInstance = axios.create(config);

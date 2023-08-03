@@ -33,8 +33,5 @@ namespace WebApplication1.Dtos
         public double Food { get; set; } = 0;
         public double Muavin { get; set; } = 0;
         public double Sehra { get; set; } = 0;
-
-
-
     }
 }

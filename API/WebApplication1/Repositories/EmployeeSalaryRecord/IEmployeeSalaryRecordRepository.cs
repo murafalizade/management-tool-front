@@ -11,6 +11,7 @@ namespace WebApplication1.Repositories
         Task<EmployeeSalaryRecord> GetEmployeeById(int id);
         Task<List<EmployeeSalaryRecord>> GetEmployeeById(int employeeId, int year);
         Task<EmployeeSalaryRecord> UpdateEmployee(EmployeeSalaryRecord employee);
+        Task AddKirayeQat(int kirayeQat);
         Task<EmployeeSalaryRecord> GetLastEmployeeRecord();
     }
 }

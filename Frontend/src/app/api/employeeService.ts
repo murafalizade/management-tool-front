@@ -40,12 +40,8 @@ export default class EmployeeService {
     );
   }
 
-  static async getEmployeeSalaryRecordById(
-    id: number
-  ): Promise<any> {
-    return await fetch.get(
-      `/api/employee/salary/record/${id}`
-    );
+  static async getEmployeeSalaryRecordById(id: number): Promise<any> {
+    return await fetch.get(`/api/employee/salary/record/${id}`);
   }
 
   static async getEmployeeByPositionId(id: number): Promise<any> {
@@ -58,5 +54,26 @@ export default class EmployeeService {
 
   static async updateEmployeeSalaryRecord(data: any): Promise<any> {
     return await fetch.put(`/api/employee/salary/record`, data);
+  }
+
+  static async getKiraye(): Promise<any> {
+    return await fetch.get(`/api/kiraye`);
+  }
+
+  static async exportEmployeeSalaryRecord(
+    month: number,
+    year: number,
+    filter: string
+  ): Promise<any> {
+    return await fetch.get(
+      `/api/employee/salary/record/export/?month=${month}&year=${year}&search=${filter}`,
+      {
+        responseType: "blob",
+        headers: {
+          "Content-Type":
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        },
+      }
+    );
   }
 }

@@ -12,6 +12,7 @@ import EmployeeService from "../api/employeeService";
 import ModalLayout from "./ModalLayout";
 import RankSalary from "./RankSalary";
 import Compensation from "./Compensation";
+import { FILTER_TABLE } from "../constants/filterTable";
 
 function Layout() {
   const [showFileDropdown, setShowFileDropdown] = useState<boolean>(false);
@@ -41,11 +42,6 @@ function Layout() {
     }
   }, []);
 
-  const openModal = (tab: string) => {
-    setActiveTab(tab);
-    setShowModal(true);
-  };
-
   const logout = () => {
     Cookie.eraseCookie(process.env.SECRET_TOKEN_KEY as string);
     window.location.href = "/login";
@@ -60,6 +56,8 @@ function Layout() {
     if (row === selectedSubRow) return setSelectedSubRow("");
     setSelectedSubRow(row);
   };
+
+  
 
   return (
     <>
@@ -164,6 +162,7 @@ function Layout() {
                 Maaşları yenidən hesabla
               </NavDropdown.Item>
               <NavDropdown
+                className="ps-2"
                 onClick={() => chooseSubRow("Kirayə kompens. bu ay")}
                 style={
                   selectedSubRow === "Kirayə kompens. bu ay"
@@ -180,13 +179,14 @@ function Layout() {
                 <NavDropdown.Item href="#">3 qat</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown
-                onClick={() => chooseSubRow("Ərzad kompens. bu ay")}
+                onClick={() => chooseSubRow("Ərzaq kompens. bu ay")}
+                className="ps-2"
                 style={
-                  selectedSubRow === "Ərzad kompens. bu ay"
+                  selectedSubRow === "Ərzaq kompens. bu ay"
                     ? { backgroundColor: "#1E90FF", color: "white" }
                     : {}
                 }
-                title={"Ərzad kompens. bu ay"}
+                title={"Ərzaq kompens. bu ay"}
                 id="basic-nav-dropdown"
                 drop="end"
               >
@@ -197,6 +197,7 @@ function Layout() {
               </NavDropdown>
               <NavDropdown
                 onClick={() => chooseSubRow("BPM bu ay hamsına")}
+                className="ps-2"
                 style={
                   selectedSubRow === "BPM bu ay hamsına"
                     ? { backgroundColor: "#1E90FF", color: "white" }
@@ -233,121 +234,16 @@ function Layout() {
               title={"Cədvəllər"}
               id="basic-nav-dropdown"
             >
-              <NavDropdown title={"Əsas"} id="basic-nav-dropdown" drop="end">
-                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
-                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
-              </NavDropdown>
-
-              <NavDropdown title={"Ərzaq"} id="basic-nav-dropdown" drop="end">
-                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
-                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
-              </NavDropdown>
-
-              <NavDropdown title={"Kirayə"} id="basic-nav-dropdown" drop="end">
-                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
-                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
-              </NavDropdown>
-
-              <NavDropdown
-                title={"Məzuniyyət"}
-                id="basic-nav-dropdown"
-                drop="end"
-              >
-                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
-                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
-              </NavDropdown>
-
-              <NavDropdown
-                title={"Ezamiyyət"}
-                id="basic-nav-dropdown"
-                drop="end"
-              >
-                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
-                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
-              </NavDropdown>
-
-              <NavDropdown
-                title={"Səhra pulu"}
-                id="basic-nav-dropdown"
-                drop="end"
-              >
-                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
-                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
-              </NavDropdown>
-
-              <NavDropdown
-                title={"Maddi yardım"}
-                id="basic-nav-dropdown"
-                drop="end"
-              >
-                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
-                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
-              </NavDropdown>
-
-              <NavDropdown
-                title={"Kəşf. Məzun."}
-                id="basic-nav-dropdown"
-                drop="end"
-              >
-                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
-                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
-              </NavDropdown>
-
-              <NavDropdown
-                title={"Kəşf. Xəstə."}
-                id="basic-nav-dropdown"
-                drop="end"
-              >
-                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
-                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
-              </NavDropdown>
-
-              <NavDropdown
-                title={"Kəşf. Mükafat."}
-                id="basic-nav-dropdown"
-                drop="end"
-              >
-                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
-                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
-              </NavDropdown>
-
-              <NavDropdown
-                title={"Yol xərci"}
-                id="basic-nav-dropdown"
-                drop="end"
-              >
-                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
-                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
-              </NavDropdown>
-
-              <NavDropdown
-                title={"Yük xərci"}
-                id="basic-nav-dropdown"
-                drop="end"
-              >
-                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
-                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
-              </NavDropdown>
-
-              <NavDropdown title={"Təxris"} id="basic-nav-dropdown" drop="end">
-                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
-                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
-              </NavDropdown>
-
-              <NavDropdown title={"BPM"} id="basic-nav-dropdown" drop="end">
-                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
-                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
-              </NavDropdown>
-
-              <NavDropdown title={"2 qat"} id="basic-nav-dropdown" drop="end">
-                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
-                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
-              </NavDropdown>
-
-              <NavDropdown title={"Aliment"} id="basic-nav-dropdown" drop="end">
-                <NavDropdown.Item href="#">Reestr</NavDropdown.Item>
-                <NavDropdown.Item href="#">Paylanma cədvəli</NavDropdown.Item>
-              </NavDropdown>
+              {FILTER_TABLE.map((item, index) => (
+                <NavDropdown key={item.id} title={item.name} drop="end">
+                  <NavDropdown.Item href={`/table?filter=${item.slug}`}>
+                    Reestr
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href={`/table?filter=${item.slug}`}>
+                    Paylanma cədvəli
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ))}
             </NavDropdown>
 
             <NavDropdown

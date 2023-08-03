@@ -1,108 +1,16 @@
-import { Column } from "react-table";
-import { EmployeeData } from "../types/EmployeeData";
-import { SalaryRecordData } from "../types/SalaryRecordData";
+import { CellProps, Column } from "react-table";
+import { SalaryRecordData } from "../../types/SalaryRecordData";
+import moment from "moment";
 
-export const createColumns: Column<EmployeeData>[] = [
-  {
-    Header: "Soyadı",
-    accessor: "lastName",
-  },
-  {
-    Header: "Adı",
-    accessor: "firstName",
-  },
-  {
-    Header: "Atasının adı",
-    accessor: "fatherName",
-  },
-  {
-    Header: "Sosial Sığorta №",
-    accessor: "injuranceNo",
-  },
-  {
-    Header: "Doğum tarixi",
-    accessor: "birthDate",
-  },
-  {
-    Header: "FIN",
-    accessor: "fin",
-  },
-  {
-    Header: "Təyin olunma",
-    columns: [
-      {
-        Header: "vaxtı",
-        id: "date",
-      },
-      {
-        Header: "əmri",
-        id: "order",
-      },
-    ],
-  },
-  {
-    Header: "Qəbul olunma",
-    columns: [
-      {
-        Header: "vaxtı",
-      },
-      {
-        Header: "əmri",
-      },
-    ],
-  },
-  {
-    Header: "Rütbənin dəyişdirilməsi",
-  },
-  {
-    Header: "Vəzifənin dəyişdirilməsi",
-  },
-  {
-    Header: "Məharət dərəcəsi",
-    columns: [
-      {
-        Header: "verilmə tarixi",
-      },
-      {
-        Header: "Məharət dərəcəsi",
-        accessor: "meharetlilik",
-      },
-    ],
-  },
-  {
-    Header: "Təmsilçilik",
-    accessor: "temsilcilik",
-  },
-  {
-    Header: "Məxfilik",
-    accessor: "mexfilik",
-  },
-  {
-    Header: "Zərərliyə görə",
-    accessor: "zererlilik",
-  },
-  {
-    Header: "Kibertəhlükəsizlik əlavəsi",
-  },
-  {
-    Header: "Xarici dil",
-    accessor: "xariciDil",
-  },
-  {
-    Header: "Kəşf. mükaf.",
-    accessor: "kesfiyyat",
-  },
-  {
-    Header: "Elmi dərəcə",
-    accessor: "elmiDerece",
-  },
-  {
-    Header: "Fəxri ad",
-    accessor: "fexriAd",
-  },
-];
+// Custom cell converter string for boolean values in table
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+const CustomCellRenderer: React.FunctionComponent<
+  CellProps<SalaryRecordData, boolean>
+> = ({ value }) => {
+  return <span>{value ? "Bəli" : "Xeyr"}</span>;
+};
 
-const columns: Column<SalaryRecordData>[] = [
+const salaryRecordHeaders: Column<SalaryRecordData>[] = [
   {
     Header: "idarə",
     accessor: "employeePositionDepartmentAdminstrationName",
@@ -128,15 +36,33 @@ const columns: Column<SalaryRecordData>[] = [
     columns: [
       {
         Header: "gün",
-        accessor: "xiDays",
+        accessor: (row: any) => {
+          const startDate = moment(row?.employeeStartDate);
+          let recordDate = moment(row?.recordDate);
+          recordDate = recordDate.set("date", 1);
+          const duration = moment.duration(recordDate.diff(startDate));
+          return duration.days();
+        },
       },
       {
         Header: "ay",
-        accessor: "xiMonths",
+        accessor: (row: any) => {
+          const startDate = moment(row?.employeeStartDate);
+          let recordDate = moment(row?.recordDate);
+          recordDate = recordDate.set("date", 1);
+          const duration = moment.duration(recordDate.diff(startDate));
+          return duration.months();
+        },
       },
       {
         Header: "il",
-        accessor: "xiYears",
+        accessor: (row: any) => {
+          const startDate = moment(row?.employeeStartDate);
+          let recordDate = moment(row?.recordDate);
+          recordDate = recordDate.set("date", 1);
+          const duration = moment.duration(recordDate.diff(startDate));
+          return duration.years();
+        },
       },
     ],
   },
@@ -218,15 +144,15 @@ const columns: Column<SalaryRecordData>[] = [
     columns: [
       {
         Header: "Gəlir vergisi",
-        accessor: "tax",
+        accessor: (row: SalaryRecordData) => row.tax.toFixed(2),
       },
       {
         Header: "DSMF",
-        accessor: "dsmf",
+        accessor: (row: SalaryRecordData) => row.dsmf.toFixed(2)
       },
       {
         Header: "Tibbi sığorta",
-        accessor: "healthInsurance",
+        accessor: (row: SalaryRecordData) => row.healthInsurance.toFixed(2),
       },
       {
         Header: "Kəsirlər",
@@ -246,13 +172,13 @@ const columns: Column<SalaryRecordData>[] = [
       },
       {
         Header: "Cəmi",
-        accessor: "totalTaken",
+        accessor: (row: SalaryRecordData) => row.totalTaken.toFixed(2),
       },
     ],
   },
   {
     Header: "Ələ veriləcək məbləğ",
-    accessor: "totalGiven",
+    accessor: (row: SalaryRecordData) => row.totalGiven.toFixed(2),
   },
   {
     Header: "Ərzaq komp-sı",
@@ -276,7 +202,7 @@ const columns: Column<SalaryRecordData>[] = [
   },
   {
     Header: "Kirayə. komp.",
-    accessor: "kiraye",
+    accessor: "kirayePrice",
   },
   {
     Header: "Maddi yardım",
@@ -316,7 +242,8 @@ const columns: Column<SalaryRecordData>[] = [
   },
   {
     Header: "Cəmi",
-    accessor: "totalSalary",
+    id: "totalSalary",
+    accessor: (row: SalaryRecordData) => row.totalSalary.toFixed(2),
   },
   {
     Header: "Qeyd",
@@ -325,6 +252,7 @@ const columns: Column<SalaryRecordData>[] = [
   {
     Header: "MV müav. verilir",
     accessor: "isMatry",
+    Cell: CustomCellRenderer,
   },
   {
     Header: "Hesab nömrəsi",
@@ -346,7 +274,8 @@ const columns: Column<SalaryRecordData>[] = [
   },
 ];
 
-const columns2 = [
+// Headers for sum of each column
+const totalSalaryRecordHeaders = [
   {
     Header: "Rütbə",
     accessor: "rankSalary",
@@ -510,244 +439,4 @@ const columns2 = [
   },
 ];
 
-const detailsColumns: Column<SalaryRecordData>[] = [
-  {
-    Header: "Il",
-    accessor: "recordDateYear",
-  },
-  {
-    Header: "Ay",
-    accessor: "recordDateMonth",
-  },
-  {
-    Header: "idarə",
-    accessor: "employeePositionDepartmentAdminstrationName",
-  },
-  {
-    Header: "Şöbə, bölmə",
-    accessor: "employeePositionDepartmentName",
-  },
-  {
-    Header: "Vəzifə",
-    accessor: "employeePositionName",
-  },
-  {
-    Header: "Hərbi rütbə",
-    accessor: "employeeRankName",
-  },
-  {
-    Header: "Uzun müddətli Xİ",
-    columns: [
-      {
-        Header: "gün",
-      },
-      {
-        Header: "ay",
-      },
-      {
-        Header: "il",
-      },
-    ],
-  },
-  {
-    Header: "Xİ görə (%)",
-  },
-  {
-    Header: "Hesablanıb",
-    columns: [
-      {
-        Header: "Rütbə maaşı",
-        accessor: "rankSalary",
-      },
-      {
-        Header: "Vəzifə maaşı",
-        accessor: "positionSalary",
-      },
-      {
-        Header: "Xİ  görə əlavə",
-        accessor: "xiMoney",
-      },
-      {
-        Header: "P.t qatı",
-        accessor: "ptMoney",
-      },
-      {
-        Header: "Məharət dər.",
-        accessor: "meharetlilik",
-      },
-      {
-        Header: "Təmsilçilik",
-        accessor: "temsilcilik",
-      },
-      {
-        Header: "Məxfiçilik",
-        accessor: "mexfilik",
-      },
-      {
-        Header: "Zərərliyə görə",
-        accessor: "zererlilik",
-      },
-      {
-        Header: "Xarici dil",
-        accessor: "xariciDil",
-      },
-      {
-        Header: "Kəşf. mükaf.",
-        accessor: "kesfiyyat",
-      },
-      {
-        Header: "Elmi dərəcə",
-        accessor: "elmiDerece",
-      },
-      {
-        Header: "Fəxri ad",
-        accessor: "fexriAd",
-      },
-      {
-        Header: "Əlavə öd. (gvti)",
-        accessor: "extraMoney",
-      },
-      {
-        Header: "Əlavə ödəniş",
-        accessor: "extraMoney2",
-      },
-      {
-        Header: "Cəmi",
-        accessor: "totalIncome",
-      },
-    ],
-  },
-  {
-    Header: "Tutulur",
-    columns: [
-      {
-        Header: "Gəlir vergisi",
-        accessor: "tax",
-      },
-      {
-        Header: "DSMF",
-        accessor: "dsmf",
-      },
-      {
-        Header: "Tibbi sığorta",
-        accessor: "healthInsurance",
-      },
-      {
-        Header: "Kəsirlər",
-        accessor: "kesirler",
-      },
-      {
-        Header: "Aliment",
-        accessor: "aliment",
-      },
-      {
-        Header: "Artıq 211100",
-        accessor: "extra211100",
-      },
-      {
-        Header: "Güzəşt",
-        accessor: "totalDiscount",
-      },
-      {
-        Header: "Cəmi",
-        // accessor: "total",
-      },
-    ],
-  },
-  {
-    Header: "Ələ veriləcək məbləğ",
-    accessor: "extraGivenMoney",
-  },
-  {
-    Header: "Ərzaq komp-sı",
-    accessor: "food",
-  },
-  {
-    Header: "MV müavin.",
-    accessor: "muavin",
-  },
-  {
-    Header: "Məzuniyyət",
-    accessor: "mezuniyyet",
-  },
-  {
-    Header: "Kəşf. məzun.",
-    accessor: "kesfMezun",
-  },
-  {
-    Header: "Kəşf. xəstə",
-    accessor: "kesfXeste",
-  },
-  {
-    Header: "Kirayə. komp.",
-    accessor: "kiraye",
-  },
-  {
-    Header: "Maddi yardım",
-    accessor: "maddiYardim",
-  },
-  {
-    Header: "Ezamiyyət",
-    accessor: "ezamiyyet",
-  },
-  {
-    Header: "Səhra pulu",
-    accessor: "sehra",
-  },
-  {
-    Header: "Yol xərci",
-    accessor: "yolXerci",
-  },
-  {
-    Header: "Yük pulu",
-    accessor: "yukPulu",
-  },
-  {
-    Header: "Çıxış müav.",
-    accessor: "cixisMuv",
-  },
-  {
-    Header: "BPM faiz",
-    accessor: "bPMPercentage",
-  },
-  {
-    Header: "BPM",
-    accessor: "bPM",
-  },
-  {
-    Header: "DSMF ümumi",
-    accessor: "totalDSMF",
-  },
-  {
-    Header: "Cəmi",
-    accessor: "total",
-    // /    accessor: "total2",
-  },
-  {
-    Header: "Qeyd",
-    accessor: "comment",
-  },
-  {
-    Header: "MV müav. verilir",
-    accessor: "isMatry",
-  },
-  {
-    Header: "Hesab nömrəsi",
-    accessor: "accountNumber",
-  },
-  {
-    Header: "Məh. %",
-  },
-  {
-    Header: "HA_ID",
-  },
-  {
-    Header: "H_ID",
-  },
-  {
-    Header: "V2F_ID",
-  },
-];
-
-export default columns;
-export { columns2, detailsColumns };
+export { salaryRecordHeaders, totalSalaryRecordHeaders };

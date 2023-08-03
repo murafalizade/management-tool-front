@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import { useTable } from "react-table";
-import { createColumns } from "../constants/headers";
+import { employeeHeaders } from "../constants/headers/employee";
 import "../styles/home.scss";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +13,7 @@ import { EmployeeData } from "../types/EmployeeData";
 import EmployeeService from "../api/employeeService";
 import Swal from "sweetalert2";
 import { BsFillPersonCheckFill, BsFillPersonVcardFill } from "react-icons/bs";
-import {MdDelete} from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import "../styles/create.scss";
 
 function Create() {
@@ -148,7 +148,7 @@ function Create() {
     setUpdatedEmployees([]);
   };
 
-  const tableInstance = useTable({ columns: createColumns, data: employees });
+  const tableInstance = useTable({ columns: employeeHeaders, data: employees });
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     tableInstance;
@@ -157,7 +157,7 @@ function Create() {
     <main>
       <div className="d-flex m-3">
         <Button onClick={() => personalAccount()} className="mx-2">
-         <BsFillPersonVcardFill /> Şəxsi kabinet
+          <BsFillPersonVcardFill /> Şəxsi kabinet
         </Button>
         <Button onClick={() => saveUpdatedEmployees()} className="mx-2">
           <BsFillPersonCheckFill /> Yadda saxla

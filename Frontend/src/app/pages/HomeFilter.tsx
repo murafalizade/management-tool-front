@@ -9,7 +9,6 @@ import {
 import { MONTHS } from "../constants/months";
 import "../styles/home.scss";
 import { useNavigate } from "react-router";
-import { FILTER_DATA } from "../constants/filterData";
 import CalculatingModal from "../components/CalculatingModal";
 import { useDispatch, useSelector } from "react-redux";
 import { showModal, setSelectedRow } from "../redux/showModalSlice";
@@ -19,21 +18,24 @@ import EmployeeService from "../api/employeeService";
 import Loading from "../components/Loading";
 import { SalaryRecordData } from "../types/SalaryRecordData";
 
-function Home() {
+function HomeFilter() {
   const state = useSelector((state: RootState) => state.showModal);
   const [selectedColumn, setSelectedColumn] = useState<any>(state.selectedRow);
   const [salaryRecord, setSalaryRecord] = useState<SalaryRecordData[]>([]);
   const [year, setYear] = useState<number>(new Date().getFullYear());
   const [month, setMonth] = useState<number>(new Date().getMonth() + 1);
-  const [filter, setFilter] = useState<string>("");
   const [totalValue, setTotalValue] = useState<any>({});
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const dispatch = useDispatch();
 
   let nav = useNavigate();
 
+  // get query params from url
+  const queryParams = new URLSearchParams(window.location.search);
+  const queryFilter = queryParams.get("filter");
+
   // fetch employees from API
-  const getEmployees = async () => {
+  const getEmployees = async (filter: string) => {
     setIsLoading(true);
     const response = await EmployeeService.getEmployeeSalaryRecord(
       month,
@@ -45,9 +47,12 @@ function Home() {
   };
 
   useEffect(() => {
-    getEmployees();
-  }, []);
-
+    if (queryFilter) {
+      getEmployees(queryFilter);
+    } else {
+      nav("/");
+    }
+  }, [queryFilter]);
 
   // calculate sum to each fields return object
   useEffect(() => {
@@ -73,11 +78,6 @@ function Home() {
       setTotalValue(totals);
     }
   }, [salaryRecord]);
-
-  // Handle filter change
-  const handleFilter = (e: any) => {
-    setFilter(e.target.value);
-  };
 
   // Navigate to personal account when clicked
   const personalAccount = () => {
@@ -105,6 +105,27 @@ function Home() {
   // Handle row double click
   const handleRowDoubleClick = (row: any) => {
     dispatch(showModal(row.original.id));
+  };
+
+  // Download table as excel
+  const downloadTable = async () => {
+    const response = await EmployeeService.exportEmployeeSalaryRecord(
+      month,
+      year,
+      queryFilter!
+    );
+
+    const url = URL.createObjectURL(response);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "maliyye.xlsx";
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const tableInstance = useTable({
@@ -144,30 +165,20 @@ function Home() {
           <Button
             variant="primary"
             className="btn btn-primary mx-2"
-            onClick={() => getEmployees()}
+            onClick={() => getEmployees(queryFilter!)}
           >
             Göstər
           </Button>
-          <Button variant="primary" className="btn btn-primary">
+          <Button variant="primary" className="btn mx-2 btn-primary">
             Nəzarət
           </Button>
-        </div>
-
-        <div className="d-flex">
-          <select className="form-control mx-2">
-            {FILTER_DATA.map((month: any, index: number) => (
-              <option className="fs-6" key={index} value={month.value}>
-                {month.name}
-              </option>
-            ))}
-          </select>
 
           <Button
             variant="primary"
+            onClick={() => downloadTable()}
             className="btn btn-primary"
-            onClick={() => getEmployees()}
           >
-            Göstər
+            Çap et
           </Button>
         </div>
 
@@ -267,4 +278,4 @@ function Home() {
   );
 }
 
-export default withAuth(Home);
+export default withAuth(HomeFilter);

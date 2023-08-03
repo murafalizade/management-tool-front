@@ -1,4 +1,4 @@
-const months = [
+export const MONTHS = [
     { id: 1, name: 'Yanvar' },
     { id: 2, name: 'Fevral' },
     { id: 3, name: 'Mart' },
@@ -12,5 +12,3 @@ const months = [
     { id: 11, name: 'Noyabr' },
     { id: 12, name: 'Dekabr' },
 ];
-
-export default months;

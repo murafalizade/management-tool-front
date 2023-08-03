@@ -18,5 +18,6 @@ namespace WebApplication1.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<EmployeeSalaryRecord> EmployeeSalaryRecords { get; set; }
+        public DbSet<Kiraye> Kirayes { get; set; }
      }
 }

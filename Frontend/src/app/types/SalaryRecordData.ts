@@ -1,3 +1,5 @@
+import { EnumDeclaration } from "typescript";
+
 export type SalaryRecordData = {
   recordDateMonth: number;
   recordDateYear: number;
@@ -47,7 +49,7 @@ export type SalaryRecordData = {
   mezuniyyet: number;
   kesfMezun: number;
   kesfXeste: number;
-  kiraye: number;
+  kirayePrice: number;
   employeePositionId: number;
   maddiYardim: number;
   ezamiyyet: number;

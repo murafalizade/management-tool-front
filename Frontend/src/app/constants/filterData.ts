@@ -1,4 +1,4 @@
-const filterData = [
+export const FILTER_DATA = [
   {
     name: "Hamısı",
     value:"all"
@@ -116,6 +116,3 @@ const filterData = [
     value:"himayedar"
   },
 ];
-
-
-export default filterData;

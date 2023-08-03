@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { hideModal } from "../redux/showModalSlice";
 import EmployeeService from "../api/employeeService";
-import months from "../constants/months";
+import { MONTHS } from "../constants/months";
 import moment from "moment";
+import Toastify from "../utility/Toastify";
 
 const CalculatingModal = () => {
   const state = useSelector((state: RootState) => state.showModal);
@@ -17,16 +18,13 @@ const CalculatingModal = () => {
     rankSalaryByHand: false,
     positionSalaryByHand: false,
     additionalServiceByHand: false,
-    skillDegreePercent: 0,
-    representationPercent: 0,
-    harmfulPercent: 0,
-    securityPercent: 0,
     alimentPercent: 0,
-    languageSkillPercent: 0,
     languageSkillByHand: false,
-    discoveryPercent: 0,
     discoveryByHand: false,
+    rentByHand: false,
   });
+
+  const [rents, setRents] = useState<any[]>([]);
 
   // Xidmet illeri
   const [serviceYears, setServiceYears] = useState<any>(0);
@@ -37,6 +35,8 @@ const CalculatingModal = () => {
   const [totalDiscount, setTotalDiscount] = useState<number>(0);
   const [totalTaken, setTotalTaken] = useState<number>(0);
   const [totalDSMF, setTotalDSMF] = useState<number>(0);
+
+  const [rentPrice, setRentPrice] = useState<number>(0);
 
   // Calculate total discount
   const handleCheckboxChange = (checkboxIndex: string, isChecked: boolean) => {
@@ -65,17 +65,29 @@ const CalculatingModal = () => {
     });
   };
 
+  const handleSelect = (e: any) => {
+    setInfo({ ...info, kirayeId: parseInt(e.target.value) });
+    setRentPrice(rents.find((x) => x.id === parseInt(e.target.value))?.price);
+  };
+
   const getRecord = async () => {
     if (state.show === 0) return;
     const record = await EmployeeService.getEmployeeSalaryRecordById(
       state.show
     );
     setInfo({ ...info, ...record });
-    setTotalDiscount(parseInt(record?.totalDiscount));
+    // setTotalDiscount(parseInt(record?.totalDiscount));
+  };
+
+  const getRent = async () => {
+    const rent = await EmployeeService.getKiraye();
+    setRents(rent);
   };
 
   useEffect(() => {
+    if(state.show === 0) return;
     getRecord();
+    getRent();
   }, [state.show]);
 
   useEffect(() => {
@@ -111,26 +123,26 @@ const CalculatingModal = () => {
     );
   }, [info]);
 
+  // Calculate service years till 1st of current month
   useEffect(() => {
-    const startDate = moment(info?.employeeStartDate, "YYYY-MM-DD");
-    const currentDate = moment();
-    const firstDayOfMonth = moment(currentDate).startOf("month");
+    const startDate = moment(info?.employeeStartDate);
+    let endDate = moment(info?.recordDate);
+    endDate.set("date", 1);
+    const duration = moment.duration(endDate.diff(startDate));
+    const years = duration.years();
+    const months = duration.months();
+    const days = duration.days();
 
-    // Calculate the difference in years, months, and days
-    const diffDuration = moment.duration(startDate.diff(firstDayOfMonth));
-    const diffYears = diffDuration.years();
-    const diffMonths = diffDuration.months();
-    const diffDays = diffDuration.days();
-
-    setServiceYears(Math.abs(diffYears));
-    setServiceMonths(Math.abs(diffMonths));
-    setServiceDays(Math.abs(diffDays));
+    setServiceYears(years);
+    setServiceMonths(months);
+    setServiceDays(days);
   }, [info?.employeeStartDate]);
 
   // update record
   const updateRecord = async () => {
     await EmployeeService.updateEmployeeSalaryRecord(info);
-    window.location.reload();
+    dispatch(hideModal());
+    Toastify.success();
   };
 
   return (
@@ -141,7 +153,7 @@ const CalculatingModal = () => {
     >
       <Modal.Header closeButton>
         <Modal.Title className="fs-6">
-          {info?.recordDateYear} il {months[info.recordDateMonth - 1]?.name}
+          {info?.recordDateYear} il {MONTHS[info.recordDateMonth - 1]?.name}
         </Modal.Title>
         <Modal.Title className="fs-6">{info.fullName}</Modal.Title>
       </Modal.Header>
@@ -161,7 +173,6 @@ const CalculatingModal = () => {
           <label>H/rütbə</label>
           <input
             type="text"
-            disabled
             value={info.employeeRankName}
             className="form-control"
           />
@@ -249,7 +260,7 @@ const CalculatingModal = () => {
                 <div className="d-flex justify-content-between my-1">
                   <label>Xidmət illəri</label>
                   <label>{info?.xiPercent} %</label>
-                  <label className="normal-label">{info.serviceYears}</label>
+                  <label className="normal-label">{info.xiMoney}</label>
                 </div>
 
                 <div className="d-flex justify-content-between my-1">
@@ -435,7 +446,7 @@ const CalculatingModal = () => {
 
                 <div className="d-flex  align-items-center justify-content-between my-1">
                   <label>Cəmi hesablanıb:</label>
-                  <b>{totalGiven}</b>
+                  <b>{totalGiven.toFixed(2)}</b>
                 </div>
               </div>
             </Col>
@@ -528,7 +539,7 @@ const CalculatingModal = () => {
                         <input type="text" className="form-control w-100" />
                       </div>
                       <span className="text-center">
-                        Güzəştli məbləğ: {totalDiscount}
+                        Güzəştli məbləğ: {totalDiscount.toFixed(2)}
                       </span>
                     </Col>
                   </Row>
@@ -603,17 +614,23 @@ const CalculatingModal = () => {
                       type="number"
                       min="0"
                       max="100"
-                      name="alimentPercent"
                       disabled={!info.takenByHand}
-                      value={info?.alimentPercent}
-                      onChange={handleInput}
+                      value={info?.alimentPercentage}
+                      onChange={(e: any) => {
+                        setInfo({
+                          ...info,
+                          aliment:
+                            (e.target.value * (totalGiven - info.tax)) / 100,
+                          alimentPercentage: e.target.value,
+                        });
+                      }}
                       className="form-control w-50"
                     />
                     %
                     <input
                       type="number"
                       min="0"
-                      value={info?.aliment}
+                      value={info.aliment}
                       disabled={!info.takenByHand}
                       onChange={handleInput}
                       name="aliment"
@@ -636,14 +653,16 @@ const CalculatingModal = () => {
 
                   <div className="d-flex  align-items-center justify-content-between my-1">
                     <label>Cəmi tutulur:</label>
-                    <b>{totalTaken}</b>
+                    <b>{totalTaken.toFixed(2)}</b>
                   </div>
                 </div>
 
                 <div className="section">
                   <div className="d-flex  align-items-center justify-content-between my-1">
                     <label>Veriləcək məbləğ:</label>
-                    <b>{totalGiven - totalTaken + totalDiscount}</b>
+                    <b>
+                      {(totalGiven - totalTaken + totalDiscount).toFixed(2)}
+                    </b>
                   </div>
                 </div>
               </div>
@@ -689,13 +708,52 @@ const CalculatingModal = () => {
                   <h6>Mənzil kirayəsi kompensasiya</h6>
                   <div className="d-flex  align-items-center justify-content-between my-1">
                     <label className="normal-label">Yaş. yeri</label>
-                    <input type="text" className="form-control" />
-                    <input type="text" className="form-control date-input" />
+                    <select
+                      onChange={handleSelect}
+                      className="form-control w-25 h-25 p-0 ps-1 fs-7"
+                    >
+                      {rents?.map((item: any) => (
+                        <option value={item.id} key={item.id}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                    <input
+                      type="number"
+                      name="familyCount"
+                      onChange={handleInput}
+                      value={info.familyCount}
+                      className="form-control date-input"
+                    />
                     <label className="normal-label">nəfər</label>
-                    <input type="text" className="form-control date-input" />
+                    <input
+                      type="number"
+                      value={info.kirayeQat}
+                      name="kirayeQat"
+                      onChange={handleInput}
+                      className="form-control date-input"
+                    />
                     <label className="normal-label">Qat</label>
-                    <input type="text" className="form-control date-input" />
-                    <input type="checkbox" />
+                    <input
+                      type="number"
+                      disabled={!info.rentByHand}
+                      name="kirayePrice"
+                      onChange={handleInput}
+                      value={
+                        info.rentByHand
+                          ? info.kirayePrice
+                          : (rentPrice + info.familyCount * 0.5 * rentPrice) *
+                            (info.kirayeQat + 1)
+                      }
+                      className="form-control date-input"
+                    />
+                    <input
+                      type="checkbox"
+                      checked={info.rentByHand}
+                      value={info.rentByHand}
+                      onChange={handleCheckbox}
+                      name="rentByHand"
+                    />
                     <label className="normal-label">əl ilə</label>
                   </div>
                 </div>
@@ -893,7 +951,14 @@ const CalculatingModal = () => {
 
                   <div className="section w-75 d-flex justify-content-between ms-2">
                     <label>Cəmi verilir:</label>
-                    <b>{totalGiven - totalTaken + totalDiscount - totalDSMF}</b>
+                    <b>
+                      {(
+                        totalGiven -
+                        totalTaken +
+                        totalDiscount -
+                        totalDSMF
+                      ).toFixed(2)}
+                    </b>
                   </div>
                 </div>
               </div>

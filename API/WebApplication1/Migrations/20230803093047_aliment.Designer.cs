@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230803093047_aliment")]
+    partial class aliment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -278,7 +280,7 @@ namespace WebApplication1.Migrations
                     b.Property<double>("Kibertehlukesizlik")
                         .HasColumnType("float");
 
-                    b.Property<int>("KirayeId")
+                    b.Property<int?>("KirayeId")
                         .HasColumnType("int");
 
                     b.Property<double>("KirayePrice")
@@ -394,7 +396,7 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Kirayes");
+                    b.ToTable("Kiraye");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Position", b =>
@@ -503,10 +505,8 @@ namespace WebApplication1.Migrations
                         .IsRequired();
 
                     b.HasOne("WebApplication1.Models.Kiraye", "Kiraye")
-                        .WithMany()
-                        .HasForeignKey("KirayeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("EmployeeSalaryRecord")
+                        .HasForeignKey("KirayeId");
 
                     b.Navigation("Discount");
 
@@ -544,6 +544,11 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Employee", b =>
                 {
                     b.Navigation("EmployeeSalaryRecords");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Kiraye", b =>
+                {
+                    b.Navigation("EmployeeSalaryRecord");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Rank", b =>

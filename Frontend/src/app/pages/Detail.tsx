@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
-import { columns2, detailsColumns } from "../constants/headers";
+import { totalSalaryRecordHeaders } from "../constants/headers/salaryRecord";
+import { personalAccountHeaders } from "../constants/headers/personalAccount";
 import { useTable } from "react-table";
 import EmployeeService from "../api/employeeService";
 import { SalaryRecordData } from "../types/SalaryRecordData";
 import { useParams } from "react-router-dom";
 
-
 const Detail = () => {
-
   const [salaryRecord, setSalaryRecord] = useState<SalaryRecordData[]>([]);
   const [year, setYear] = useState<number>(new Date().getFullYear());
   const [totalValue, setTotalValue] = useState<any>({});
-
 
   const { id } = useParams<{ id: string }>();
 
@@ -30,27 +28,25 @@ const Detail = () => {
     getEmployees(parseInt(id!));
   }, [id]);
 
-
   useEffect(() => {
-      // calculate sum to each fields return object
-      const totals = salaryRecord.reduce((acc: any, curr: any) => {
-        for (const key in curr) {
-          if (typeof curr[key] !== "string") {
-            if (acc[key]) {
-              acc[key] += curr[key];
-            } else {
-              acc[key] = curr[key];
-            }
+    // calculate sum to each fields return object
+    const totals = salaryRecord.reduce((acc: any, curr: any) => {
+      for (const key in curr) {
+        if (typeof curr[key] !== "string") {
+          if (acc[key]) {
+            acc[key] += curr[key];
+          } else {
+            acc[key] = curr[key];
           }
         }
-        return acc;
-      }, []);
-      setTotalValue(totals);
+      }
+      return acc;
+    }, []);
+    setTotalValue(totals);
   }, [salaryRecord]);
 
-
   const tableInstance = useTable({
-    columns: detailsColumns,
+    columns: personalAccountHeaders,
     data: salaryRecord,
   });
 
@@ -70,7 +66,11 @@ const Detail = () => {
             value={year}
             onChange={(e) => setYear(parseInt(e.target.value))}
           />
-          <Button variant="primary" className="btn btn-primary mx-2" onClick={()=> getEmployees(parseInt(id!))}>
+          <Button
+            variant="primary"
+            className="btn btn-primary mx-2"
+            onClick={() => getEmployees(parseInt(id!))}
+          >
             Göstər
           </Button>
         </div>
@@ -129,11 +129,13 @@ const Detail = () => {
             })}
           </tbody>
 
-
-          <tfoot className="position-sticky foot-table w-100" style={{bottom:"0px"}}>
+          <tfoot
+            className="position-sticky foot-table w-100"
+            style={{ bottom: "0px" }}
+          >
             <tr>
               <td colSpan={10}></td>
-              {columns2.map((column: any) => (
+              {totalSalaryRecordHeaders.map((column: any) => (
                 <td>{totalValue[column.accessor] ?? 0}</td>
               ))}
             </tr>

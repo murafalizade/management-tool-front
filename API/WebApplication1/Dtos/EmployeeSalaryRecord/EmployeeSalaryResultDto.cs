@@ -6,13 +6,11 @@ namespace WebApplication1.Dtos
     public class EmployeeSalaryResultDto
     {
         public int Id { get; set; }
-        public string recordDateMonth { get; set; }
+        public string RecordDateMonth { get; set; }
         public int XIYears { get; set; }
-        public int XIMonths { get; set; }
-        public int XIDays { get; set; }
         public int XIPercent { get; set; }
         public double XIMoney { get; set; }
-        public string recordDateYear { get; set; }
+        public string RecordDateYear { get; set; }
         public double PTMoney { get; set; }
         public DateTime EmployeeStartDate { get; set; }
         public int EmployeeMeharetlilik { get; set; }
@@ -46,7 +44,11 @@ namespace WebApplication1.Dtos
         public double Tax { get; set; }
         public double DSMF { get; set; }
         public double Kesirler { get; set; }
+        public double AlimentPercentage { get; set; }
         public double Aliment { get; set; }
+        public double KirayePrice { get; set; }
+        public int FamilyCount { get; set; }
+        public int KirayeQat { get; set; }
         public double HealthInsurance { get; set; }
         public double Extra211100 { get; set; }
         public double Food { get; set; }
@@ -62,14 +64,13 @@ namespace WebApplication1.Dtos
         public double Sehra { get; set; }
         public double YukPulu { get; set; }
         public double KesfXeste { get; set; }
-        public double Kiraye { get; set; }
         public double YolXerci { get; set; }
-        public bool isMatry { get; set; }
-        public bool isChernobil { get; set; }
-        public bool isVeteran { get; set; }
-        public bool isDisabled { get; set; }
-        public bool isOwner { get; set; }
-        public bool isQachqin { get; set; }
+        public bool İsMatry { get; set; }
+        public bool İsChernobil { get; set; }
+        public bool İsVeteran { get; set; }
+        public bool İsDisabled { get; set; }
+        public bool İsOwner { get; set; }
+        public bool İsQachqin { get; set; }
         public double MaddiYardim { get; set; }
         public double Ezamiyyet { get; set; }
         public double KesfMezun { get; set; }
