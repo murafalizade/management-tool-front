@@ -12,8 +12,10 @@ namespace WebApplication1.Dtos
         public double XIMoney { get; set; }
         public string RecordDateYear { get; set; }
         public double PTMoney { get; set; }
+         public int PTQat { get; set; }
+        public bool IsEternalQat { get; set; }
         public DateTime EmployeeStartDate { get; set; }
-        public int EmployeeMeharetlilik { get; set; }
+        public string EmployeeMeharetName { get; set; }
         public string AccountNumber { get; set; }
         public double Kibertehlukesizlik { get; set; }
         public string EmployeePositionName { get; set; }
@@ -49,16 +51,23 @@ namespace WebApplication1.Dtos
         public double KirayePrice { get; set; }
         public int FamilyCount { get; set; }
         public int KirayeQat { get; set; }
+        public string KirayeName { get; set; }
+        public int KirayeId { get; set; }
         public double HealthInsurance { get; set; }
         public double Extra211100 { get; set; }
         public double Food { get; set; }
         public double TotalDiscount { get; set; }
+        public double DiscountFood { get; set; }
+
         public int DiscountChernobil { get; set; }
         public int DiscountDsmf { get; set; }
         public int DiscountMartyr { get; set; }
         public int DiscountVeteran { get; set; }
         public int DiscountDisability { get; set; }
         public int DiscountOwner { get; set; }
+        public int DiscountTaxPercentage { get; set; }
+        // public int DiscountDSMF { get; set; }
+        public int DiscountHealthInsurance { get; set; }
         public int DiscountQachqin { get; set; }
         public double Muavin { get; set; }
         public double Sehra { get; set; }

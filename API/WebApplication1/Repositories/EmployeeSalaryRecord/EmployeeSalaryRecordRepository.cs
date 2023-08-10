@@ -23,6 +23,25 @@ namespace WebApplication1.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task AddFoodQat(int foodQat)
+        {
+            // update Food qat for this month
+            var recordsToUpdate = await _context.EmployeeSalaryRecords
+            .Where(x => x.RecordDate.Month == DateTime.Now.Month && x.RecordDate.Year == DateTime.Now.Year)
+            .Include(x => x.Discount)
+            .ToListAsync();
+
+            if (foodQat == 0)
+            {
+                recordsToUpdate.ForEach(record => { record.FoodGiven = false; record.Food = 0; });
+                await _context.SaveChangesAsync();
+                return;
+            }
+
+            recordsToUpdate.ForEach(record => { record.Food = foodQat * record.Discount.Food; });
+            await _context.SaveChangesAsync();
+        }
+
         public async Task AddKirayeQat(int kirayeQat)
         {
             // update kiraye qat for this month
@@ -30,7 +49,14 @@ namespace WebApplication1.Repositories
             .Where(x => x.RecordDate.Month == DateTime.Now.Month && x.RecordDate.Year == DateTime.Now.Year)
             .ToListAsync();
 
-            recordsToUpdate.ForEach(record => { record.KirayeQat = kirayeQat; record.KirayePrice = kirayeQat * record.KirayePrice; record.KirayeId = 1; });
+            if (kirayeQat == 0)
+            {
+                recordsToUpdate.ForEach(record => { record.KirayeQat = 0; record.KirayePrice = 0; record.KirayeId = 1; });
+                await _context.SaveChangesAsync();
+                return;
+            }
+
+            recordsToUpdate.ForEach(record => { record.KirayePrice = kirayeQat * record.KirayePrice / record.KirayeQat; record.KirayeQat = kirayeQat; });
             await _context.SaveChangesAsync();
         }
 
@@ -43,6 +69,7 @@ namespace WebApplication1.Repositories
             Include(x => x.Employee.Position).
             Include(x => x.Employee.Position.Department).
             Include(x => x.Employee.Position.Department.Adminstration).
+            Include(x=> x.Employee.Meharet).
             Where(x => x.EmployeeId == employeeId && x.RecordDate.Year == year).ToListAsync();
         }
 
@@ -63,6 +90,9 @@ namespace WebApplication1.Repositories
             var query = _context.EmployeeSalaryRecords
                 .Include(x => x.Employee)
                     .ThenInclude(x => x.Rank)
+                .Include(x=>x.Employee.Meharet)
+                .Include(x=>x.Employee.ElmiDerece)
+                .Include(x=> x.Employee.FexriAd)
                 .Include(x => x.Discount)
                 .Include(x => x.Kiraye)
                 .Include(x => x.Employee.Position)
@@ -94,6 +124,14 @@ namespace WebApplication1.Repositories
                     {  "yuk", x=> x.YukPulu >0},
                     { "kiraye", x => x.KirayePrice > 0 },
                     { "maddi", x => x.MaddiYardim > 0 },
+                    {"maddiyardimalmayanlar", x=> x.MaddiYardim == 0},
+                    {"mezuniyyetalmayanlar", x => x.Mezuniyyet == 0},
+                    {"muharibe", x=> x.isVeteran==true},
+                    {"elil",x=>x.isDisabled == true},
+                    {"qachqin",x=>x.isQachqin == true},
+                    {"sehid",x=>x.isMatry == true},
+                    {"himayeder",x=> x.isOwner == true},
+                    {"cernobil",x=>x.isChernobil == true},
                     { "sahra", x => x.Sehra > 0 },
                     { "elmi", x => x.ElmiDerece > 0 },
                     { "cixis", x => x.XariciDil > 0 },
@@ -115,25 +153,32 @@ namespace WebApplication1.Repositories
             return await _context.EmployeeSalaryRecords.OrderByDescending(e => e.Id).FirstAsync();
         }
 
+        private async Task ChangeKiraye(int kirayeId, int employeeId)
+        {
+            //var kiraye = await _context.Kirayes.FirstOrDefaultAsync(x => x.Id == kirayeId);
+            var employee = await _context.EmployeeSalaryRecords.FirstOrDefaultAsync(x => x.Id == employeeId);
+            // if(kiraye == null || employee == null)
+            // {
+            //     return;
+            // }
+            employee.KirayeId = kirayeId;
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<EmployeeSalaryRecord> UpdateEmployee(EmployeeSalaryRecord employee)
         {
+            Console.WriteLine(employee.Id + " " + employee.KirayeId);
+            await ChangeKiraye(employee.KirayeId, employee.Id);
+
             var existingEmployee = await _context.EmployeeSalaryRecords.
             Include(x => x.Discount).
-            Include(x => x.Kiraye).
             FirstOrDefaultAsync(x => x.Id == employee.Id);
-            if (existingEmployee == null)
-            {
-                System.Console.WriteLine("Employee not found.");
-            }
 
             // Update the properties of the existingEmployee object with the values from the employee parameter.
             existingEmployee.XariciDil = employee.XariciDil;
             existingEmployee.ElmiDerece = employee.ElmiDerece;
             existingEmployee.AlimentPercentage = employee.AlimentPercentage;
             existingEmployee.Aliment = employee.Aliment;
-            existingEmployee.KirayeId = employee.KirayeId;
-
-
             existingEmployee.FamilyCount = employee.FamilyCount;
             existingEmployee.KirayeQat = employee.KirayeQat;
             existingEmployee.KirayePrice = employee.KirayePrice;
@@ -160,6 +205,11 @@ namespace WebApplication1.Repositories
             existingEmployee.Zererlilik = employee.Zererlilik;
             existingEmployee.Mexfilik = employee.Mexfilik;
 
+            existingEmployee.PTQat = employee.PTQat;
+            existingEmployee.PTMoney = employee.PTMoney;
+            existingEmployee.IsEternalQat = employee.IsEternalQat;
+
+
             existingEmployee.Tax = employee.Tax;
             existingEmployee.Kesirler = employee.Kesirler;
             existingEmployee.Extra211100 = employee.Extra211100;
@@ -175,11 +225,30 @@ namespace WebApplication1.Repositories
             existingEmployee.isNotGiven = employee.isNotGiven;
             existingEmployee.Mezuniyyet = employee.Mezuniyyet;
             existingEmployee.FoodGiven = employee.FoodGiven;
+            existingEmployee.Food = employee.Food;
             existingEmployee.KesfMezun = employee.KesfMezun;
             existingEmployee.CixisMuv = employee.CixisMuv;
 
             await _context.SaveChangesAsync();
             return existingEmployee;
+        }
+
+        public async Task AddVeteranQat(int veteranQat)
+        {
+            // update kiraye qat for this month
+            var recordsToUpdate = await _context.EmployeeSalaryRecords
+            .Where(x => x.RecordDate.Month == DateTime.Now.Month && x.RecordDate.Year == DateTime.Now.Year)
+            .ToListAsync();
+
+            if (veteranQat == 0)
+            {
+                recordsToUpdate.ForEach(record => { record.isVeteran = false; });
+                await _context.SaveChangesAsync();
+                return;
+            }
+
+            recordsToUpdate.ForEach(record => { record.isVeteran = true; record.VeteranQat = veteranQat; });
+            await _context.SaveChangesAsync();
         }
     }
 }

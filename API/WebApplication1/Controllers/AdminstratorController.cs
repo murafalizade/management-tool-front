@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Dtos;
 using WebApplication1.Models;
@@ -9,6 +10,8 @@ namespace WebApplication1.Controllers
 {
     [Route("api/adminstration")]
     [ApiController]
+    [Authorize]
+
     public class AdminstratorController : ControllerBase
     {
         private readonly IAdminstrationService _adminstrationService;

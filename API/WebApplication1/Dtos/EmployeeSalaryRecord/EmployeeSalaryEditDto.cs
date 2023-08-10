@@ -7,10 +7,12 @@ namespace WebApplication1.Dtos
     {
         public int Id { get; set; }
         public double PTMoney { get; set; }
+         public int PTQat { get; set; } = 0;
+        public bool IsEternalQat { get; set; } = false;
         public string AccountNumber { get; set; }
         public double Kibertehlukesizlik { get; set; }
         public double RankSalary { get; set; }
-        public int KirayeId { get; set; }
+        public int KirayeId { get; set; } = 1;
         public int FamilyCount { get; set; } = 0;
         public int KirayeQat { get; set; } = 0;
         public double KirayePrice { get; set; }
@@ -50,5 +52,6 @@ namespace WebApplication1.Dtos
         public double CixisMuv { get; set; }
         public double Mezuniyyet { get; set; }
         public bool FoodGiven { get; set; }
+        public double Food { get; set; }
     }
 }

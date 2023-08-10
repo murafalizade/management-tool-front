@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using WebApplication1.Dtos;
@@ -8,6 +8,7 @@ namespace WebApplication1.Controllers
 {
     [Route("api/employee/salary/record")]
     [ApiController]
+    [Authorize]
     public class EmployeeSalaryRecordController : ControllerBase
     {
         private readonly IEmployeeSalaryRecordService _employeeSalaryRecordService;
@@ -54,7 +55,6 @@ namespace WebApplication1.Controllers
             return Ok(obj.data);
         }
 
-
         [HttpGet]
         public async Task<IActionResult> GetAllEmployee([FromQuery] int month, [FromQuery] int year, [FromQuery] string search)
         {
@@ -99,7 +99,6 @@ namespace WebApplication1.Controllers
             return BadRequest(obj.data);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> AddEmployee([FromBody] int id)
         {
@@ -117,5 +116,27 @@ namespace WebApplication1.Controllers
             return File(await _employeeSalaryRecordService.ExportExcel(search, month, year), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "EmployeeSalaryRecord.xlsx");
         }
 
+
+        [HttpPost("kiraye")]
+        public async Task<IActionResult> AddKirayeQat([FromQuery] int kirayeQat)
+        {
+            ErrorHandelerDto obj = await _employeeSalaryRecordService.AddKirayeQat(kirayeQat);
+            if ((bool)!obj.isError)
+            {
+                return Ok(obj.data);
+            }
+            return BadRequest(obj.data);
+        }
+
+        [HttpPost("food")]
+        public async Task<IActionResult> AddFoodQat([FromQuery] int foodQat)
+        {
+            ErrorHandelerDto obj = await _employeeSalaryRecordService.AddFoodQat(foodQat);
+            if ((bool)!obj.isError)
+            {
+                return Ok(obj.data);
+            }
+            return BadRequest(obj.data);
+        }
     }
 }

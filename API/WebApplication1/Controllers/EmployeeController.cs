@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Dtos;
 using WebApplication1.Models;
@@ -9,6 +10,8 @@ namespace WebApplication1.Controllers
 
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
+
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;

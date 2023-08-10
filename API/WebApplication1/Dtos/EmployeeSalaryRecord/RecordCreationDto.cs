@@ -5,11 +5,10 @@ namespace WebApplication1.Dtos
     public class RecordCreationDto
     {
         public Employee Employee { get; set; }
-        public Discount Discount { get; set; }
-        public int XIYears { get; set; } = 0;
-        public int XIMonths { get; set; } = 0;
-        public int XIDays { get; set; } = 0;
-        public int XIPercentage { get; set; } = 0;
+        public int? DiscountId { get; set; }
+        public virtual Discount Discount { get; set; }
+        public int? KirayeId { get; set; }
+        public int XIPercent { get; set; } = 0;
         public string FullName { get; set; } = "";
         public double RankSalary { get; set; } = 0;
         public double PositionSalary { get; set; } = 0;

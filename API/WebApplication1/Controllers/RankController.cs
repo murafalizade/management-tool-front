@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Dtos;
 using WebApplication1.Models;
@@ -9,6 +10,7 @@ namespace WebApplication1.Controllers
 {
     [Route("api/rank")]
     [ApiController]
+    [Authorize]
     public class RankController : ControllerBase
     {
         private readonly IRankService _RankService;

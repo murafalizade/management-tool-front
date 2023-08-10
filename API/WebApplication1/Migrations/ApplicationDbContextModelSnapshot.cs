@@ -111,6 +111,33 @@ namespace WebApplication1.Migrations
                     b.ToTable("Discounts");
                 });
 
+            modelBuilder.Entity("WebApplication1.Models.ElmiDerece", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("For10to15Salary")
+                        .HasColumnType("int");
+
+                    b.Property<int>("For15to20Salary")
+                        .HasColumnType("int");
+
+                    b.Property<int>("For20Salary")
+                        .HasColumnType("int");
+
+                    b.Property<int>("For5to10Salary")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ElmiDereces");
+                });
+
             modelBuilder.Entity("WebApplication1.Models.Employee", b =>
                 {
                     b.Property<int>("Id")
@@ -124,8 +151,14 @@ namespace WebApplication1.Migrations
                     b.Property<string>("CommandNo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ElmiDerece")
+                    b.Property<int?>("ElmiDereceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EnteranceCommand")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EnteranceDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ExtraMoney")
                         .HasColumnType("nvarchar(max)");
@@ -136,7 +169,10 @@ namespace WebApplication1.Migrations
                     b.Property<string>("FatherName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FexriAd")
+                    b.Property<int?>("FexriAdId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FexriAdName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Fin")
@@ -154,13 +190,13 @@ namespace WebApplication1.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Meharetlilik")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("MeharetDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("MeharetId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Mexfilik")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PTMoney")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("PositionId")
@@ -175,17 +211,25 @@ namespace WebApplication1.Migrations
                     b.Property<string>("Temsilcilik")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("XariciDil")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("XariciDilId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Zererlilik")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ElmiDereceId");
+
+                    b.HasIndex("FexriAdId");
+
+                    b.HasIndex("MeharetId");
+
                     b.HasIndex("PositionId");
 
                     b.HasIndex("RankId");
+
+                    b.HasIndex("XariciDilId");
 
                     b.ToTable("Employees");
                 });
@@ -263,6 +307,9 @@ namespace WebApplication1.Migrations
                     b.Property<double>("HealthInsurance")
                         .HasColumnType("float");
 
+                    b.Property<bool>("IsEternalQat")
+                        .HasColumnType("bit");
+
                     b.Property<double>("KesfMezun")
                         .HasColumnType("float");
 
@@ -305,6 +352,9 @@ namespace WebApplication1.Migrations
                     b.Property<double>("PTMoney")
                         .HasColumnType("float");
 
+                    b.Property<int>("PTQat")
+                        .HasColumnType("int");
+
                     b.Property<double>("PositionSalary")
                         .HasColumnType("float");
 
@@ -326,13 +376,13 @@ namespace WebApplication1.Migrations
                     b.Property<double>("TotalDSMF")
                         .HasColumnType("float");
 
+                    b.Property<int>("VeteranQat")
+                        .HasColumnType("int");
+
                     b.Property<double>("XIMoney")
                         .HasColumnType("float");
 
                     b.Property<int>("XIPercent")
-                        .HasColumnType("int");
-
-                    b.Property<int>("XIYears")
                         .HasColumnType("int");
 
                     b.Property<double>("XariciDil")
@@ -379,6 +429,24 @@ namespace WebApplication1.Migrations
                     b.ToTable("EmployeeSalaryRecords");
                 });
 
+            modelBuilder.Entity("WebApplication1.Models.FexriAd", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Salary")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FexriAds");
+                });
+
             modelBuilder.Entity("WebApplication1.Models.Kiraye", b =>
                 {
                     b.Property<int>("Id")
@@ -395,6 +463,30 @@ namespace WebApplication1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Kirayes");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Meharet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("ForGizirPercentage")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ForMuddetliPercentage")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ForZabitPercentage")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Meharets");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Position", b =>
@@ -462,6 +554,24 @@ namespace WebApplication1.Migrations
                     b.ToTable("AdminUsers");
                 });
 
+            modelBuilder.Entity("WebApplication1.Models.XariciDil", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Percentage")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("XariciDils");
+                });
+
             modelBuilder.Entity("WebApplication1.Models.Department", b =>
                 {
                     b.HasOne("WebApplication1.Models.Adminstration", "Adminstration")
@@ -475,13 +585,37 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.Employee", b =>
                 {
+                    b.HasOne("WebApplication1.Models.ElmiDerece", "ElmiDerece")
+                        .WithMany("Employees")
+                        .HasForeignKey("ElmiDereceId");
+
+                    b.HasOne("WebApplication1.Models.FexriAd", "FexriAd")
+                        .WithMany()
+                        .HasForeignKey("FexriAdId");
+
+                    b.HasOne("WebApplication1.Models.Meharet", "Meharet")
+                        .WithMany("Employees")
+                        .HasForeignKey("MeharetId");
+
                     b.HasOne("WebApplication1.Models.Position", "Position")
                         .WithMany()
                         .HasForeignKey("PositionId");
 
                     b.HasOne("WebApplication1.Models.Rank", "Rank")
-                        .WithMany("Employees")
+                        .WithMany()
                         .HasForeignKey("RankId");
+
+                    b.HasOne("WebApplication1.Models.XariciDil", "XariciDil")
+                        .WithMany()
+                        .HasForeignKey("XariciDilId");
+
+                    b.Navigation("ElmiDerece");
+
+                    b.Navigation("FexriAd");
+
+                    b.Navigation("XariciDil");
+
+                    b.Navigation("Meharet");
 
                     b.Navigation("Position");
 
@@ -503,7 +637,7 @@ namespace WebApplication1.Migrations
                         .IsRequired();
 
                     b.HasOne("WebApplication1.Models.Kiraye", "Kiraye")
-                        .WithMany()
+                        .WithMany("EmployeeSalaryRecord")
                         .HasForeignKey("KirayeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -541,12 +675,22 @@ namespace WebApplication1.Migrations
                     b.Navigation("EmployeeSalaryRecords");
                 });
 
+            modelBuilder.Entity("WebApplication1.Models.ElmiDerece", b =>
+                {
+                    b.Navigation("Employees");
+                });
+
             modelBuilder.Entity("WebApplication1.Models.Employee", b =>
                 {
                     b.Navigation("EmployeeSalaryRecords");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Rank", b =>
+            modelBuilder.Entity("WebApplication1.Models.Kiraye", b =>
+                {
+                    b.Navigation("EmployeeSalaryRecord");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Meharet", b =>
                 {
                     b.Navigation("Employees");
                 });

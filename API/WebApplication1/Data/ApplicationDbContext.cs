@@ -19,5 +19,9 @@ namespace WebApplication1.Data
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<EmployeeSalaryRecord> EmployeeSalaryRecords { get; set; }
         public DbSet<Kiraye> Kirayes { get; set; }
+        public DbSet<XariciDil> XariciDils { get; set; }
+        public DbSet<FexriAd> FexriAds { get; set; }
+        public DbSet<Meharet> Meharets { get; set; }
+        public DbSet<ElmiDerece> ElmiDereces { get; set; }
      }
 }

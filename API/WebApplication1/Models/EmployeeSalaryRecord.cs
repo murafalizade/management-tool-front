@@ -7,32 +7,23 @@ namespace WebApplication1.Models
         public int Id { get; set; }
         public int EmployeeId { get; set; }
         public Employee Employee { get; set; }
-        private string fullName = "";
+
         public string FullName
         {
-            set
+            get
             {
-                if (Employee != null)
+                if(Employee != null)
                 {
-                    fullName = Employee.FirstName + " " + Employee.LastName + " " + Employee.FatherName;
+                    return Employee.LastName + " " + Employee.FirstName + " " + Employee.FatherName;
+                }
+                else
+                {
+                    return "Naməlum işçi";
                 }
             }
-            get
-            {
-                return fullName;
-            }
-        }
-        private int xIYears = 0;
-        public int XIYears
-        {
-            get
-            {
-                return xIYears;
-            }
             set
             {
-                // calculate remaining years from RecordDate only return remains years not months or days
-                xIYears = (int)(DateTime.Now - Employee.StartDate).TotalDays / 365;
+
             }
         }
         private double rankSalary = 0;
@@ -42,9 +33,9 @@ namespace WebApplication1.Models
 
             set
             {
-                if (Employee != null && value == 0)
+                if (Employee != null && Employee.Rank != null && value == 0)
                 {
-                    rankSalary = (double)Employee.Rank.Salary;
+                    rankSalary = Employee.Rank.Salary;
                 }
                 else
                 {
@@ -57,9 +48,9 @@ namespace WebApplication1.Models
         {
             set
             {
-                if (Employee != null && value == 0)
+                if (Employee != null && Employee.Position != null && value == 0)
                 {
-                    positionSalary = (double)Employee.Position.Salary;
+                    positionSalary = Employee.Position.Salary;
                 }
                 else
                 {
@@ -68,53 +59,55 @@ namespace WebApplication1.Models
             }
             get { return positionSalary; }
         }
-        private int XIPercentage = 0;
+        private int _xIPercent = 0;
         public int XIPercent
         {
             get
             {
-                return XIPercentage;
+                return _xIPercent;
             }
             set
             {
-                if (Employee != null && value == 0)
+                if (Employee != null)
                 {
+                    int xIYears = DateTime.Now.Year - Employee.StartDate.Year;
+                    Console.WriteLine("XI years: " + xIYears);
                     if (xIYears <= 2 && xIYears >= 1)
                     {
-                        XIPercentage = 5;
+                        _xIPercent = 5;
                     }
                     else if (xIYears <= 5 && xIYears >= 3)
                     {
-                        XIPercentage = 10;
+                        _xIPercent = 10;
                     }
                     else if (xIYears <= 10 && xIYears >= 6)
                     {
-                        XIPercentage = 15;
+                        _xIPercent = 15;
                     }
                     else if (xIYears <= 15 && xIYears >= 11)
                     {
-                        XIPercentage = 20;
+                        _xIPercent = 20;
                     }
                     else if (xIYears <= 20 && xIYears >= 16)
                     {
-                        XIPercentage = 25;
+                        _xIPercent = 25;
                     }
                     else if (xIYears <= 25 && xIYears >= 21)
                     {
-                        XIPercentage = 30;
+                        _xIPercent = 30;
                     }
                     else if (xIYears <= 30 && xIYears >= 26)
                     {
-                        XIPercentage = 40;
+                        _xIPercent = 40;
                     }
                     else if (xIYears > 30)
                     {
-                        XIPercentage = 50;
+                        _xIPercent = 50;
                     }
                 }
                 else
                 {
-                    XIPercentage = value;
+                    _xIPercent = 0;
                 }
             }
         }
@@ -127,9 +120,9 @@ namespace WebApplication1.Models
             }
             set
             {
-                if (Employee != null && value == 0)
+                if (Employee != null)
                 {
-                    xIMoney = positionSalary * XIPercentage / 100;
+                    xIMoney = positionSalary * XIPercent / 100;
                 }
                 else
                 {
@@ -138,6 +131,8 @@ namespace WebApplication1.Models
             }
         }
         private double pTMoney = 0;
+        public int PTQat { get; set; } = 0;
+        public bool IsEternalQat { get; set; } = false;
         public double PTMoney
         {
             get
@@ -146,24 +141,9 @@ namespace WebApplication1.Models
             }
             set
             {
-                if (Employee != null && value == 0)
+                if (value == 0)
                 {
-                    if (Employee.PTMoney == "5")
-                    {
-                        pTMoney = positionSalary * 5 / 100;
-                    }
-                    else if (Employee.PTMoney == "8")
-                    {
-                        pTMoney = positionSalary * 8 / 100;
-                    }
-                    else if (Employee.PTMoney == "11")
-                    {
-                        pTMoney = positionSalary * 11 / 100;
-                    }
-                    else if (Employee.PTMoney == "extra10")
-                    {
-                        pTMoney *= 0.1;
-                    }
+                    pTMoney = (XIMoney + RankSalary + PositionSalary) * PTQat;
                 }
                 else
                 {
@@ -177,52 +157,20 @@ namespace WebApplication1.Models
         {
             set
             {
-                if (Employee != null && value == 0)
+
+                if (Employee != null && Employee.Meharet != null && value == 0)
                 {
                     if (Employee.Position.Name == "zabit")
                     {
-                        if (Employee.Meharetlilik == "2")
-                        {
-                            meharetlilik = positionSalary * 15 / 100;
-                        }
-                        else if (Employee.Meharetlilik == "1")
-                        {
-                            meharetlilik = positionSalary * 25 / 100;
-                        }
-                        else if (Employee.Meharetlilik == "usta")
-                        {
-                            meharetlilik = positionSalary * 35 / 100;
-                        }
+                        meharetlilik = positionSalary * Employee.Meharet.ForZabitPercentage / 100;
                     }
-                    else if (Employee.Position.Name == "gizir")
+                    else if (Employee.Position.Name != "esger")
                     {
-                        if (Employee.Meharetlilik == "2")
-                        {
-                            meharetlilik = positionSalary * 10 / 100;
-                        }
-                        else if (Employee.Meharetlilik == "1")
-                        {
-                            meharetlilik = positionSalary * 15 / 100;
-                        }
-                        else if (Employee.Meharetlilik == "usta")
-                        {
-                            meharetlilik = positionSalary * 25 / 100;
-                        }
+                        meharetlilik = positionSalary * Employee.Meharet.ForGizirPercentage / 100;
                     }
                     else
                     {
-                        if (Employee.Meharetlilik == "2")
-                        {
-                            meharetlilik = positionSalary * 5 / 100;
-                        }
-                        else if (Employee.Meharetlilik == "1")
-                        {
-                            meharetlilik = positionSalary * 10 / 100;
-                        }
-                        else if (Employee.Meharetlilik == "usta")
-                        {
-                            meharetlilik = positionSalary * 15 / 100;
-                        }
+                        meharetlilik = positionSalary * Employee.Meharet.ForMuddetliPercentage / 100;
                     }
                 }
                 else
@@ -272,16 +220,9 @@ namespace WebApplication1.Models
         {
             set
             {
-                if (Employee != null && value == 0)
+                if (Employee != null && Employee.XariciDil != null && value == 0)
                 {
-                    if (Employee.XariciDil == "15")
-                    {
-                        xariciDil = positionSalary * 15 / 100;
-                    }
-                    if (Employee.XariciDil == "10")
-                    {
-                        xariciDil = positionSalary * 10 / 100;
-                    }
+                    xariciDil = positionSalary * Employee.XariciDil.Percentage / 100;
                 }
                 else
                 {
@@ -300,65 +241,29 @@ namespace WebApplication1.Models
         {
             set
             {
-                if (Employee != null && value == 0)
+                if (Employee != null && Employee.ElmiDerece != null && value == 0)
                 {
                     int workExperience = DateTime.Now.Year - Employee.StartDate.Year;
-                    switch (Employee.ElmiDerece)
+
+                    if (workExperience >= 5 && workExperience <= 10)
                     {
-                        case "dosent":
-                            // if work experience is more than 5 years
-                            if (workExperience >= 5 && workExperience <= 10)
-                            {
-                                elmiDerece = 25;
-                            }
-                            else if (workExperience > 10 && workExperience <= 15)
-                            {
-                                elmiDerece = 50;
-                            }
-                            else if (workExperience > 15 && workExperience <= 20)
-                            {
-                                elmiDerece = 75;
-                            }
-                            else if (workExperience > 20)
-                            {
-                                elmiDerece = 100;
-                            }
-                            else
-                            {
-                                elmiDerece = 0;
-                            }
-                            break;
-                        case "professor":
-                            if (workExperience >= 5 && workExperience <= 10)
-                            {
-                                elmiDerece = 30;
-                            }
-                            else if (workExperience > 10 && workExperience <= 15)
-                            {
-                                elmiDerece = 60;
-                            }
-                            else if (workExperience > 15 && workExperience <= 20)
-                            {
-                                elmiDerece = 90;
-                            }
-                            else if (workExperience > 20)
-                            {
-                                elmiDerece = 120;
-                            }
-                            else
-                            {
-                                elmiDerece = 0;
-                            }
-                            break;
-                        case "elmlər doktoru":
-                            elmiDerece = 100;
-                            break;
-                        case "fəlsəfə doktoru":
-                            elmiDerece = 60;
-                            break;
-                        default:
-                            elmiDerece = 0;
-                            break;
+                        elmiDerece = Employee.ElmiDerece.For5to10Salary;
+                    }
+                    else if (workExperience > 10 && workExperience <= 15)
+                    {
+                        elmiDerece = Employee.ElmiDerece.For10to15Salary;
+                    }
+                    else if (workExperience > 15 && workExperience <= 20)
+                    {
+                        elmiDerece = Employee.ElmiDerece.For15to20Salary;
+                    }
+                    else if (workExperience > 20)
+                    {
+                        elmiDerece = Employee.ElmiDerece.For20Salary;
+                    }
+                    else
+                    {
+                        elmiDerece = 0;
                     }
                 }
                 else
@@ -376,16 +281,9 @@ namespace WebApplication1.Models
         {
             set
             {
-                if (Employee != null && value == 0)
+                if (Employee != null && Employee.FexriAd != null && value == 0)
                 {
-                    if (Employee.XariciDil == "1")
-                    {
-                        fexriAd = 100;
-                    }
-                    if (Employee.XariciDil == "2")
-                    {
-                        fexriAd = 60;
-                    }
+                    fexriAd = Employee.FexriAd.Salary;
                 }
                 else
                 {
@@ -417,6 +315,7 @@ namespace WebApplication1.Models
         public bool isQachqin { get; set; }
 
         private double tax = 0;
+        public int VeteranQat { get; set; } = 1;
         public double Tax
         {
             get
@@ -436,7 +335,6 @@ namespace WebApplication1.Models
             }
         }
 
-        private double totalDiscount { get; set; } = 0;
         public double TotalDiscount
         {
             get
@@ -453,8 +351,8 @@ namespace WebApplication1.Models
                 }
                 if (isVeteran)
                 {
-                    totalDiscount += Discount.Veteran;
-                    // tax = tax - Discount.VeteranTaxDiscount > 0 ? tax - Discount.VeteranTaxDiscount : 0;
+                    totalDiscount += Discount.Veteran * VeteranQat;
+                    tax = tax - Discount.VeteranTaxDiscount > 0 ? tax - Discount.VeteranTaxDiscount : 0;
                 }
                 if (isDisabled)
                 {
@@ -501,7 +399,7 @@ namespace WebApplication1.Models
             }
             set
             {
-                if (Discount != null)
+                if (Discount != null && value == 0)
                 {
                     healthInsurance = TotalIncome * Discount.HealthInjurance / 100;
                 }
@@ -524,7 +422,7 @@ namespace WebApplication1.Models
             {
                 if (value == 0)
                 {
-                    aliment = (TotalIncome - tax) * AlimentPercentage / 100;
+                    aliment = (TotalIncome - Tax) * AlimentPercentage / 100;
                 }
                 else
                 {
@@ -548,6 +446,10 @@ namespace WebApplication1.Models
                 {
                     food = Discount.Food;
                 }
+                else if (FoodGiven == false)
+                {
+                    food = 0;
+                }
                 else
                 {
                     food = value;
@@ -563,7 +465,7 @@ namespace WebApplication1.Models
                 if (Discount != null)
                 {
                     muavin = Discount.Veteran;
-                    // tax -= Discount.VeteranTaxDiscount;
+                    tax = tax - Discount.VeteranTaxDiscount > 0 ? tax - Discount.VeteranTaxDiscount : 0;
                 }
                 else
                 {
@@ -646,7 +548,7 @@ namespace WebApplication1.Models
         {
             get
             {
-                return TotalGiven - TotalDSMF;
+                return TotalGiven - TotalDSMF + KirayePrice + Food;
             }
         }
 

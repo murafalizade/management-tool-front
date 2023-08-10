@@ -39,8 +39,12 @@ namespace WebApplication1.Services
             Employee obj1 = _mapper.Map<Employee>(employee);
             int id = await _employeeRepository.AddEmployee(obj1);
             Employee emp = await _employeeRepository.GetEmployeeById(id);
-            Discount discount = await _discountRepository.GetDiscounts(2023,7);
-            RecordCreationDto x = new RecordCreationDto { Employee = emp, Discount = discount };
+            Discount discount = await _discountRepository.GetDiscountByDate(0, 0);
+            RecordCreationDto x = new() { Employee = emp, KirayeId = 1 };
+            if (discount != null)
+            {
+                x.Discount = discount;
+            }
             await _employeeSalaryRecordRepository.AddEmployee(_mapper.Map<EmployeeSalaryRecord>(x));
             return new ErrorHandelerDto
             {
@@ -98,7 +102,7 @@ namespace WebApplication1.Services
         {
             try
             {
-                List<Employee> obj = await _employeeRepository.GetEmployees();
+                List<EmployeeGetDto> obj = _mapper.Map<List<EmployeeGetDto>>(await _employeeRepository.GetEmployees());
                 return new ErrorHandelerDto
                 {
                     data = obj,
@@ -144,7 +148,6 @@ namespace WebApplication1.Services
                     data = "Employee Get Failed",
                     StatusCode = 400,
                     isError = true
-
                 };
             }
         }

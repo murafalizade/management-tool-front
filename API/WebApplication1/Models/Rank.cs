@@ -9,6 +9,6 @@ namespace WebApplication1.Models
         public string ShortName {get; set;}
         public int Salary { get; set; }
 
-        public ICollection<Employee> Employees { get; set; }
+        //public ICollection<Employee> Employees { get; set; }
     }
 }

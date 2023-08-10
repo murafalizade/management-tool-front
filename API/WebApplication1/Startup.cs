@@ -1,22 +1,19 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using AutoMapper;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
 using WebApplication1.Data;
 using WebApplication1.Services;
 using WebApplication1.Repositories;
 using WebApplication1.Helpers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace WebApplication1
 {
@@ -44,13 +41,23 @@ namespace WebApplication1
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IRankRepository, RankRepository>();
-            services.AddScoped<IRankService,RankService>();
-            services.AddScoped<IEmployeeSalaryRecordRepository,EmployeeSalaryRecordRepository>();
+            services.AddScoped<IRankService, RankService>();
+            services.AddScoped<IEmployeeSalaryRecordRepository, EmployeeSalaryRecordRepository>();
             services.AddScoped<IEmployeeSalaryRecordService, EmployeeSalaryRecordService>();
             services.AddScoped<IDiscountRepository, DiscountRepository>();
             services.AddScoped<IDiscountService, DiscountService>();
             services.AddScoped<IKirayeRepository, KirayeRepository>();
             services.AddScoped<IKirayeService, KirayeService>();
+            services.AddScoped<IFexriAdRepository, FexriAdRepository>();
+            services.AddScoped<IFexriAdService, FexriAdService>();
+            services.AddScoped<IXariciDilRepository, XariciDilRepository>();
+            services.AddScoped<IXariciDilService, XariciDilService>();
+            services.AddScoped<IElmiDereceRepository, ElmiDereceRepository>();
+            services.AddScoped<IElmiDereceService, ElmiDereceService>();
+            services.AddScoped<IMeharetRepistory, MeharetRepository>();
+            services.AddScoped<IMeharetService, MeharetService>();
+
+
 
 
             services.AddCors(
@@ -66,24 +73,54 @@ namespace WebApplication1
             );
             services.AddControllers();
             services.AddAutoMapper(typeof(Program));
-            // services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
-            // {
-            //     options.Authority = "https://localhost:5001";
-            //     options.TokenValidationParameters = new TokenValidationParameters
-            //     {
-            //         ValidateAudience = false
-            //     };
-            // });
+
+
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApplication1", Version = "v1" });
+                var securityScheme = new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Description = "JWT Authorization header using the Bearer scheme.",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT"
+                };
+                c.AddSecurityDefinition("Bearer", securityScheme);
 
+                // Add the security requirement to include JWT Bearer token in the requests
+                    var securityRequirement = new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new List<string>()
+                        }
+                    };
+                    c.AddSecurityRequirement(securityRequirement);
             });
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+                ValidateIssuer = false,
+                ValidateAudience = false
+            };
+        });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -92,14 +129,14 @@ namespace WebApplication1
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApplication1 v1"));
             }
 
-            DataSeeder.SeedData(serviceProvider);
-            
+            //DataSeeder.SeedData(serviceProvider);
+
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
 
             app.UseCors("AllowAll");
-            
+
             app.UseRouting();
 
             app.UseAuthorization();

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,6 +33,10 @@ namespace WebApplication1.Repositories
         public async Task<Employee> GetEmployeeByFin(string fin)
         {
             return await _context.Employees.Include(x => x.Rank).
+              Include(x => x.FexriAd).
+                Include(x => x.XariciDil).
+                Include(x => x.ElmiDerece).
+                Include(x => x.Meharet).
              Include(x => x.Position).FirstOrDefaultAsync(x => x.Fin == fin);
         }
 
@@ -39,6 +44,10 @@ namespace WebApplication1.Repositories
         {
             return await _context.Employees.Include(x => x.Rank).
              Include(x => x.Position).
+                Include(x => x.FexriAd).
+                Include(x => x.XariciDil).
+                Include(x => x.ElmiDerece).
+                Include(x => x.Meharet).
             FirstOrDefaultAsync(x => x.Id == employeeId);
         }
 
@@ -49,14 +58,47 @@ namespace WebApplication1.Repositories
 
         public async Task<List<Employee>> GetEmployees()
         {
-            return await _context.Employees.ToListAsync();
+            return await _context.Employees.
+                Include(x => x.Rank).
+                Include(x => x.Position).
+                Include(x => x.FexriAd).
+                Include(x => x.XariciDil).
+                Include(x => x.ElmiDerece).
+                Include(x => x.Meharet).
+                ToListAsync();
         }
 
         public async Task<Employee> UpdateEmployee(Employee employee)
         {
-            _context.Employees.Update(employee);
+            System.Console.WriteLine(employee.XariciDilId);
+            var existingEmployee = await _context.Employees.FindAsync(employee.Id);
+
+            if (existingEmployee == null)
+            {
+                // Handle error or return null if the employee doesn't exist
+                return null;
+            }
+
+            // Get the type of the Employee class
+            var employeeType = typeof(Employee);
+
+            // Get the properties of the Employee class
+            var properties = employeeType.GetProperties();
+
+            foreach (var property in properties)
+            {
+                // Skip properties that are null in the updatedEmployee
+                var updatedValue = property.GetValue(employee);
+
+                if (updatedValue != null)
+                {
+                    // Set the corresponding property value in the existingEmployee
+                    property.SetValue(existingEmployee, updatedValue);
+                }
+            }
             await _context.SaveChangesAsync();
             return employee;
+
         }
     }
 

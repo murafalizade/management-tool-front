@@ -31,7 +31,7 @@ namespace WebApplication1.Services
             month = month == 0 ? DateTime.Now.Month : month;
             try
             {
-                var discounts = await _discountRepository.GetDiscounts(year, month);
+                var discounts = await _discountRepository.GetDiscountByDate(year, month);
                 return new ErrorHandelerDto { StatusCode = 200, data = discounts };
             }
             catch (Exception ex)

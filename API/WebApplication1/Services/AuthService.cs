@@ -32,14 +32,14 @@ namespace WebApplication1.Services
             {
                 error.isError = true;
                 error.StatusCode = 404;
-                error.data = "Istifadeci tapilmadi";
+                error.data = "İstifadeçi tapılmadı";
                 return error;
             }
-            if (ComparePassword(password, user.PasswordSalt, user.PasswordHash))
+            if (!ComparePassword(password, user.PasswordSalt, user.PasswordHash))
             {
                 error.isError = true;
                 error.StatusCode = 401;
-                error.data = "Sifre yanlisdir";
+                error.data = "İstifadəçi adı və ya şifrə yanlışdır";
                 return error;
             }
             string token = CreateToken(user);
@@ -59,7 +59,7 @@ namespace WebApplication1.Services
                 ErrorHandelerDto error = new ErrorHandelerDto();
                 error.isError = true;
                 error.StatusCode = 400;
-                error.data = "Bu email artiq movcuddur";
+                error.data = "Bu email artıq istifadə olunub";
                 return error;
             }
             User user = new User();
@@ -87,20 +87,16 @@ namespace WebApplication1.Services
 
         private void CreatePasswordHash(string password, out byte[] passwordSalt, out byte[] passwordHash)
         {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            }
+            using var hmac = new System.Security.Cryptography.HMACSHA512();
+            passwordSalt = hmac.Key;
+            passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
         }
 
         private bool ComparePassword(string password, byte[] passwordSalt, byte[] passwordHash)
         {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
-            {
-                var computedPassword = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                return computedPassword.SequenceEqual(passwordHash);
-            }
+            using var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt);
+            var computedPassword = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            return computedPassword.SequenceEqual(passwordHash);
         }
 
         private string CreateToken(User user)
@@ -110,7 +106,7 @@ namespace WebApplication1.Services
                 new Claim(ClaimTypes.Name,user.Email)
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
-            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
