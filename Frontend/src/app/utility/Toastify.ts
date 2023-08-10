@@ -1,10 +1,10 @@
-import Swal from "sweetalert2";
+import Swal, { SweetAlertPosition } from "sweetalert2";
 
 class Toastify {
-  public static success(msj?:string): void {
+  public static success(msj?: string, position?: SweetAlertPosition): void {
     Swal.mixin({
       toast: true,
-      position: "bottom-end",
+      position: position || "bottom-end",
       showConfirmButton: false,
       timer: 3000,
       timerProgressBar: true,
@@ -22,6 +22,8 @@ class Toastify {
       text: msj || "Əməliyyat uğursuz oldu!",
     });
   }
+
+  
 
   public static warning(action: (result: any) => void, msj?: string): void {
     Swal.fire({

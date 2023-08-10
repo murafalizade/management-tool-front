@@ -101,7 +101,7 @@ export const FILTER_DATA = [
   },
   {
     name: "Qaçqın",
-    value:"qacqin"
+    value:"qachqin"
   },
   {
     name: "Şəhid",

@@ -148,7 +148,7 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
       },
       {
         Header: "DSMF",
-        accessor: (row: SalaryRecordData) => row.dsmf.toFixed(2)
+        accessor: (row: SalaryRecordData) => row.dsmf.toFixed(2),
       },
       {
         Header: "Tibbi sığorta",
@@ -255,12 +255,16 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
     Cell: CustomCellRenderer,
   },
   {
+    Header: "Kirayə komp. verilir",
+    accessor: "kirayeName",
+  },
+  {
     Header: "Hesab nömrəsi",
     accessor: "accountNumber",
   },
   {
     Header: "Məh. %",
-    accessor: "employeeMeharetlilik",
+    accessor: "employeeMeharetName",
   },
   {
     Header: "HA_ID",
@@ -394,9 +398,11 @@ const totalSalaryRecordHeaders = [
   },
   {
     Header: "K.xəs.",
+    accessor: "kesfXeste",
   },
   {
     Header: "Kirayə",
+    accessor: "kirayePrice",
   },
   {
     Header: "Maddi",

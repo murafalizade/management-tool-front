@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
-import OperationService from "../api/operationService";
+import OperationService from "../../api/operationService";
 import Swal from "sweetalert2";
 
 const Organizations = () => {

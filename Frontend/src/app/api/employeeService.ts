@@ -60,6 +60,14 @@ export default class EmployeeService {
     return await fetch.get(`/api/kiraye`);
   }
 
+  static async addFoodQat(qat:number): Promise<any> {
+    return await fetch.post(`/api/employee/salary/record/food?foodQat=${qat}`);
+  }
+
+  static async addKirayeQat(qat:number): Promise<any> {
+    return await fetch.post(`/api/employee/salary/record/kiraye?kirayeQat=${qat}`);
+  }
+
   static async exportEmployeeSalaryRecord(
     month: number,
     year: number,

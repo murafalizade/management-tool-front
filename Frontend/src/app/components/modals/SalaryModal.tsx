@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Nav, Tab } from "react-bootstrap";
-import Organizations from "./Organizations";
-import PositionSalary from "./PositionSalary";
-import Departments from "./Departments";
+import Organizations from "../tables/Organizations";
+import PositionSalary from "../tables/PositionSalary";
+import Departments from "../tables/Departments";
 import { useDispatch, useSelector } from "react-redux";
-import { changeModalInfo } from "../redux/showModalSlice";
-import { RootState } from "../redux/store";
-import RankSalary from "./RankSalary";
+import { changeModalInfo } from "../../redux/showModalSlice";
+import { RootState } from "../../redux/store";
+import RankSalary from "../tables/RankSalary";
 
 type Props = {
   show: boolean;

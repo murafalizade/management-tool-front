@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Dropdown, Nav, NavDropdown, Navbar } from "react-bootstrap";
-import "../styles/navbar.scss";
+import "../../styles/navbar.scss";
 import DarkModeToggler from "./DarkModeToggler";
-import SalaryModal from "./SalaryModal";
+import SalaryModal from "../modals/SalaryModal";
 import { useDispatch, useSelector } from "react-redux";
-import { changeModalInfo, showModalCreate } from "../redux/showModalSlice";
-import Cookie from "../utility/Cookie";
-import { RootState } from "../redux/store";
-import CreateEmployeeModal from "./CreateEmployeeModal";
-import EmployeeService from "../api/employeeService";
-import ModalLayout from "./ModalLayout";
-import RankSalary from "./RankSalary";
-import Compensation from "./Compensation";
-import { FILTER_TABLE } from "../constants/filterTable";
+import { changeModalInfo, showModalCreate } from "../../redux/showModalSlice";
+import Cookie from "../../utility/Cookie";
+import { RootState } from "../../redux/store";
+import CreateEmployeeModal from "../modals/CreateEmployeeModal";
+import EmployeeService from "../../api/employeeService";
+import ModalLayout from "../modals/ModalLayout";
+import RankSalary from "../tables/RankSalary";
+import Compensation from "../tables/Compensation";
+import { FILTER_TABLE } from "../../constants/filterTable";
+import Toastify from "../../utility/Toastify";
+import ChangePositionEmployeeModal from "../modals/ChangePositionEmployeeModal";
+import DeleteEmployeeModal from "../modals/DeleteEmployeeModal";
 
 function Layout() {
   const [showFileDropdown, setShowFileDropdown] = useState<boolean>(false);
@@ -20,6 +23,8 @@ function Layout() {
   const [showModalRank, setShowModalRank] = useState<boolean>(false);
   const [showModalCompensation, setShowModalCompensation] =
     useState<boolean>(false);
+  const [showModalEdit, setShowModalEdit] = useState<boolean>(false);
+  const [showModalDelete, setShowModalDelete] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>("");
   const [selectedRow, setSelectedRow] = useState<string>("");
   const [selectedSubRow, setSelectedSubRow] = useState<string>("");
@@ -47,6 +52,24 @@ function Layout() {
     window.location.href = "/login";
   };
 
+  const addFoodQat = async (qat: number) => {
+    try {
+      await EmployeeService.addFoodQat(qat);
+      Toastify.success();
+    } catch (err) {
+      Toastify.success("Xəta baş verdi", "top-end");
+    }
+  };
+
+  const addKirayeQat = async (qat: number) => {
+    try {
+      await EmployeeService.addKirayeQat(qat);
+      Toastify.success();
+    } catch (err) {
+      Toastify.success("Xəta baş verdi", "top-end");
+    }
+  };
+
   const chooseRow = (row: string) => {
     if (row === selectedRow) return setSelectedRow("");
     setSelectedRow(row);
@@ -56,8 +79,6 @@ function Layout() {
     if (row === selectedSubRow) return setSelectedSubRow("");
     setSelectedSubRow(row);
   };
-
-  
 
   return (
     <>
@@ -74,6 +95,20 @@ function Layout() {
         onHide={() => setShowModalCompensation(false)}
         title="Kompenzasiya və faizlər"
         children={<Compensation />}
+      />
+      <ModalLayout
+        show={showModalEdit}
+        onHide={() => setShowModalEdit(false)}
+        title="Vəzifəni dəyiş"
+        children={<ChangePositionEmployeeModal />}
+      />
+      <ModalLayout
+        show={showModalDelete}
+        onHide={() => setShowModalDelete(false)}
+        title="Hərbi qulluqçu sil"
+        children={
+          <DeleteEmployeeModal onHide={() => setShowModalDelete(false)} />
+        }
       />
       <Navbar
         style={{ height: "35px" }}
@@ -100,8 +135,8 @@ function Layout() {
               <NavDropdown.Item
                 href={
                   state.selectedRow?.name
-                    ? `/detail/${state.selectedRow?.name}`
-                    : "/"
+                    ? `/employees/${state.selectedRow?.name}`
+                    : "/employees"
                 }
               >
                 HQ Şəxsi hesab
@@ -109,10 +144,10 @@ function Layout() {
               <NavDropdown.Item onClick={() => dispatch(showModalCreate())}>
                 HQ bu aydan əlavə et
               </NavDropdown.Item>
-              <NavDropdown.Item href="/create">
+              <NavDropdown.Item href="/employees">
                 HQ vəzifəni dəyiş
               </NavDropdown.Item>
-              <NavDropdown.Item href="/create">
+              <NavDropdown.Item href="/employess">
                 HQ bu aydan cədvəldən sil
               </NavDropdown.Item>
             </NavDropdown>
@@ -143,6 +178,7 @@ function Layout() {
               <NavDropdown.Item onClick={() => setShowModalRank(true)}>
                 Hərbi rütbə maaşları
               </NavDropdown.Item>
+              <NavDropdown.Item>Kirayə kompensasiyası</NavDropdown.Item>
               <NavDropdown.Item onClick={() => setShowModalCompensation(true)}>
                 Digər faiz və kompen.
               </NavDropdown.Item>
@@ -163,6 +199,23 @@ function Layout() {
               </NavDropdown.Item>
               <NavDropdown
                 className="ps-2"
+                onClick={() => chooseSubRow("Müharibə veteranı yardımı")}
+                style={
+                  selectedSubRow === "Müharibə veteranı yardımı"
+                    ? { backgroundColor: "#1E90FF", color: "white" }
+                    : {}
+                }
+                title={"Müharibə veteranı yardımı"}
+                id="basic-nav-dropdown"
+                drop="end"
+              >
+                <NavDropdown.Item>Verilmir</NavDropdown.Item>
+                <NavDropdown.Item>1 qat</NavDropdown.Item>
+                <NavDropdown.Item>2 qat</NavDropdown.Item>
+                <NavDropdown.Item>3 qat</NavDropdown.Item>
+              </NavDropdown>
+              <NavDropdown
+                className="ps-2"
                 onClick={() => chooseSubRow("Kirayə kompens. bu ay")}
                 style={
                   selectedSubRow === "Kirayə kompens. bu ay"
@@ -173,10 +226,18 @@ function Layout() {
                 id="basic-nav-dropdown"
                 drop="end"
               >
-                <NavDropdown.Item href="#">Verilmir</NavDropdown.Item>
-                <NavDropdown.Item href="#">1 qat</NavDropdown.Item>
-                <NavDropdown.Item href="#">2 qat</NavDropdown.Item>
-                <NavDropdown.Item href="#">3 qat</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => addKirayeQat(0)}>
+                  Verilmir
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => addKirayeQat(1)}>
+                  1 qat
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => addKirayeQat(2)}>
+                  2 qat
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => addKirayeQat(3)}>
+                  3 qat
+                </NavDropdown.Item>
               </NavDropdown>
               <NavDropdown
                 onClick={() => chooseSubRow("Ərzaq kompens. bu ay")}
@@ -190,10 +251,18 @@ function Layout() {
                 id="basic-nav-dropdown"
                 drop="end"
               >
-                <NavDropdown.Item href="#">Verilmir</NavDropdown.Item>
-                <NavDropdown.Item href="#">1 qat</NavDropdown.Item>
-                <NavDropdown.Item href="#">2 qat</NavDropdown.Item>
-                <NavDropdown.Item href="#">3 qat</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => addFoodQat(0)}>
+                  Verilmir
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => addFoodQat(1)}>
+                  1 qat
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => addFoodQat(2)}>
+                  2 qat
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => addFoodQat(3)}>
+                  3 qat
+                </NavDropdown.Item>
               </NavDropdown>
               <NavDropdown
                 onClick={() => chooseSubRow("BPM bu ay hamsına")}
@@ -259,19 +328,19 @@ function Layout() {
               <NavDropdown.Item href="#">Icmal cədvəli</NavDropdown.Item>
               <NavDropdown.Item href="#">Statistik məlumatlar</NavDropdown.Item>
               <NavDropdown.Item href="#">6.MX saylı forma</NavDropdown.Item>
-              <NavDropdown.Item href="#">
+              <NavDropdown.Item href={`/table?filter=maddiyardimalmayanlar`}>
                 Maddi yardım almayanlar
               </NavDropdown.Item>
-              <NavDropdown.Item href="#">
+              <NavDropdown.Item href="/table?filter=mezuniyyetalmayanlar">
                 Məzuniyyət pulu almayanlar
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
-        <Navbar expand="lg" className="justify-content-end mx-2">
+        <Navbar expand="lg" className="justify-content-end h-100 mx-2">
           <DarkModeToggler />
           <Navbar.Text onClick={() => logout()}>
-            <a href="#logout" className="text-decoration-none ">
+            <a type="button" className="text-decoration-none ">
               Çıxış
             </a>
           </Navbar.Text>

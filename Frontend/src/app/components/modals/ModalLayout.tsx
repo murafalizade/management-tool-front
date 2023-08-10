@@ -10,8 +10,6 @@ interface ModalLayoutProps {
 }
 
 const ModalLayout = (props: ModalLayoutProps) => {
-
-
   return (
     <Modal size={props.size} show={props.show} onHide={() => props.onHide()}>
       <Modal.Header closeButton>

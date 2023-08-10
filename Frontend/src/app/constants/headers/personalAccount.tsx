@@ -229,9 +229,8 @@ export const personalAccountHeaders: Column<SalaryRecordData>[] = [
     accessor: "cixisMuv",
   },
   {
-    Header: "BPM faiz",
-    accessor: "bPMPercentage",
-  },
+    Header: "BPM faiz"
+    },
   {
     Header: "BPM",
     accessor: "bPM",
@@ -260,6 +259,7 @@ export const personalAccountHeaders: Column<SalaryRecordData>[] = [
   },
   {
     Header: "Məh. %",
+    accessor:"employeeMeharetName"
   },
   {
     Header: "HA_ID",

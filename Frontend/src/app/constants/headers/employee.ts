@@ -1,5 +1,6 @@
 import { Column } from "react-table";
 import { EmployeeData } from "../../types/EmployeeData";
+import moment from "moment";
 
 export const employeeHeaders: Column<EmployeeData>[] = [
     {
@@ -20,7 +21,7 @@ export const employeeHeaders: Column<EmployeeData>[] = [
     },
     {
       Header: "Doğum tarixi",
-      accessor: "birthDate",
+      accessor: (row) => moment(new Date(row.birthDate)).format("DD.MM.YYYY") || "",
     },
     {
       Header: "FIN",
@@ -31,11 +32,11 @@ export const employeeHeaders: Column<EmployeeData>[] = [
       columns: [
         {
           Header: "vaxtı",
-          id: "date",
+          accessor: (row) => moment(new Date(row.startDate)).format("DD.MM.YYYY") || "",
         },
         {
           Header: "əmri",
-          id: "order",
+          accessor: "commandNo",
         },
       ],
     },
@@ -44,17 +45,23 @@ export const employeeHeaders: Column<EmployeeData>[] = [
       columns: [
         {
           Header: "vaxtı",
+          id: "enteranceDate",
+          accessor: (row) => moment(new Date(row.enteranceDate)).format("DD.MM.YYYY") || "",
         },
         {
           Header: "əmri",
+          accessor: "enteranceCommand",
         },
       ],
     },
     {
       Header: "Rütbənin dəyişdirilməsi",
+      accessor: (row) => row.rank?.shortName || "",
     },
     {
       Header: "Vəzifənin dəyişdirilməsi",
+      accessor: (row) => row.position?.name || "",
+
     },
     {
       Header: "Məharət dərəcəsi",
@@ -64,7 +71,7 @@ export const employeeHeaders: Column<EmployeeData>[] = [
         },
         {
           Header: "Məharət dərəcəsi",
-          accessor: "meharetlilik",
+          // accessor: "meharetlilik",
         },
       ],
     },
@@ -81,15 +88,8 @@ export const employeeHeaders: Column<EmployeeData>[] = [
       accessor: "zererlilik",
     },
     {
-      Header: "Kibertəhlükəsizlik əlavəsi",
-    },
-    {
       Header: "Xarici dil",
-      accessor: "xariciDil",
-    },
-    {
-      Header: "Kəşf. mükaf.",
-      accessor: "kesfiyyat",
+      accessor: (row) => row.xariciDil?.name || "",
     },
     {
       Header: "Elmi dərəcə",
@@ -97,6 +97,6 @@ export const employeeHeaders: Column<EmployeeData>[] = [
     },
     {
       Header: "Fəxri ad",
-      accessor: "fexriAd",
+      accessor: (row) => row.fexriAd?.name || "",
     },
   ];

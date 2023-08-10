@@ -6,6 +6,7 @@ import { useTable } from "react-table";
 import EmployeeService from "../api/employeeService";
 import { SalaryRecordData } from "../types/SalaryRecordData";
 import { useParams } from "react-router-dom";
+import Toastify from "../utility/Toastify";
 
 const Detail = () => {
   const [salaryRecord, setSalaryRecord] = useState<SalaryRecordData[]>([]);
@@ -16,12 +17,12 @@ const Detail = () => {
 
   // fetch employees from API
   const getEmployees = async (id: number) => {
-    const response = await EmployeeService.getEmployeeSalaryRecordByEmployeeId(
-      id,
-      year
-    );
-    console.log(response);
-    setSalaryRecord(response);
+    try {
+      const response = await EmployeeService.getEmployeeSalaryRecordByEmployeeId(id, year);
+      setSalaryRecord(response);
+    } catch (err) {
+      Toastify.success("Xəta baş verdi!", "top-end");
+    }
   };
 
   useEffect(() => {
@@ -42,6 +43,7 @@ const Detail = () => {
       }
       return acc;
     }, []);
+
     setTotalValue(totals);
   }, [salaryRecord]);
 

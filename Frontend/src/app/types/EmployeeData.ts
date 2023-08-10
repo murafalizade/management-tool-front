@@ -5,23 +5,36 @@ export type EmployeeData = {
   fatherName: string;
   injuranceNo: string;
   birthDate: string;
+  enteranceDate: string;
+  enteranceCommand: string;
+  meharetDate: string;
+  startDate: string;
+  commandNo: string;
+  fexriAdName: string;
   fin: string;
-  appointment?: {
-    date: string;
-    order: string;
+  rankId: number;
+  elmiDereceId:number;
+  meharetId: number;
+  rank: {
+    shortName: string;
   };
-  admission?: {
-    date: string;
-    order: string;
+  position: {
+    name: string;
   };
-  changeOfRank?: string;
-  changeOfPosition?: string;
-  meharetlilik?: string;
+  meharet: {
+    name: string;
+  };
   temsilcilik?: string;
   mexfilik?: string;
   zererlilik?: string;
-  xariciDil?: string;
+  xariciDil:{
+    name: string;
+  }
   kesfiyyat?: string;
-  elmiDerece?: string;
-  fexriAd?: string;
+  elmiDerece: {
+    name: string;
+  };
+  fexriAd?: {
+    name: string;
+  };
 };

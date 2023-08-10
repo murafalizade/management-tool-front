@@ -14,6 +14,7 @@ export type SalaryRecordData = {
   rankSalary: number;
   positionSalary: number;
   total: number;
+  employeeMeharetName:string;
   xiMoney: number;
   xiPercent: number;
   ptMoney: number;
@@ -64,4 +65,5 @@ export type SalaryRecordData = {
   accountNumber: number;
   totalSalary: number;
   isMatry: boolean;
+  kirayeName: string;
 };

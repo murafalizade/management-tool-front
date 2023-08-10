@@ -10,14 +10,15 @@ import { MONTHS } from "../constants/months";
 import "../styles/home.scss";
 import { useNavigate } from "react-router";
 import { FILTER_DATA } from "../constants/filterData";
-import CalculatingModal from "../components/CalculatingModal";
+import CalculatingModal from "../components/modals/CalculatingModal";
 import { useDispatch, useSelector } from "react-redux";
 import { showModal, setSelectedRow } from "../redux/showModalSlice";
 import withAuth from "../hoc/withAuth";
 import { RootState } from "../redux/store";
 import EmployeeService from "../api/employeeService";
-import Loading from "../components/Loading";
+import Loading from "../components/layouts/Loading";
 import { SalaryRecordData } from "../types/SalaryRecordData";
+import Toastify from "../utility/Toastify";
 
 function Home() {
   const state = useSelector((state: RootState) => state.showModal);
@@ -35,19 +36,22 @@ function Home() {
   // fetch employees from API
   const getEmployees = async () => {
     setIsLoading(true);
-    const response = await EmployeeService.getEmployeeSalaryRecord(
-      month,
-      year,
-      filter
-    );
-    setSalaryRecord(response);
+    try {
+      const response = await EmployeeService.getEmployeeSalaryRecord(
+        month,
+        year,
+        filter
+      );
+      setSalaryRecord(response);
+    } catch (err) {
+      Toastify.success("Xəta baş verdi!", "top-end");
+    }
     setIsLoading(false);
   };
 
   useEffect(() => {
     getEmployees();
   }, []);
-
 
   // calculate sum to each fields return object
   useEffect(() => {
@@ -85,7 +89,7 @@ function Home() {
       alert("Please select a row");
       return;
     }
-    nav(`/detail/${selectedColumn.employeeId}`);
+    nav(`/employees/${selectedColumn.employeeId}`);
   };
 
   // Set selected row
@@ -154,7 +158,7 @@ function Home() {
         </div>
 
         <div className="d-flex">
-          <select className="form-control mx-2">
+          <select className="form-control mx-2" onChange={handleFilter} name="filter">
             {FILTER_DATA.map((month: any, index: number) => (
               <option className="fs-6" key={index} value={month.value}>
                 {month.name}
@@ -182,14 +186,12 @@ function Home() {
         </div>
       </div>
 
-      <div style={{ overflow: "scroll", maxHeight: "80vh" }}>
-        {/* <div style={{maxHeight:'43vh',width:"100%"}}> */}
+      <div style={{ overflow: "scroll", maxHeight: "79vh" }}>
         <Table
           className="position-relative main-table"
           bordered
           hover
           {...getTableProps()}
-          id="table-to-export"
         >
           <thead>
             {headerGroups.map((headerGroup: any) => (
@@ -262,7 +264,7 @@ function Home() {
       </div>
 
       <CalculatingModal />
-      <div className="px-1">{selectedColumn?.comment ?? ""}</div>
+      <div className="px-1 comment">{selectedColumn?.comment ?? ""}</div>
     </main>
   );
 }

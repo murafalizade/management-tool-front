@@ -12,6 +12,8 @@ export interface ModalShowType {
   showCreateModal: boolean;
   showModalRank: boolean;
   showModalCompensation: boolean;
+  showEditModal: boolean;
+  showDeleteModal: boolean;
 }
 
 const initialState: ModalShowType = {
@@ -24,6 +26,8 @@ const initialState: ModalShowType = {
   selectedRow: {},
   showModalRank: false,
   showModalCompensation: false,
+  showEditModal: false,
+  showDeleteModal: false,
 };
 
 export const showModalSlicer = createSlice({
@@ -42,6 +46,14 @@ export const showModalSlicer = createSlice({
       state.showModalCompensation = true;
     },
 
+    showModalEdit: (state) => {
+      state.showEditModal = true;
+    },
+
+    showModalDelete: (state) => {
+      state.showDeleteModal = true;
+    },
+
     hideModalCompensation: (state) => {
       state.showModalCompensation = false;
     },
@@ -56,6 +68,14 @@ export const showModalSlicer = createSlice({
 
     hideModalCreate: (state) => {
       state.showCreateModal = false;
+    },
+
+    hideModalEdit: (state) => {
+      state.showEditModal = false;
+    },
+
+    hideModalDelete: (state) => {
+      state.showDeleteModal = false;
     },
 
     hideModal: (state) => {
@@ -81,6 +101,10 @@ export const {
   hideModalRank,
   showModalCompensation,
   hideModalCompensation,
+  showModalEdit,
+  hideModalEdit,
+  showModalDelete,
+  hideModalDelete,
 } = showModalSlicer.actions;
 
 export default showModalSlicer.reducer;

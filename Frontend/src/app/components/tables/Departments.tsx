@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import TableLayout from "./TableLayout";
-import OperationService from "../api/operationService";
+import OperationService from "../../api/operationService";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addDepartment,
@@ -9,9 +9,9 @@ import {
   setDepartment,
   setEmployees,
   setPositions,
-} from "../redux/organizationSlice";
+} from "../../redux/organizationSlice";
 import Swal from "sweetalert2";
-import EmployeeService from "../api/employeeService";
+import EmployeeService from "../../api/employeeService";
 
 export default function Departments() {
   const [organization, setOrganization] = useState<any[]>([]);
@@ -317,7 +317,7 @@ export default function Departments() {
             columns={[
               {
                 title: "İl",
-                field: "year",
+                field: "xiYear",
               },
               {
                 title: "Ay",

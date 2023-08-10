@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
-import OperationService from "../api/operationService";
+import OperationService from "../../api/operationService";
 
 const RankSalary = () => {
   const [organization, setOrganization] = useState<any[]>([]);
@@ -14,21 +14,6 @@ const RankSalary = () => {
   useEffect(() => {
     getRankData();
   }, []);
-
-  const exportToExcel = async () => {
-    const response = await OperationService.getExcel();
-    const url = URL.createObjectURL(response);
-
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "vezife_maaslari.xlsx";
-    document.body.appendChild(link);
-
-    link.click();
-
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
 
   return (
     <div>

@@ -1,42 +1,39 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
-import { BASE_API_URL } from "../constants/baseUrl";
-import OperationService from "../api/operationService";
+import { BASE_API_URL } from "../../constants/baseUrl";
+import OperationService from "../../api/operationService";
+import Toastify from "../../utility/Toastify";
 
 const PositionSalary = () => {
-  
-  const [organization,setOrganization] = useState<any[]>([]);
+  const [organization, setOrganization] = useState<any[]>([]);
   const getOrganizationData = async () => {
-    const res = await axios(`${BASE_API_URL}/api/adminstration/all`);
-    const data = res.data;
-    return data;
+    try {
+      const res = await OperationService.getAdminstrationByAll();
+      setOrganization(res);
+    } catch (error) {
+      Toastify.success("Xəta baş verdi", "top-end");
+    }
   };
 
   useEffect(() => {
-    const gettingData = async () => {
-      const org = await getOrganizationData();
-      setOrganization(org);
-    };
-    gettingData();
+    getOrganizationData();
   }, []);
 
   const exportToExcel = async () => {
     const response = await OperationService.getExcel();
     const url = URL.createObjectURL(response);
 
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = 'vezife_maaslari.xlsx'; 
+    link.download = "vezife_maaslari.xlsx";
     document.body.appendChild(link);
 
     link.click();
 
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    
-  }
-
+  };
 
   return (
     <div>
@@ -48,7 +45,7 @@ const PositionSalary = () => {
             defaultValue={2023}
             className="form-control w-50 me-2 text-rigth"
           />
-          <select  defaultValue={5} className="form-control w-75 mx-2">
+          <select defaultValue={5} className="form-control w-75 mx-2">
             <option value="1">Yanvar</option>
             <option value="2">Fevral</option>
             <option value="3">Mart</option>
@@ -62,14 +59,12 @@ const PositionSalary = () => {
             <option value="11">Noyabr</option>
             <option value="12">Dekabr</option>
           </select>
-          <Button variant="primary">Goster</Button>
+          <Button variant="primary">Göstər</Button>
         </div>
 
-        <Button onClick={()=>exportToExcel()}>Cixaris et</Button>
+        <Button onClick={() => exportToExcel()}>Çıxarış et</Button>
       </div>
-      <div
-       className="table-wrapper"
-      >
+      <div className="table-wrapper">
         <Table bordered>
           <thead>
             <tr className="text-center">
@@ -80,7 +75,7 @@ const PositionSalary = () => {
             </tr>
           </thead>
           <tbody>
-            {organization.map((item:any, index) => (
+            {organization.map((item: any, index) => (
               <tr key={index}>
                 <td>{item.organizationName}</td>
                 <td>{item.departmentName}</td>
@@ -89,13 +84,9 @@ const PositionSalary = () => {
               </tr>
             ))}
             <tr>
-                <td colSpan={2} className="text-center">
-                    
-                </td>
-                <td>
-                    {organization.length}
-                </td>
-                <td></td>
+              <td colSpan={2} className="text-center"></td>
+              <td>{organization.length}</td>
+              <td></td>
             </tr>
           </tbody>
         </Table>

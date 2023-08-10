@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
-import { RootState } from "../redux/store";
+import { RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { hideModalCreate } from "../redux/showModalSlice";
-import EmployeeService from "../api/employeeService";
+import { hideModalCreate } from "../../redux/showModalSlice";
+import EmployeeService from "../../api/employeeService";
 import Swal from "sweetalert2";
 
 export default function CreateEmployeeModal() {
@@ -36,10 +36,9 @@ export default function CreateEmployeeModal() {
         showConfirmButton: false,
         timer: 1500,
       }).then(() => {
-        window.location.href = "/create";
+        window.location.href = "/employees";
       });
     } catch (e: any) {
-      console.log(e);
       Swal.fire({
         icon: "error",
         title: "Oops...",

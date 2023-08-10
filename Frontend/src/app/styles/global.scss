@@ -1,83 +1,76 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
-  /* Remove number input arrows */
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
+/* Remove number input arrows */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
-  }
+}
 
-  input[type="number"] {
+input[type="number"] {
     -moz-appearance: textfield;
-  }
+}
 
-.selected-item{
-    background-color: #1E90FF!important;
-    color: #FFFFFF!important;
+.selected-item {
+    background-color: #1e90ff !important;
+    color: #ffffff !important;
 }
 
 .dropdown-item.selected-item {
-    background-color: #1E90FF!important;
-    color: #FFFFFF!important;
-  }
-
-.fade:not(.show) {
-    display: none!important;
+    background-color: #1e90ff !important;
+    color: #ffffff !important;
 }
 
-body{
-    background-color: #F5F5F5;
+.fade:not(.show) {
+    display: none !important;
+}
+
+body {
+    background-color: #f5f5f5;
     color: #000000;
     font-size: 14px;
     font-weight: 400;
     line-height: 1.5;
-    overflow-x: hidden!important;
-
+    overflow-x: hidden !important;
 }
 
-main{
+main {
     max-height: 100vh;
     overflow-y: hidden;
     overflow-x: hidden;
 }
 
-.inverse {
-    filter:invert(100);
-    //dark mode background
-    background-color: #000000;
+.fs-7 {
+    font-size: 0.7rem !important;
 }
 
-.fs-7{
-    font-size: 0.7rem!important;
+.min-width-20 {
+    min-width: 20% !important;
 }
 
-.min-width-20{
-    min-width: 20%!important;
+.min-width-30 {
+    min-width: 31% !important;
 }
 
-.min-width-30{
-    min-width: 31%!important;
+.min-width-50 {
+    min-width: 55% !important;
 }
 
-.min-width-50{
-    min-width: 55%!important;
+.small-td {
+    width: 20px !important;
 }
 
-.small-td{
-    width:20px!important;
-}
-
-
-.table{
-    margin-bottom: 0px!important;
-    th, td{
+.table {
+    margin-bottom: 0px !important;
+    th,
+    td {
         font-size: 12px;
         // text-align: center;
         // word-break: keep-all;
@@ -85,21 +78,103 @@ main{
     }
 }
 
-// Path: src\app\styles\variables.scss
-$primary-color: #1E90FF;
-$secondary-color: #FF6347;
-$tertiary-color: #FFA500;
-$quaternary-color: #FFD700;
-$quinary-color: #00FF7F;
-$senary-color: #FF1493;
-$septenary-color: #FF00FF;
-$octonary-color: #FF4500;
-$nonary-color: #FF8C00;
-$denary-color: #FFDAB9;
-$background-color: #F5F5F5;
-$font-color: #000000;
-$font-color-light: #FFFFFF;
-$font-color-dark: #000000;
-$font-color-secondary: #808080;
-$font-color-tertiary: #A9A9A9;
-$font-color-quaternary: #C0C0C0;
+// Dark theme
+$darkModeBackgroundColor: #1e1f23;
+$darkModeTextColor: #757776;
+$darkModePrimaryColor: #0ad673;
+$darkModeNavbarColor: black;
+
+/* Default styles (light mode) */
+.inverse {
+    background-color: $darkModeBackgroundColor;
+}
+
+/* Dark mode styles */
+body.inverse {
+    h1,
+    h3,
+    h4,
+    h5,
+    h6 {
+        color: white !important;
+    }
+
+    .slider{
+        background-color: $darkModeBackgroundColor !important;
+    }
+
+    .login-page{
+        background-color: $darkModeBackgroundColor !important;
+        p{
+            color: $darkModeTextColor !important;
+        }
+    }
+
+    .btn-primary {
+        background-color: $darkModePrimaryColor;
+        border: none;
+        color: #ffffff;
+    }
+
+    .dropdown-menu {
+        background-color: $darkModeBackgroundColor !important;
+        color: $darkModeTextColor !important;
+        a {
+            &:hover {
+                background-color: $darkModePrimaryColor !important;
+                color: #ffffff !important;
+            }
+        }
+    }
+
+    table {
+        color: $darkModeTextColor !important;
+        background-color: $darkModeBackgroundColor !important;
+
+        tr {
+            background-color: $darkModeBackgroundColor !important;
+            color: $darkModeTextColor !important;
+            &:hover {
+                td {
+                    color: inherit !important;
+                }
+            }
+            &:last-child {
+                background-color: $darkModeBackgroundColor !important;
+                color: $darkModeTextColor !important;
+            }
+        }
+
+        tfoot {
+            color: $darkModeTextColor !important;
+            background-color: $darkModeBackgroundColor !important;
+        }
+    }
+
+    .navbar {
+        background-color: $darkModeNavbarColor !important;
+        border: none !important;
+        a {
+            color: white !important;
+        }
+    }
+
+    input:not([type="checkbox"]),
+    select {
+        background-color: $darkModeBackgroundColor !important;
+        color: $darkModeTextColor !important;
+    }
+
+    label {
+        color: $darkModeTextColor !important;
+    }
+
+    .modal-content {
+        background-color: $darkModeBackgroundColor !important;
+        color: $darkModeTextColor !important;
+    }
+
+    .comment {
+        color: white !important;
+    }
+}

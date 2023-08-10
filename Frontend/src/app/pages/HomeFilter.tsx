@@ -9,14 +9,15 @@ import {
 import { MONTHS } from "../constants/months";
 import "../styles/home.scss";
 import { useNavigate } from "react-router";
-import CalculatingModal from "../components/CalculatingModal";
+import CalculatingModal from "../components/modals/CalculatingModal";
 import { useDispatch, useSelector } from "react-redux";
 import { showModal, setSelectedRow } from "../redux/showModalSlice";
 import withAuth from "../hoc/withAuth";
 import { RootState } from "../redux/store";
 import EmployeeService from "../api/employeeService";
-import Loading from "../components/Loading";
+import Loading from "../components/layouts/Loading";
 import { SalaryRecordData } from "../types/SalaryRecordData";
+import Toastify from "../utility/Toastify";
 
 function HomeFilter() {
   const state = useSelector((state: RootState) => state.showModal);
@@ -37,12 +38,17 @@ function HomeFilter() {
   // fetch employees from API
   const getEmployees = async (filter: string) => {
     setIsLoading(true);
-    const response = await EmployeeService.getEmployeeSalaryRecord(
-      month,
-      year,
-      filter
-    );
-    setSalaryRecord(response);
+    try{
+      const response = await EmployeeService.getEmployeeSalaryRecord(
+        month,
+        year,
+        filter
+      );
+      setSalaryRecord(response);
+    }
+    catch(err){
+      Toastify.success("Xəta baş verdi!", "top-end");
+    }
     setIsLoading(false);
   };
 
@@ -85,7 +91,7 @@ function HomeFilter() {
       alert("Please select a row");
       return;
     }
-    nav(`/detail/${selectedColumn.employeeId}`);
+    nav(`/employees/${selectedColumn.employeeId}`);
   };
 
   // Set selected row
