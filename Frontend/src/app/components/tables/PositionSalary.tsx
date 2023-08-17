@@ -7,12 +7,14 @@ import Toastify from "../../utility/Toastify";
 
 const PositionSalary = () => {
   const [organization, setOrganization] = useState<any[]>([]);
+  const toast = new Toastify();
+
   const getOrganizationData = async () => {
     try {
       const res = await OperationService.getAdminstrationByAll();
       setOrganization(res);
     } catch (error) {
-      Toastify.success("Xəta baş verdi", "top-end");
+      toast.error();
     }
   };
 

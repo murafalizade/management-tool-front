@@ -35,6 +35,8 @@ function HomeFilter() {
   const queryParams = new URLSearchParams(window.location.search);
   const queryFilter = queryParams.get("filter");
 
+  const toast = new Toastify();
+
   // fetch employees from API
   const getEmployees = async (filter: string) => {
     setIsLoading(true);
@@ -47,7 +49,7 @@ function HomeFilter() {
       setSalaryRecord(response);
     }
     catch(err){
-      Toastify.success("Xəta baş verdi!", "top-end");
+      toast.error();
     }
     setIsLoading(false);
   };

@@ -31,6 +31,8 @@ function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const dispatch = useDispatch();
 
+  const toast = new Toastify();
+
   let nav = useNavigate();
 
   // fetch employees from API
@@ -43,8 +45,8 @@ function Home() {
         filter
       );
       setSalaryRecord(response);
-    } catch (err) {
-      Toastify.success("Xəta baş verdi!", "top-end");
+    } catch (err:any) {
+      toast.error(err.response.data.message);
     }
     setIsLoading(false);
   };

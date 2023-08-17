@@ -10,8 +10,9 @@ import {
   setEmployees,
   setPositions,
 } from "../../redux/organizationSlice";
-import Swal from "sweetalert2";
 import EmployeeService from "../../api/employeeService";
+import moment from "moment";
+import Toastify from "../../utility/Toastify";
 
 export default function Departments() {
   const [organization, setOrganization] = useState<any[]>([]);
@@ -19,17 +20,7 @@ export default function Departments() {
   const [choosenOrganization, setChoosenOrganizetion] = useState<any>(null);
   const [choosenDepartment, setChoosenDepartment] = useState<any>(null);
 
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "bottom-end",
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.addEventListener("mouseenter", Swal.stopTimer);
-      toast.addEventListener("mouseleave", Swal.resumeTimer);
-    },
-  });
+  const toast = new Toastify();
 
   const departmentsData = useSelector(
     (state: any) => state.organization
@@ -49,20 +40,17 @@ export default function Departments() {
 
   const selectOrganization = async (id: number) => {
     if (newEdit) {
-      Swal.fire({
-        title: "Dəyişiklikləri yadda saxlamaq istəyirsinizmi?",
-        showDenyButton: true,
-        confirmButtonText: "Yadda saxla",
-        denyButtonText: `Ləğv et`,
-      }).then(async (result: any) => {
+      toast.warning(async (result: any) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
           await saveDepartment();
           await savePosition();
+          toast.success();
         } else if (result.isDenied) {
           setNewEdit(false);
+          toast.info("Dəyişikliklər ləğv edildi");
         }
-      });
+      }, "Yadda saxlamaq istəyirsinizmi?");
     }
     const res = await OperationService.getAdminstrationById(id);
     setChoosenOrganizetion(res);
@@ -73,16 +61,20 @@ export default function Departments() {
 
   const selectDepartment = async (id: number) => {
     if (id < 0) return;
-    const res = await OperationService.getOrganizationById(id);
-    const org = res.data;
-    setChoosenDepartment(org);
-    dispatch(setPositions(org.positions));
+    try {
+      const res = await OperationService.getOrganizationById(id);
+      const org = res.data;
+      setChoosenDepartment(org);
+      dispatch(setPositions(org.positions));
+    } catch (err) {
+      toast.error("Bölmə seçilmədi");
+    }
   };
 
   // bolme elave etmek ucun
   const addDepartments = () => {
     if (!choosenOrganization) {
-      alert("Zəhmət olmasa ilk öncə idarəni seçin");
+      toast.info("Zəhmət olmasa ilk öncə idarəni seçin");
       return;
     }
     const newDepartment = {
@@ -97,15 +89,11 @@ export default function Departments() {
   // bolmeni silmek ucun
   const deleteDepartment = async (id: number | null) => {
     if (!id) {
-      alert("Zəhmət olmasa ilk öncə şöbə və bölmə seçin");
+      toast.info("Zəhmət olmasa ilk öncə şöbə və bölmə seçin");
       return;
     }
-    Swal.fire({
-      title: "Bölməni silmək istəyirsinizmi?",
-      showDenyButton: true,
-      confirmButtonText: "Sil",
-      denyButtonText: `Ləğv et`,
-    }).then(async (result: any) => {
+
+    toast.warning(async (result: any) => {
       /* Read more about isConfirmed, isDenied below */
       const newDepartments = departmentsData.filter(
         (department: any) => department.id !== id
@@ -113,15 +101,11 @@ export default function Departments() {
       if (result.isConfirmed) {
         if (id > 0) {
           await OperationService.deleteOrganizationById(id);
-          Toast.fire({
-            icon: "success",
-            title: "Bölmə silindi",
-          });
+          toast.success("Bölmə silindi");
         }
         dispatch(setDepartment(newDepartments));
-      } else if (result.isDenied) {
       }
-    });
+    }, "Bölməni silmək istəyirsinizmi?");
   };
 
   // bolmeni deyismek ucun
@@ -141,26 +125,22 @@ export default function Departments() {
 
   // bolmeni yadda saxlamaq ucun
   const saveDepartment = async () => {
-    await OperationService.saveOrganization(departmentsData);
-    Toast.fire({
-      icon: "success",
-      title: "Bölmələr yadda saxlanıldı",
-    });
-    setNewEdit(false);
+    try {
+      await OperationService.saveOrganization(departmentsData);
+      toast.success("Bölmələr yadda saxlanıldı");
+      setNewEdit(false);
+    } catch (err) {
+      toast.error("Bölmələr yadda saxlanılmadı");
+    }
   };
 
   // vezifeni silmek ucun
   const deletePosition = async (id: number | null) => {
     if (!id) {
-      alert("Zəhmət olmasa ilk öncə vəzifəni seçin");
+      toast.info("Zəhmət olmasa ilk öncə vəzifəni seçin");
       return;
     }
-    Swal.fire({
-      title: "Vəzifəni silmək istəyirsinizmi?",
-      showDenyButton: true,
-      confirmButtonText: "Sil",
-      denyButtonText: `Ləğv et`,
-    }).then(async (result: any) => {
+    toast.warning(async (result: any) => {
       /* Read more about isConfirmed, isDenied below */
       const newPositions = positionsData.filter(
         (position: any) => position.id !== id
@@ -168,25 +148,21 @@ export default function Departments() {
       if (result.isConfirmed) {
         if (id > 0) {
           await OperationService.deletePositionById(id);
-          Toast.fire({
-            icon: "success",
-            title: "Vəzifə silindi",
-          });
+          toast.success("Vəzifə silindi");
         }
         dispatch(setPositions(newPositions));
-      } else if (result.isDenied) {
       }
-    });
+    }, "Vəzifəni silmək istəyirsinizmi?");
   };
 
   // vezife elave etmek ucun
   const addPositions = () => {
     if (!choosenDepartment) {
-      alert("Zəhmət olmasa ilk öncə şöbə və bölmə seçin");
+      toast.info("Zəhmət olmasa ilk öncə şöbə və bölmə seçin");
       return;
     }
     if (choosenDepartment.id < 0) {
-      alert("Zəhmət olmasa ilk öncə secdiyiniz şöbə və bölməni yadda saxlayin");
+      toast.info("Zəhmət olmasa ilk öncə secdiyiniz şöbə və bölməni yadda saxlayin");
       return;
     }
     const newPosition = {
@@ -217,10 +193,7 @@ export default function Departments() {
   // vezifeni yadda saxlamaq ucun
   const savePosition = async () => {
     await OperationService.savePosition(positionsData);
-    Toast.fire({
-      icon: "success",
-      title: "Vəzifələr yadda saxlanıldı",
-    });
+    toast.success("Vəzifələr yadda saxlanıldı");
     setNewEdit(false);
   };
 
@@ -228,7 +201,7 @@ export default function Departments() {
   const selectPosition = async (id: number) => {
     if (id < 0) return;
     const res = await EmployeeService.getEmployeeByPositionId(id);
-    dispatch(setEmployees(res??[]));
+    dispatch(setEmployees(res ?? []));
   };
 
   useEffect(() => {
@@ -245,6 +218,10 @@ export default function Departments() {
         <Col md={2}>
           <TableLayout
             columns={[
+              {
+                title:"Seç",
+                field:"select",
+              },
               {
                 title: "S№",
                 field: "id",
@@ -271,6 +248,10 @@ export default function Departments() {
             delete={deleteDepartment}
             columns={[
               {
+                title:"Seç",
+                field:"select",
+              },
+              {
                 title: "S№",
                 field: "id",
               },
@@ -290,6 +271,10 @@ export default function Departments() {
             save={savePosition}
             delete={deletePosition}
             columns={[
+              {
+                title:"Seç",
+                field:"select",
+              },
               {
                 title: "S№",
                 field: "id",
@@ -317,11 +302,19 @@ export default function Departments() {
             columns={[
               {
                 title: "İl",
-                field: "xiYear",
+                field: "startDate",
+                value: (x) => {
+                  console.log(x);
+                  const startDate = moment(x?.startDate);
+                  let recordDate = moment(new Date());
+                  const duration = moment.duration(recordDate.diff(startDate));
+                  return duration.days();
+                },
               },
               {
                 title: "Ay",
                 field: "months",
+                value: (x) => moment().diff(x.startDate, "months") % 12,
               },
 
               {
@@ -335,17 +328,14 @@ export default function Departments() {
               },
               {
                 title: "HA_ID",
-
                 field: "HA_ID",
               },
               {
                 title: "H_ID",
-
                 field: "rankId",
               },
               {
                 title: "VZF_ID",
-
                 field: "positionId",
               },
             ]}

@@ -14,9 +14,9 @@ namespace WebApplication1.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<List<ElmiDerece>> GetElmiDereces()
+        public async Task<List<ScientificDegree>> GetElmiDereces()
         {
-            return await _dbContext.ElmiDereces.ToListAsync();
+            return await _dbContext.ScientificDegrees.ToListAsync();
         }
     }
 }

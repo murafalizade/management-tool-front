@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Dropdown, Nav, NavDropdown, Navbar } from "react-bootstrap";
+import { Dropdown, Nav, NavDropdown, NavItem, Navbar } from "react-bootstrap";
 import "../../styles/navbar.scss";
 import DarkModeToggler from "./DarkModeToggler";
 import SalaryModal from "../modals/SalaryModal";
@@ -16,6 +16,7 @@ import { FILTER_TABLE } from "../../constants/filterTable";
 import Toastify from "../../utility/Toastify";
 import ChangePositionEmployeeModal from "../modals/ChangePositionEmployeeModal";
 import DeleteEmployeeModal from "../modals/DeleteEmployeeModal";
+import Rents from "../tables/Rents";
 
 function Layout() {
   const [showFileDropdown, setShowFileDropdown] = useState<boolean>(false);
@@ -25,8 +26,12 @@ function Layout() {
     useState<boolean>(false);
   const [showModalEdit, setShowModalEdit] = useState<boolean>(false);
   const [showModalDelete, setShowModalDelete] = useState<boolean>(false);
+  const [showRents, setShowRents] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>("");
   const [selectedRow, setSelectedRow] = useState<string>("");
+
+  const toast = new Toastify();
+
   const [selectedSubRow, setSelectedSubRow] = useState<string>("");
   const dispatch = useDispatch();
 
@@ -55,18 +60,36 @@ function Layout() {
   const addFoodQat = async (qat: number) => {
     try {
       await EmployeeService.addFoodQat(qat);
-      Toastify.success();
-    } catch (err) {
-      Toastify.success("Xəta baş verdi", "top-end");
+      toast.success();
+    } catch (err: any) {
+      toast.error(err.response.data.message);
+    }
+  };
+
+  const uploadNextMonth = async () => {
+    try {
+      await EmployeeService.updateNextMonth();
+      toast.success();
+    } catch (err: any) {
+      toast.error(err.response.data.message);
     }
   };
 
   const addKirayeQat = async (qat: number) => {
     try {
       await EmployeeService.addKirayeQat(qat);
-      Toastify.success();
-    } catch (err) {
-      Toastify.success("Xəta baş verdi", "top-end");
+      toast.success();
+    } catch (err: any) {
+      toast.error(err.response.data.message);
+    }
+  };
+
+  const addMvQat = async (qat: number) => {
+    try {
+      await EmployeeService.addMvQat(qat);
+      toast.success();
+    } catch (err: any) {
+      toast.error(err.response.data.message);
     }
   };
 
@@ -89,6 +112,12 @@ function Layout() {
         onHide={() => setShowModalRank(false)}
         title="Hərbi rütbə maaşları"
         children={<RankSalary />}
+      />
+      <ModalLayout
+        show={showRents}
+        onHide={() => setShowRents(false)}
+        title="Kirayə kompenzasiyası və faizlər"
+        children={<Rents />}
       />
       <ModalLayout
         show={showModalCompensation}
@@ -178,7 +207,9 @@ function Layout() {
               <NavDropdown.Item onClick={() => setShowModalRank(true)}>
                 Hərbi rütbə maaşları
               </NavDropdown.Item>
-              <NavDropdown.Item>Kirayə kompensasiyası</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => setShowRents(true)}>
+                Kirayə kompensasiyası
+              </NavDropdown.Item>
               <NavDropdown.Item onClick={() => setShowModalCompensation(true)}>
                 Digər faiz və kompen.
               </NavDropdown.Item>
@@ -209,10 +240,18 @@ function Layout() {
                 id="basic-nav-dropdown"
                 drop="end"
               >
-                <NavDropdown.Item>Verilmir</NavDropdown.Item>
-                <NavDropdown.Item>1 qat</NavDropdown.Item>
-                <NavDropdown.Item>2 qat</NavDropdown.Item>
-                <NavDropdown.Item>3 qat</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => addMvQat(0)}>
+                  Verilmir
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => addMvQat(1)}>
+                  1 qat
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => addMvQat(2)}>
+                  2 qat
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => addMvQat(3)}>
+                  3 qat
+                </NavDropdown.Item>
               </NavDropdown>
               <NavDropdown
                 className="ps-2"
@@ -281,10 +320,7 @@ function Layout() {
                 <NavDropdown.Item href="#">2 qat</NavDropdown.Item>
                 <NavDropdown.Item href="#">3 qat</NavDropdown.Item>
               </NavDropdown>
-              <NavDropdown.Item
-                href="#"
-                onClick={async () => await EmployeeService.updateNextMonth()}
-              >
+              <NavDropdown.Item href="#" onClick={() => uploadNextMonth()}>
                 Bu ayın cədvəlini gələn aya köçür
               </NavDropdown.Item>
               <NavDropdown.Item onClick={() => window.location.reload()}>
@@ -335,6 +371,12 @@ function Layout() {
                 Məzuniyyət pulu almayanlar
               </NavDropdown.Item>
             </NavDropdown>
+
+            <Navbar.Text>
+            <a href="/settings" className="text-decoration-none ">
+              Tənzimləmələr
+            </a>
+          </Navbar.Text>
           </Nav>
         </Navbar.Collapse>
         <Navbar expand="lg" className="justify-content-end h-100 mx-2">

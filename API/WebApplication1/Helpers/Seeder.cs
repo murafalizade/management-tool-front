@@ -1,82 +1,102 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+using System.IO;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using Newtonsoft.Json;
+using WebApplication1.Services;
+using WebApplication1.Dtos;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace WebApplication1.Helpers
 {
     public static class DataSeeder
     {
-        //public static async void SeedData(IServiceProvider serviceProvider)
-        //{
-        //    //using (var scope = serviceProvider.CreateScope())
-        //    //{
-        //    //    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        public static async Task SeedData(IServiceProvider serviceProvider)
+        {
+            using (var scope = serviceProvider.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                var authService = scope.ServiceProvider.GetRequiredService<IAuthService>();
 
-        //    //    if (!dbContext.Employees.Any())
-        //    //    {
-        //    //        var Rank = new List<Rank>
-        //    //{
-        //    //    new Rank {  Name = "org", Salary = 1223, ShortName = "org"  },
-        //    //};
-        //    //        dbContext.Ranks.AddRange(Rank);
-        //    //        dbContext.SaveChanges();
+                // Use Path.Combine to create file path to handle different OS file path formats
+                var seedJsonPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "WEB", "MyProjects", "hr", "API", "WebApplication1", "DummyData", "data.json");
 
-        //    //        var Department = new List<Department>
-        //    //{
-        //    //    new Department {  Name = "test"  },
-        //    //};
+                // Read seed data from JSON file
+                var seedJson = File.ReadAllText(seedJsonPath);
+                var seedData = JsonConvert.DeserializeObject<SeedData>(seedJson);
+                if (!await dbContext.AdminUsers.AnyAsync())
+                {
+                    var userEntity = seedData.Entities["Users"] as JArray;
+                    var firstUser = userEntity[0];
+                    AuthInputDto authInputDto = new()
+                    {
+                        Email = firstUser["Email"].ToString(),
+                        Password = firstUser["Password"].ToString(),
+                    };
+                    await authService.Register(authInputDto.Email, authInputDto.Password);
+                    Console.WriteLine("Admin user created");
+                }
 
-        //    //        var Position = new List<Position>
-        //    //{
-        //    //    new Position { Name = "test", Salary = 23, DepartmentId = 1  },
-        //    //};
+                if (!await dbContext.Discounts.AnyAsync())
+                {
+                    var discounts = seedData.Entities["Discounts"] as JArray;
+                    Console.WriteLine(discounts[0]);
+                    var firstDiscount = discounts[0];
+                    Discount discount = new()
+                    {
+                        Chernobyl = (double)firstDiscount["Chernobyl"],
+                        Desert = (double)firstDiscount["Desert"],
+                        Food = (double)firstDiscount["Food"],
+                        TaxPercentage = (int)firstDiscount["TaxPercentage"],
+                        Veteran = (double)firstDiscount["Veteran"],
+                        Dsmf = (int)firstDiscount["Dsmf"],
+                        Disability = (double)firstDiscount["Disability"],
+                        Martyr = (double)firstDiscount["Martyr"],
+                        Refugee = (double)firstDiscount["Refugee"],
+                        HealthInjurance = (int)firstDiscount["HealthInjurance"],
+                        Owner = (double)firstDiscount["Owner"],
+                        VeteranTaxDiscount = (double)firstDiscount["VeteranTaxDiscount"],
+                        MinWage = (int)firstDiscount["MinWage"],
+                    };
+                    dbContext.Discounts.Add(discount);
+                    Console.WriteLine("Discounts created");
+                }
 
-        //    //        dbContext.Positions.AddRange(Position);
-        //    //        dbContext.SaveChanges();
+                if (!await dbContext.Ranks.AnyAsync())
+                {
+                    var ranks = seedData.Entities["Ranks"] as JArray;
+                    var firstRank = ranks[0];
 
-        //    //        // Create and add the initial employee data
-        //    //        var employees = new List<Employee>
-        //    //{
-        //    //    new Employee {
-        //    //        LastName = "Doe",
-        //    //        FirstName = "John",
-        //    //        PositionId = 1,
-        //    //        RankId = 1,
-        //    //        InjuranceNo  = "123456789",
-        //    //        FatherName = "Father"
-        //    //     },
-        //    //};
+                    Rank rank = new()
+                    {
+                        Name = (string)firstRank["Name"],
+                        Salary = (int)firstRank["Price"],
+                    };
 
-        //    //        dbContext.Employees.AddRange(employees);
-        //    //        dbContext.SaveChanges();
+                    dbContext.Ranks.Add(rank);
+                    Console.WriteLine("Ranks created");
+                }
 
-        //    //        Console.WriteLine(employees[0].Id);
+                if (!await dbContext.Rents.AnyAsync())
+                {
+                    var rents = seedData.Entities["Rents"] as JArray;
+                    var firstRent = rents[0];
 
-        //    //        Employee employee = await dbContext.Employees.
-        //    //        Include(x => x.Rank).
-        //    //        Include(x => x.Position).
-        //    //        FirstOrDefaultAsync(x => x.Id == employees[0].Id);
+                    Rent rent = new()
+                    {
+                        Name = (string)firstRent["Name"],
+                        Price = (double)firstRent["Price"],
+                    };
+                    dbContext.Rents.Add(rent);
+                    Console.WriteLine("Rents created");
+                }
 
-        //    //        Console.WriteLine(employee.Id);
-
-        //    //        var EmployeeSalaryRecord = new List<EmployeeSalaryRecord>
-        //    //{
-        //    //    new EmployeeSalaryRecord {
-        //    //        Employee = employee,
-        //    //        RankSalary = 0,
-        //    //        PositionSalary = 0,
-        //    //     },
-        //    //};
-
-        //    //        dbContext.EmployeeSalaryRecords.AddRange(EmployeeSalaryRecord);
-        //    //        dbContext.SaveChanges();
-
-        //    //    }
-        //    //}
-        //}
+                await dbContext.SaveChangesAsync();
+            }
+        }
     }
 }

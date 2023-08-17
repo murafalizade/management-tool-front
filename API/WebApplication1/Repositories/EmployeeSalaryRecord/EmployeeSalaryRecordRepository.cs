@@ -27,7 +27,7 @@ namespace WebApplication1.Repositories
         {
             // update Food qat for this month
             var recordsToUpdate = await _context.EmployeeSalaryRecords
-            .Where(x => x.RecordDate.Month == DateTime.Now.Month && x.RecordDate.Year == DateTime.Now.Year)
+            .Where(x => x.RecordDate.Month == DateTime.Now.Month && x.RecordDate.Year == DateTime.Now.Year && x.FoodGiven == true)
             .Include(x => x.Discount)
             .ToListAsync();
 
@@ -46,42 +46,47 @@ namespace WebApplication1.Repositories
         {
             // update kiraye qat for this month
             var recordsToUpdate = await _context.EmployeeSalaryRecords
-            .Where(x => x.RecordDate.Month == DateTime.Now.Month && x.RecordDate.Year == DateTime.Now.Year)
+            .Where(x => x.RecordDate.Month == DateTime.Now.Month && x.RecordDate.Year == DateTime.Now.Year && x.RentId != 1)
             .ToListAsync();
 
             if (kirayeQat == 0)
             {
-                recordsToUpdate.ForEach(record => { record.KirayeQat = 0; record.KirayePrice = 0; record.KirayeId = 1; });
+                recordsToUpdate.ForEach(record => { record.RentQat = 0; record.RentPrice = 0; record.RentId = 1; });
                 await _context.SaveChangesAsync();
                 return;
             }
 
-            recordsToUpdate.ForEach(record => { record.KirayePrice = kirayeQat * record.KirayePrice / record.KirayeQat; record.KirayeQat = kirayeQat; });
+            recordsToUpdate.ForEach(record => { record.RentPrice = kirayeQat * record.RentQat / record.RentPrice; record.RentQat = kirayeQat; });
             await _context.SaveChangesAsync();
         }
 
         public Task<List<EmployeeSalaryRecord>> GetEmployeeById(int employeeId, int year)
         {
-            return _context.EmployeeSalaryRecords.
-            Include(x => x.Employee).
-            Include(x => x.Employee.Rank).
-            Include(x => x.Discount).
-            Include(x => x.Employee.Position).
-            Include(x => x.Employee.Position.Department).
-            Include(x => x.Employee.Position.Department.Adminstration).
-            Include(x=> x.Employee.Meharet).
+            return _context.EmployeeSalaryRecords
+           .Include(x => x.Employee)
+                .Include(x => x.Ability)
+                .Include(x => x.ScientificDegree)
+                .Include(x => x.HonorTitle)
+                .Include(x => x.Discount)
+                .Include(x => x.Rent)
+                .Include(x => x.Position)
+                    .ThenInclude(x => x.Department)
+                        .ThenInclude(x => x.Adminstration).
             Where(x => x.EmployeeId == employeeId && x.RecordDate.Year == year).ToListAsync();
         }
 
         public async Task<EmployeeSalaryRecord> GetEmployeeById(int id)
         {
-            return await _context.EmployeeSalaryRecords.Include(x => x.Employee).
-            Include(x => x.Employee.Rank).
-            Include(x => x.Employee.Position).
-            Include(x => x.Kiraye).
-            Include(x => x.Discount).
-            Include(x => x.Employee.Position.Department).
-            Include(x => x.Employee.Position.Department.Adminstration).
+            return await _context.EmployeeSalaryRecords
+                .Include(x => x.Employee)
+                .Include(x => x.Ability)
+                .Include(x => x.ScientificDegree)
+                .Include(x => x.HonorTitle)
+                .Include(x => x.Discount)
+                .Include(x => x.Rent)
+                .Include(x => x.Position)
+                    .ThenInclude(x => x.Department)
+                        .ThenInclude(x => x.Adminstration).
             FirstOrDefaultAsync(x => x.Id == id);
         }
 
@@ -89,52 +94,51 @@ namespace WebApplication1.Repositories
         {
             var query = _context.EmployeeSalaryRecords
                 .Include(x => x.Employee)
-                    .ThenInclude(x => x.Rank)
-                .Include(x=>x.Employee.Meharet)
-                .Include(x=>x.Employee.ElmiDerece)
-                .Include(x=> x.Employee.FexriAd)
+                .Include(x => x.Ability)
+                .Include(x => x.ScientificDegree)
+                .Include(x => x.HonorTitle)
                 .Include(x => x.Discount)
-                .Include(x => x.Kiraye)
-                .Include(x => x.Employee.Position)
+                .Include(x => x.Rent)
+                .Include(x => x.Position)
                     .ThenInclude(x => x.Department)
                         .ThenInclude(x => x.Adminstration)
                 .Where(x => x.RecordDate.Year == year && x.RecordDate.Month == month);
 
             var searchOptions = new Dictionary<string, Expression<Func<EmployeeSalaryRecord, bool>>>
                 {
-                    { "aliment", x => x.Aliment > 0 },
+                    { "aliment", x => x.Alimony > 0 },
                     { "extra211100", x => x.Extra211100 > 0 },
-                    { "fexri", x => x.FexriAd > 0 },
-                    { "kesfiyyat", x => x.Kesfiyyat > 0 },
+                    { "fexri", x => x.HonorTitlePrice > 0 },
+                    { "kesfiyyat", x => x.ExploretionPrice > 0 },
                     { "kesfMezun", x => x.KesfMezun > 0 },
                     { "kesfXeste", x => x.KesfXeste > 0 },
                     { "food", x => x.Food > 0 },
                     { "yukPulu", x => x.YukPulu > 0 },
-                    { "cixisMuv", x => x.CixisMuv > 0 },
+                    { "cixisMuv", x => x.ExitAid > 0 },
                     { "bpm", x => x.BPM > 0 },
                     {"erzaq", x=> x.FoodGiven==true},
-                    {"texris", x=> x.CixisMuv >0},
-                    { "mezuniyyet", x => x.Mezuniyyet > 0 },
-                    {"ezamiyyet", x=>x.Ezamiyyet > 0},
-                    { "kesir", x => x.Kesirler > 0 },
-                    { "zererli", x => x.Zererlilik > 0 },
-                    { "meharetlilik", x => x.Meharetlilik > 0 },
-                    { "temsilcilik", x => x.Temsilcilik > 0 },
-                    { "yol", x => x.YolXerci > 0 },
+                    {"texris", x=> x.ExitAid >0},
+                    { "mezuniyyet", x => x.Vacation > 0 },
+                    {"ezamiyyet", x=>x.BusinessTrip > 0},
+                    { "kesir", x => x.Fails > 0 },
+                    { "zererli", x => x.Harmfulness > 0 },
+                    { "meharetlilik", x => x.AbilityPrice > 0 },
+                    { "temsilcilik", x => x.Representing > 0 },
+                    { "yol", x => x.TripExpense > 0 },
                     {  "yuk", x=> x.YukPulu >0},
-                    { "kiraye", x => x.KirayePrice > 0 },
-                    { "maddi", x => x.MaddiYardim > 0 },
-                    {"maddiyardimalmayanlar", x=> x.MaddiYardim == 0},
-                    {"mezuniyyetalmayanlar", x => x.Mezuniyyet == 0},
-                    {"muharibe", x=> x.isVeteran==true},
-                    {"elil",x=>x.isDisabled == true},
-                    {"qachqin",x=>x.isQachqin == true},
-                    {"sehid",x=>x.isMatry == true},
-                    {"himayeder",x=> x.isOwner == true},
-                    {"cernobil",x=>x.isChernobil == true},
-                    { "sahra", x => x.Sehra > 0 },
-                    { "elmi", x => x.ElmiDerece > 0 },
-                    { "cixis", x => x.XariciDil > 0 },
+                    { "kiraye", x => x.RentPrice > 0 },
+                    { "maddi", x => x.FinancialAid > 0 },
+                    {"maddiyardimalmayanlar", x=> x.FinancialAid == 0},
+                    {"mezuniyyetalmayanlar", x => x.Vacation == 0},
+                    {"muharibe", x=> x.IsVeteran==true},
+                    {"elil",x=>x.IsDisabled == true},
+                    {"qachqin",x=>x.IsRefugee == true},
+                    {"sehid",x=>x.IsMatry == true},
+                    {"himayeder",x=> x.IsOwner == true},
+                    {"cernobil",x=>x.IsChernobyl == true},
+                    { "sahra", x => x.DesertPrice > 0 },
+                    { "elmi", x => x.ScientificDegreePrice > 0 },
+                    { "cixis", x => x.ForeignLanguagePrice > 0 },
                     { "elave", x => x.ExtraGivenMoney > 0 },
                     { "elaveGvti", x => x.ExtraMoney2 > 0 }
                 };
@@ -146,7 +150,6 @@ namespace WebApplication1.Repositories
 
             return await query.ToListAsync();
         }
-
 
         public async Task<EmployeeSalaryRecord> GetLastEmployeeRecord()
         {
@@ -161,49 +164,56 @@ namespace WebApplication1.Repositories
             // {
             //     return;
             // }
-            employee.KirayeId = kirayeId;
+            employee.RentId = kirayeId;
             await _context.SaveChangesAsync();
         }
 
         public async Task<EmployeeSalaryRecord> UpdateEmployee(EmployeeSalaryRecord employee)
         {
-            Console.WriteLine(employee.Id + " " + employee.KirayeId);
-            await ChangeKiraye(employee.KirayeId, employee.Id);
+            // await ChangeKiraye(employee.RentId, employee.Id);
 
-            var existingEmployee = await _context.EmployeeSalaryRecords.
-            Include(x => x.Discount).
+            var existingEmployee = await _context.EmployeeSalaryRecords
+          .Include(x => x.Employee)
+                .Include(x => x.Ability)
+                .Include(x => x.ScientificDegree)
+                .Include(x => x.HonorTitle)
+                .Include(x => x.Discount)
+                .Include(x => x.Rent)
+                .Include(x => x.Position)
+                    .ThenInclude(x => x.Department)
+                        .ThenInclude(x => x.Adminstration).
             FirstOrDefaultAsync(x => x.Id == employee.Id);
 
             // Update the properties of the existingEmployee object with the values from the employee parameter.
-            existingEmployee.XariciDil = employee.XariciDil;
-            existingEmployee.ElmiDerece = employee.ElmiDerece;
-            existingEmployee.AlimentPercentage = employee.AlimentPercentage;
-            existingEmployee.Aliment = employee.Aliment;
+            existingEmployee.ForeignLanguagePrice = employee.ForeignLanguagePrice;
+            existingEmployee.ScientificDegreePrice = employee.ScientificDegreePrice;
+            existingEmployee.AlimonyPercentage = employee.AlimonyPercentage;
+            existingEmployee.Alimony = employee.Alimony;
             existingEmployee.FamilyCount = employee.FamilyCount;
-            existingEmployee.KirayeQat = employee.KirayeQat;
-            existingEmployee.KirayePrice = employee.KirayePrice;
+            existingEmployee.RentQat = employee.RentQat;
+            existingEmployee.RentPrice = employee.RentPrice;
             existingEmployee.BPM = employee.BPM;
             existingEmployee.DSMF = employee.DSMF;
             existingEmployee.Comment = employee.Comment;
             existingEmployee.RankSalary = employee.RankSalary;
             existingEmployee.PositionSalary = employee.PositionSalary;
-            existingEmployee.Kibertehlukesizlik = employee.Kibertehlukesizlik;
-            existingEmployee.FexriAd = employee.FexriAd;
-            existingEmployee.Ezamiyyet = employee.Ezamiyyet;
-            existingEmployee.YolXerci = employee.YolXerci;
+            existingEmployee.CyberSecurityPrice = employee.CyberSecurityPrice;
+            existingEmployee.HonorTitle = employee.HonorTitle;
+            existingEmployee.BusinessTrip = employee.BusinessTrip;
+            existingEmployee.TripExpense = employee.TripExpense;
             existingEmployee.KesfXeste = employee.KesfXeste;
-            existingEmployee.MaddiYardim = employee.MaddiYardim;
-            existingEmployee.Sehra = employee.Sehra;
-            existingEmployee.Kiraye = employee.Kiraye;
+            existingEmployee.FinancialAid = employee.FinancialAid;
+            existingEmployee.DesertPrice = employee.DesertPrice;
+            existingEmployee.RentPrice = employee.RentPrice;
             existingEmployee.ExtraGivenMoney = employee.ExtraGivenMoney;
             existingEmployee.ExtraMoney = employee.ExtraMoney;
             existingEmployee.ExtraMoney2 = employee.ExtraMoney2;
-            existingEmployee.Meharetlilik = employee.Meharetlilik;
+            existingEmployee.AbilityPrice = employee.AbilityPrice;
             existingEmployee.YukPulu = employee.YukPulu;
-            existingEmployee.Kesfiyyat = employee.Kesfiyyat;
-            existingEmployee.Temsilcilik = employee.Temsilcilik;
-            existingEmployee.Zererlilik = employee.Zererlilik;
-            existingEmployee.Mexfilik = employee.Mexfilik;
+            existingEmployee.ExploretionPrice = employee.ExploretionPrice;
+            existingEmployee.Representing = employee.Representing;
+            existingEmployee.Harmfulness = employee.Harmfulness;
+            existingEmployee.Confidentiality = employee.Confidentiality;
 
             existingEmployee.PTQat = employee.PTQat;
             existingEmployee.PTMoney = employee.PTMoney;
@@ -211,23 +221,23 @@ namespace WebApplication1.Repositories
 
 
             existingEmployee.Tax = employee.Tax;
-            existingEmployee.Kesirler = employee.Kesirler;
+            existingEmployee.Fails = employee.Fails;
             existingEmployee.Extra211100 = employee.Extra211100;
             existingEmployee.HealthInsurance = employee.HealthInsurance;
             existingEmployee.AccountNumber = employee.AccountNumber;
 
-            existingEmployee.isChernobil = employee.isChernobil;
-            existingEmployee.isDisabled = employee.isDisabled;
-            existingEmployee.isOwner = employee.isOwner;
-            existingEmployee.isVeteran = employee.isVeteran;
-            existingEmployee.isMatry = employee.isMatry;
+            existingEmployee.IsChernobyl = employee.IsChernobyl;
+            existingEmployee.IsDisabled = employee.IsDisabled;
+            existingEmployee.IsOwner = employee.IsOwner;
+            existingEmployee.IsVeteran = employee.IsVeteran;
+            existingEmployee.IsMatry = employee.IsMatry;
             existingEmployee.Muavin = employee.Muavin;
-            existingEmployee.isNotGiven = employee.isNotGiven;
-            existingEmployee.Mezuniyyet = employee.Mezuniyyet;
+            existingEmployee.IsGiven = employee.IsGiven;
+            existingEmployee.Vacation = employee.Vacation;
             existingEmployee.FoodGiven = employee.FoodGiven;
             existingEmployee.Food = employee.Food;
             existingEmployee.KesfMezun = employee.KesfMezun;
-            existingEmployee.CixisMuv = employee.CixisMuv;
+            existingEmployee.ExitAid = employee.ExitAid;
 
             await _context.SaveChangesAsync();
             return existingEmployee;
@@ -237,17 +247,17 @@ namespace WebApplication1.Repositories
         {
             // update kiraye qat for this month
             var recordsToUpdate = await _context.EmployeeSalaryRecords
-            .Where(x => x.RecordDate.Month == DateTime.Now.Month && x.RecordDate.Year == DateTime.Now.Year)
+            .Where(x => x.RecordDate.Month == DateTime.Now.Month && x.RecordDate.Year == DateTime.Now.Year && x.IsVeteran == true)
             .ToListAsync();
 
             if (veteranQat == 0)
             {
-                recordsToUpdate.ForEach(record => { record.isVeteran = false; });
+                recordsToUpdate.ForEach(record => { record.IsVeteran = false; });
                 await _context.SaveChangesAsync();
                 return;
             }
 
-            recordsToUpdate.ForEach(record => { record.isVeteran = true; record.VeteranQat = veteranQat; });
+            recordsToUpdate.ForEach(record => { record.IsVeteran = true; record.VeteranQat = veteranQat; });
             await _context.SaveChangesAsync();
         }
     }

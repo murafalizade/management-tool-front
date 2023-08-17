@@ -6,6 +6,6 @@ namespace WebApplication1.Repositories
 {
     public interface IMeharetRepistory
     {
-       Task<List<Meharet>> GetMeharets();
+       Task<List<Ability>> GetMeharets();
     }
 }

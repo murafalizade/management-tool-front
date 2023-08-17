@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using WebApplication1.Controllers;
 using WebApplication1.Dtos;
 using WebApplication1.Models;
 using WebApplication1.Repositories;
@@ -39,7 +40,7 @@ namespace WebApplication1.Services
                 return new ErrorHandelerDto { StatusCode = 500, data = ex.Message };
             }
         }
-        public async Task<ErrorHandelerDto> updateDiscount(Discount discount)
+        public async Task<ErrorHandelerDto> UpdateDiscount(Discount discount)
         {
             try
             {

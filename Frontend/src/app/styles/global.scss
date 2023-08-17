@@ -18,6 +18,15 @@ input[type="number"] {
     -moz-appearance: textfield;
 }
 
+.initial{
+    font-size: inherit!important;
+    padding: inherit!important;
+    font-weight: inherit!important;
+    color: inherit!important;
+    line-height: inherit!important;
+}
+
+
 .selected-item {
     background-color: #1e90ff !important;
     color: #ffffff !important;
@@ -80,7 +89,8 @@ main {
 
 // Dark theme
 $darkModeBackgroundColor: #1e1f23;
-$darkModeTextColor: #757776;
+// $darkModeTextColor: #757776;
+$darkModeTextColor: rgb(221, 215, 215);
 $darkModePrimaryColor: #0ad673;
 $darkModeNavbarColor: black;
 

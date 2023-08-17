@@ -5,12 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication1.Models
 {
-    public class FexriAd
+    public class HonorTitle:BaseEntity
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public int Salary { get; set; }
 
-        //public ICollection<Employee> Employees { get; set; }
+        public ICollection<EmployeeSalaryRecord> EmployeeSalaryRecords { get; set; }
     }
 }

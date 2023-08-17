@@ -60,17 +60,16 @@ namespace WebApplication1
 
 
 
-            services.AddCors(
-                options =>
-                {
-                    options.AddPolicy("AllowAll", builder =>
-                    {
-                        builder.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader();
-                    });
-                }
-            );
+            services.AddCors(options =>
+    {
+        options.AddPolicy("AllowLocalhost3000",
+            builder =>
+            {
+                builder.WithOrigins("http://localhost:3000")
+                       .AllowAnyHeader()
+                       .AllowAnyMethod();
+            });
+    });
             services.AddControllers();
             services.AddAutoMapper(typeof(Program));
 
@@ -89,7 +88,7 @@ namespace WebApplication1
                 c.AddSecurityDefinition("Bearer", securityScheme);
 
                 // Add the security requirement to include JWT Bearer token in the requests
-                    var securityRequirement = new OpenApiSecurityRequirement
+                var securityRequirement = new OpenApiSecurityRequirement
                     {
                         {
                             new OpenApiSecurityScheme
@@ -103,7 +102,7 @@ namespace WebApplication1
                             new List<string>()
                         }
                     };
-                    c.AddSecurityRequirement(securityRequirement);
+                c.AddSecurityRequirement(securityRequirement);
             });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -120,7 +119,7 @@ namespace WebApplication1
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public  void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -129,13 +128,13 @@ namespace WebApplication1
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApplication1 v1"));
             }
 
-            //DataSeeder.SeedData(serviceProvider);
+         //   await DataSeeder.SeedData(app.ApplicationServices);
 
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
 
-            app.UseCors("AllowAll");
+            app.UseCors("AllowLocalhost3000");
 
             app.UseRouting();
 

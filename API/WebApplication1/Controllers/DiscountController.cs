@@ -41,7 +41,7 @@ namespace WebApplication1.Controllers
             {
                 return BadRequest();
             }
-            return Ok(await _discountService.updateDiscount(discount));
+            return Ok(await _discountService.UpdateDiscount(discount));
 
         }
     }

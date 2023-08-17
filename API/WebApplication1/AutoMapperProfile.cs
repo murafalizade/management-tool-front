@@ -20,6 +20,7 @@ namespace WebApplication1
             CreateMap<EmployeeInputDto, Employee>();
             CreateMap<EmployeeEditDto,Employee>();
             CreateMap<RecordCreationDto,EmployeeSalaryRecord>();
+            CreateMap<EmployeeSalaryRecord, Employee>();
             CreateMap<EmployeeSalaryRecord, EmployeeSalaryResultDto>().ReverseMap();
             CreateMap<EmployeeSalaryEditDto,EmployeeSalaryRecord>();
             CreateMap<Employee, EmployeeGetDto>();

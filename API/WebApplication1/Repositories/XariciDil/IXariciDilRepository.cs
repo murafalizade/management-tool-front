@@ -6,6 +6,6 @@ namespace WebApplication1.Repositories
 {
     public interface IXariciDilRepository
     {
-       Task<List<XariciDil>> GetXariciDils();
+       Task<List<ForeignLanguage>> GetXariciDils();
     }
 }

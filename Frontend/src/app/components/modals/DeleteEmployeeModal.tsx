@@ -15,6 +15,9 @@ const DeleteEmployeeModal = (props: ModalProps) => {
   );
   const [loading, setLoading] = useState<boolean>(false);
 
+
+  const toast = new Toastify();
+
   useEffect(() => {
     fetchEmployees();
   }, []);
@@ -35,9 +38,9 @@ const DeleteEmployeeModal = (props: ModalProps) => {
     try {
       await EmployeeService.deleteEmployeeById(selectedEmployeeId!);
       props.onHide();
-      Toastify.success();
+      toast.success();
     } catch (error) {
-      Toastify.success("Xəta baş verdi!", "top-end");
+      toast.error();
     }
     setLoading(false);
   };

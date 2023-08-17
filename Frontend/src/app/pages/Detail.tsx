@@ -15,13 +15,16 @@ const Detail = () => {
 
   const { id } = useParams<{ id: string }>();
 
+  const toast = new Toastify();
+
   // fetch employees from API
   const getEmployees = async (id: number) => {
     try {
-      const response = await EmployeeService.getEmployeeSalaryRecordByEmployeeId(id, year);
+      const response =
+        await EmployeeService.getEmployeeSalaryRecordByEmployeeId(id, year);
       setSalaryRecord(response);
     } catch (err) {
-      Toastify.success("Xəta baş verdi!", "top-end");
+      toast.error();
     }
   };
 

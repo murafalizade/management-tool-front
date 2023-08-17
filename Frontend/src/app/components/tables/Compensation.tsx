@@ -19,13 +19,16 @@ const Compensation = () => {
     setFilter({ ...filter, [e.target.name]: e.target.value });
   };
 
+  const toast = new Toastify();
+
+
   const getDiscount = async () => {
     try {
       const res = await operationService.getDiscount(filter.month, filter.year);
       setDiscount(res.data);
       console.log(res);
     } catch (error) {
-      Toastify.success("Xəta baş verdi", "top-end");
+      toast.error();
     }
   };
 

@@ -14,9 +14,9 @@ namespace WebApplication1.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<List<Meharet>> GetMeharets()
+        public async Task<List<Ability>> GetMeharets()
         {
-            return await _dbContext.Meharets.ToListAsync();
+            return await _dbContext.Abilities.ToListAsync();
         }
     }
 }

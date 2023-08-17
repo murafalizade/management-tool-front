@@ -29,9 +29,9 @@ namespace WebApplication1.Repositories
             // Check if year and month exist get last discount
             if (year == 0 || month == 0)
             {
-                return await _context.Discounts.OrderByDescending(d => d.Date).FirstOrDefaultAsync();
+                return await _context.Discounts.OrderByDescending(d => d.CreatedAt).FirstOrDefaultAsync();
             }
-            return await _context.Discounts.FirstOrDefaultAsync(d => d.Date.Year == year && d.Date.Month == month);
+            return await _context.Discounts.FirstOrDefaultAsync(d => d.CreatedAt.Year == year && d.CreatedAt.Month == month);
         }
 
         public async Task<Discount> GetDiscounts(int id)

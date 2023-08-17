@@ -6,6 +6,6 @@ namespace WebApplication1.Repositories
 {
     public interface IKirayeRepository
     {
-       Task<List<Kiraye>> GetKirayes();
+       Task<List<Rent>> GetKirayes();
     }
 }

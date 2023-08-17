@@ -13,9 +13,9 @@ namespace WebApplication1.Repositories{
             _dbContext = dbContext;
         }
 
-        public async Task<List<XariciDil>> GetXariciDils()
+        public async Task<List<ForeignLanguage>> GetXariciDils()
         {
-            return await _dbContext.XariciDils.ToListAsync();
+            return await _dbContext.ForeignLanguages.ToListAsync();
         }
     }
 }

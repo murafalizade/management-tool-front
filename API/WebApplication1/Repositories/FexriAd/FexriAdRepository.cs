@@ -13,9 +13,9 @@ namespace WebApplication1.Repositories{
             _dbContext = dbContext;
         }
 
-        public async Task<List<FexriAd>> GetFexriAds()
+        public async Task<List<HonorTitle>> GetFexriAds()
         {
-            return await _dbContext.FexriAds.ToListAsync();
+            return await _dbContext.HonorTitles.ToListAsync();
         }
     }
 }

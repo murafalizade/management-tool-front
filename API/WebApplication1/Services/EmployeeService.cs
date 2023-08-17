@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -36,16 +37,12 @@ namespace WebApplication1.Services
 
                 };
             }
-            Employee obj1 = _mapper.Map<Employee>(employee);
-            int id = await _employeeRepository.AddEmployee(obj1);
-            Employee emp = await _employeeRepository.GetEmployeeById(id);
+            int id = await _employeeRepository.AddEmployee(_mapper.Map<Employee>(employee));
             Discount discount = await _discountRepository.GetDiscountByDate(0, 0);
-            RecordCreationDto x = new() { Employee = emp, KirayeId = 1 };
-            if (discount != null)
-            {
-                x.Discount = discount;
-            }
-            await _employeeSalaryRecordRepository.AddEmployee(_mapper.Map<EmployeeSalaryRecord>(x));
+            Console.WriteLine("ID: "+discount.Id);
+            RecordCreationDto x = new() { EmployeeId = id, Discount = discount };
+            EmployeeSalaryRecord employeeSalaryRecord = _mapper.Map<EmployeeSalaryRecord>(x);
+            await _employeeSalaryRecordRepository.AddEmployee(employeeSalaryRecord);
             return new ErrorHandelerDto
             {
                 data = "Employee Added Successfully",
@@ -154,7 +151,8 @@ namespace WebApplication1.Services
 
         public async Task<ErrorHandelerDto> GetEmployeeByPosition(int positionId)
         {
-            List<Employee> obj = await _employeeRepository.GetEmployeeByPosition(positionId);
+            List<Employee> obj = _mapper.Map<List<Employee>>(
+                await _employeeRepository.GetEmployeeByPosition(positionId));
             return new ErrorHandelerDto
             {
                 data = obj,

@@ -12,9 +12,9 @@ namespace WebApplication1.Repositories{
         {
             _dbContext = dbContext;
         }
-        public async Task<List<Kiraye>> GetKirayes()
+        public async Task<List<Rent>> GetKirayes()
         {
-            return await _dbContext.Kirayes.ToListAsync();
+            return await _dbContext.Rents.ToListAsync();
         }
     }
 }

@@ -6,6 +6,6 @@ namespace WebApplication1.Repositories
 {
     public interface IFexriAdRepository
     {
-       Task<List<FexriAd>> GetFexriAds();
+       Task<List<HonorTitle>> GetFexriAds();
     }
 }

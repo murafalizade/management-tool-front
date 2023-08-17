@@ -6,6 +6,6 @@ namespace WebApplication1.Repositories
 {
     public interface IElmiDereceRepository
     {
-       Task<List<ElmiDerece>> GetElmiDereces();
+       Task<List<ScientificDegree>> GetElmiDereces();
     }
 }

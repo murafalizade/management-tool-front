@@ -4,9 +4,8 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace WebApplication1.Models
 {
-    public class Employee
+    public class Employee:BaseEntity
     {
-        public int Id { get; set; }
         public string FirstName { get; set; }
         public string FatherName{ get; set; }
         public string LastName { get; set; }
@@ -18,24 +17,7 @@ namespace WebApplication1.Models
         public DateTime MeharetDate { get; set; }
         public string EnteranceCommand { get; set; }
         public string CommandNo { get; set; }
-        public string Temsilcilik { get; set; }
-        public string Mexfilik { get; set; }
-        public string Zererlilik { get; set; }
-        public string Kesfiyyat { get; set; }
-        public string ExtraMoney { get; set; }
-        public string ExtraMoney2 { get; set; }        
-        public int? RankId { get; set; }
-        public virtual Rank Rank { get; set; }
-        public virtual XariciDil XariciDil { get; set; }
-        public virtual FexriAd FexriAd { get; set; }
-        public virtual Meharet Meharet { get; set; }
-        public virtual ElmiDerece ElmiDerece { get; set; }
-        public int? XariciDilId  { get; set; }
-        public int? FexriAdId { get; set; }
-        public int? MeharetId { get; set; }
-        public int? PositionId { get; set; }
-        public int? ElmiDereceId { get; set; }
-        public virtual Position Position { get; set; }
+        
         public ICollection<EmployeeSalaryRecord> EmployeeSalaryRecords { get; set; }
     }
 }

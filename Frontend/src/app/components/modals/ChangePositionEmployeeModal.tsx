@@ -35,12 +35,15 @@ const ChangePositionEmployeeModal = () => {
     setSelectedPositionId(parseInt(e.target.value));
   };
 
+  const toast = new Toastify();
+
+
   const handleDelete = async () => {
     setLoading(true);
     try {
       await EmployeeService.deleteEmployeeById(selectedEmployeeId!);
     } catch (error) {
-      Toastify.success("Xəta baş verdi!", "top-end");
+      toast.success();
     }
     setLoading(false);
   };

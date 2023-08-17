@@ -142,14 +142,9 @@ namespace WebApplication1.Services
         public async Task<ErrorHandelerDto> AddEmployee(int employeeId)
         {
 
-            Employee employee = await _employeeRepository.GetEmployeeById(employeeId);
+            // Employee employee = await _employeeRepository.GetEmployeeById(employeeId);
             Discount discount = await _discountRepository.GetDiscountByDate(0, 0);
-            RecordCreationDto x = new() { Employee = employee, KirayeId = 1 };
-            if (discount != null)
-            {
-                x.Discount = discount;
-            }
-            Console.WriteLine(x.Employee.LastName);
+            RecordCreationDto x = new() { EmployeeId = employeeId, Discount = discount };
             await _employeeSalaryRecordRepository.AddEmployee(_mapper.Map<EmployeeSalaryRecord>(x));
             return new ErrorHandelerDto
             {

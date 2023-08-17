@@ -24,22 +24,28 @@ const Login = () => {
     }));
   };
 
+  // Toastify
+  const toast = new Toastify();
+
   // Handle submit form
-  const handleSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();
 
+    // Check user input
+    if (!user.email || !user.password) {
+      toast.error("Xahiş olunur bütün xanaları doldurun!");
+      setLoading(false);
+      return;
+    }
+
     try {
       const { token } = await OperationService.login(user);
-      console.log(process.env.REACT_APP_SECRET_TOKEN_KEY!);
       Cookie.setCookie(process.env.REACT_APP_SECRET_TOKEN_KEY!, token, 7);
       window.location.href = "/";
     } catch (error: any) {
       const err = error as AxiosError;
-      Toastify.success(
-        (err.response?.data as string) || "Xəta baş verdi!",
-        "top-end"
-      );
+      toast.error((err.response?.data as string) || "Xəta baş verdi!");
     }
 
     setLoading(false);
@@ -49,7 +55,7 @@ const Login = () => {
     <div className="login-page">
       <div className="form-div">
         <h4 className="mb-5 fs-1 fw-5">Maliyyə Sistemi</h4>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <Form.Group className="pb-3" controlId="formBasicEmail">
             <Form.Control
               type="email"
@@ -57,6 +63,7 @@ const Login = () => {
               value={user.email}
               onChange={handleChange}
               className="w-100"
+              required
               placeholder="E-mail və ya istifadəçi adı"
             />
           </Form.Group>
@@ -68,13 +75,14 @@ const Login = () => {
               onChange={handleChange}
               type="password"
               placeholder="Şifrə"
+              required
             />
           </Form.Group>
           <Button
             size="sm"
+            type="submit"
             className="text-center w-100 mb-3"
             variant="primary"
-            onClick={handleSubmit}
           >
             {!loading ? (
               "Giriş"

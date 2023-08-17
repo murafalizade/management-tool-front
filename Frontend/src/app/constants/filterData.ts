@@ -1,118 +1,118 @@
 export const FILTER_DATA = [
   {
     name: "Hamısı",
-    value:"all"
+    value: "all",
   },
   {
     name: "2 qat alanlar bu ay",
-    value:"2qat"
+    value: "2qat",
   },
   {
     name: "Daimi qat alanlar",
-    value:"daimi"
+    value: "daimi",
   },
   {
     name: "Aliment verənlər",
-    value:"aliment"
+    value: "aliment",
   },
   {
     name: "Artıq 211100",
-    value:"extra211100"
+    value: "extra211100",
   },
   {
     name: "Ezamiyyət pulu",
-    value:"ezamiyyet"
+    value: "ezamiyyet",
   },
   {
     name: "Elmi dərəcəsi olanlar",
-    value:"elmi"
+    value: "elmi",
   },
   {
     name: "Zərərliyə görə alanlar",
-    value:"zererli"
+    value: "zererli",
   },
   {
     name: "Yol xərci",
-    value:"yol"
+    value: "yol",
   },
   {
     name: "Kirayə pulu alanlar",
-    value:"kiraye"
+    value: "kiraye",
   },
   {
     name: "Kəsirləri olanlar",
-    value:"kesir"
+    value: "kesir",
   },
   {
     name: "Maddi yardım",
-    value:"maddi"
+    value: "maddi",
   },
   {
     name: "Müharibə veteranı müavinəti",
-    value:"muharibe"
+    value: "muharibe",
   },
   {
     name: "Məzuniyyət pulu",
-    value:"mezuniyyet"
+    value: "mezuniyyet",
   },
   {
     name: "Məzuniyyət pulu (kəşfiyyat)",
-    value:"mezuniyyetKeshfiyyat"
+    value: "kesfMezun",
   },
   {
     name: "Məxfiçiliyə görə alanlar",
-    value:"mexficilik"
+    value: "mexficilik",
   },
   {
     name: "Səhra pulu",
-    value:"sahra"
+    value: "sahra",
   },
   {
     name: "Təmsilçiliyə görə alanlar",
-    value:"temsilcilik"
+    value: "temsilcilik",
   },
   {
     name: "Fəxri adı olanlar",
-    value:"fexri"
+    value: "fexri",
   },
   {
     name: "Xəstəlik pulu (kəşfiyyat)",
-    value:"xestelik"
+    value: "xestelik",
   },
   {
     name: "Çıxış müavinəti",
-    value:"cixis"
+    value: "cixis",
   },
   {
     name: "Əlavə ödəniş olanlar",
-    value:"elave"
+    value: "elave",
   },
   {
     name: "Əlavə ödəniş olanlar (gvti)",
-    value:"elaveGvti"
+    value: "elaveGvti",
   },
   {
     name: "MV",
-    value:"mv"
+    value: "muharibe",
   },
   {
     name: "Əlil",
-    value:"elil"
+    value: "elil",
   },
   {
     name: "Qaçqın",
-    value:"qachqin"
+    value: "qachqin",
   },
   {
     name: "Şəhid",
-    value:"sehid"
+    value: "sehid",
   },
   {
     name: "Çernobil",
-    value:"cernobil"
+    value: "cernobil",
   },
   {
     name: "Himayədar",
-    value:"himayedar"
+    value: "himayedar",
   },
 ];

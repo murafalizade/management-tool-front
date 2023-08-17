@@ -1,0 +1,6 @@
+{
+    "rules": {
+      "eslint-config-react-app": "off"
+    }
+}
+  

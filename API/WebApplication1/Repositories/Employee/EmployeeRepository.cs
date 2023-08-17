@@ -32,45 +32,29 @@ namespace WebApplication1.Repositories
 
         public async Task<Employee> GetEmployeeByFin(string fin)
         {
-            return await _context.Employees.Include(x => x.Rank).
-              Include(x => x.FexriAd).
-                Include(x => x.XariciDil).
-                Include(x => x.ElmiDerece).
-                Include(x => x.Meharet).
-             Include(x => x.Position).FirstOrDefaultAsync(x => x.Fin == fin);
+            return await _context.Employees.FirstOrDefaultAsync(x => x.Fin == fin);
         }
 
         public async Task<Employee> GetEmployeeById(int employeeId)
         {
-            return await _context.Employees.Include(x => x.Rank).
-             Include(x => x.Position).
-                Include(x => x.FexriAd).
-                Include(x => x.XariciDil).
-                Include(x => x.ElmiDerece).
-                Include(x => x.Meharet).
+            return await _context.Employees.
             FirstOrDefaultAsync(x => x.Id == employeeId);
         }
 
-        public async Task<List<Employee>> GetEmployeeByPosition(int positionId)
+        public async Task<List<EmployeeSalaryRecord>> GetEmployeeByPosition(int positionId)
         {
-            return await _context.Employees.Where(x => x.PositionId == positionId).ToListAsync();
+            return await _context.EmployeeSalaryRecords.Where(x => x.PositionId == positionId && 
+            x.RecordDate.Month == DateTime.Now.Month && x.RecordDate.Year == DateTime.Now.Year)
+            .Include(x => x.Employee).ToListAsync();
         }
 
         public async Task<List<Employee>> GetEmployees()
         {
-            return await _context.Employees.
-                Include(x => x.Rank).
-                Include(x => x.Position).
-                Include(x => x.FexriAd).
-                Include(x => x.XariciDil).
-                Include(x => x.ElmiDerece).
-                Include(x => x.Meharet).
-                ToListAsync();
+            return await _context.Employees.ToListAsync();
         }
 
         public async Task<Employee> UpdateEmployee(Employee employee)
         {
-            System.Console.WriteLine(employee.XariciDilId);
             var existingEmployee = await _context.Employees.FindAsync(employee.Id);
 
             if (existingEmployee == null)

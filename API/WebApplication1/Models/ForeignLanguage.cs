@@ -5,11 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication1.Models
 {
-    public class XariciDil
+    public class ForeignLanguage:BaseEntity
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public int Percentage { get; set; }
-        //public ICollection<Employee> Employees { get; set; }
+        public ICollection<EmployeeSalaryRecord> EmployeeSalaryRecords { get; set; }
     }
 }

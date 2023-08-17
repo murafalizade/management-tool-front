@@ -4,14 +4,26 @@ import { RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { hideModalCreate } from "../../redux/showModalSlice";
 import EmployeeService from "../../api/employeeService";
-import Swal from "sweetalert2";
+import Toastify from "../../utility/Toastify";
+
+interface IEmployee {
+  firstName: string;
+  lastName: string;
+  fatherName: string;
+  birthDate: string;
+  fin: string;
+  injuranceNo: string;
+}
 
 export default function CreateEmployeeModal() {
   const state = useSelector((state: RootState) => state.showModal);
   const dispatch = useDispatch();
 
+  // Toastify
+  const toast: Toastify = new Toastify();
+
   // initial employee form state
-  const [employee, setEmployee] = useState({
+  const [employee, setEmployee] = useState<IEmployee>({
     firstName: "",
     lastName: "",
     fatherName: "",
@@ -28,22 +40,33 @@ export default function CreateEmployeeModal() {
   // handle click event of the button
   const handleFormSubmit = async (event: any) => {
     event.preventDefault();
+
+    // Check validation
+    if (employee.fin.length !== 7) {
+      toast.error("FİN 7 rəqəmli olmalıdır!");
+      return;
+    }
+
+    // Check field existence
+    for (const key in employee) {
+      if (Object.prototype.hasOwnProperty.call(employee, key)) {
+        const fieldValue = employee[key as keyof typeof employee];
+
+        if (fieldValue === "") {
+          toast.error("Bütün xanaları doldurun!");
+          return;
+        }
+      }
+    }
+
     try {
       await EmployeeService.addEmployee(employee);
-      Swal.fire({
-        icon: "success",
-        title: "Əməliyyat uğurla yerinə yetirildi!",
-        showConfirmButton: false,
-        timer: 1500,
-      }).then(() => {
-        window.location.href = "/employees";
-      });
+      toast.success(
+        "Əməliyyat uğurla yerinə yetirildi!",
+        () => (window.location.href = "/employees")
+      );
     } catch (e: any) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: e || "Xəta baş verdi!",
-      });
+      toast.error(e);
     }
   };
 

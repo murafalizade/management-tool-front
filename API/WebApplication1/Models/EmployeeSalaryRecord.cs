@@ -2,62 +2,74 @@ using System;
 
 namespace WebApplication1.Models
 {
-    public class EmployeeSalaryRecord
+    public class EmployeeSalaryRecord : BaseEntity
     {
-        public int Id { get; set; }
+        // Relations
+        public Rent Rent { get; set; }
         public int EmployeeId { get; set; }
+        public int? ForeignLanguageId { get; set; }
+        public int? HonorTitleId { get; set; }
+        public int? AbilityId { get; set; }
+        public int? PositionId { get; set; }
+        public int? ScientificDegreeId { get; set; }
+        public int? RentId { get; set; }
+        public int DiscountId { get; set; }
         public Employee Employee { get; set; }
+        public Position Position { get; set; }
+        public Discount Discount { get; set; }
+        public int? RankId { get; set; }
+        public Rank Rank { get; set; }
+        public ForeignLanguage ForeignLanguage { get; set; }
+        public HonorTitle HonorTitle { get; set; }
+        public Ability Ability { get; set; }
+        public ScientificDegree ScientificDegree { get; set; }
 
         public string FullName
         {
             get
             {
-                if(Employee != null)
+                if (Employee != null)
                 {
                     return Employee.LastName + " " + Employee.FirstName + " " + Employee.FatherName;
                 }
                 else
                 {
-                    return "Naməlum işçi";
+                    return "Adsız hərbi qulluqçu";
                 }
             }
-            set
-            {
-
-            }
         }
-        private double rankSalary = 0;
+        private double _rankSalary = 0;
         public double RankSalary
         {
-            get { return rankSalary; }
+            get { return _rankSalary; }
 
             set
             {
-                if (Employee != null && Employee.Rank != null && value == 0)
+                if (value == 0 && Rank != null)
                 {
-                    rankSalary = Employee.Rank.Salary;
+                    _rankSalary = Rank.Salary;
                 }
                 else
                 {
-                    rankSalary = value;
+                    _rankSalary = value;
                 }
             }
         }
-        private double positionSalary = 0;
+        private double _positionSalary = 0;
         public double PositionSalary
         {
             set
             {
-                if (Employee != null && Employee.Position != null && value == 0)
+                if (value == 0 && Position != null)
                 {
-                    positionSalary = Employee.Position.Salary;
+                    _positionSalary = Position.Salary;
                 }
                 else
                 {
-                    positionSalary = value;
+                    _positionSalary = value;
                 }
             }
-            get { return positionSalary; }
+            get { return _positionSalary; }
         }
         private int _xIPercent = 0;
         public int XIPercent
@@ -71,7 +83,6 @@ namespace WebApplication1.Models
                 if (Employee != null)
                 {
                     int xIYears = DateTime.Now.Year - Employee.StartDate.Year;
-                    Console.WriteLine("XI years: " + xIYears);
                     if (xIYears <= 2 && xIYears >= 1)
                     {
                         _xIPercent = 5;
@@ -120,9 +131,9 @@ namespace WebApplication1.Models
             }
             set
             {
-                if (Employee != null)
+                if (Position != null)
                 {
-                    xIMoney = positionSalary * XIPercent / 100;
+                    xIMoney = _positionSalary * XIPercent / 100;
                 }
                 else
                 {
@@ -152,281 +163,216 @@ namespace WebApplication1.Models
             }
         }
         public DateTime RecordDate { get; set; } = DateTime.Now;
-        private double meharetlilik = 0;
-        public double Meharetlilik
+        private double _abilityPrice = 0;
+        public double AbilityPrice
         {
             set
             {
 
-                if (Employee != null && Employee.Meharet != null && value == 0)
+                if (value == 0 && Ability != null)
                 {
-                    if (Employee.Position.Name == "zabit")
+                    if (Position.Name == "zabit")
                     {
-                        meharetlilik = positionSalary * Employee.Meharet.ForZabitPercentage / 100;
+                        _abilityPrice = _positionSalary * Ability.ForZabitPercentage / 100;
                     }
-                    else if (Employee.Position.Name != "esger")
+                    else if (Position.Name != "esger")
                     {
-                        meharetlilik = positionSalary * Employee.Meharet.ForGizirPercentage / 100;
+                        _abilityPrice = _positionSalary * Ability.ForGizirPercentage / 100;
                     }
                     else
                     {
-                        meharetlilik = positionSalary * Employee.Meharet.ForMuddetliPercentage / 100;
+                        _abilityPrice = _positionSalary * Ability.ForMuddetliPercentage / 100;
                     }
                 }
                 else
                 {
-                    meharetlilik = value;
+                    _abilityPrice = value;
                 }
             }
             get
             {
-                return meharetlilik;
+                return _abilityPrice;
             }
         }
-        public double Temsilcilik { get; set; } = 0;
-        private double mexfilik = 0;
-        public double Mexfilik
+        public double Representing { get; set; } = 0;
+        public double Confidentiality { get; set; } = 0;
+        public double Harmfulness { get; set; } = 0;
+        private double _foreignLanguagePrice = 0;
+        public double ForeignLanguagePrice
         {
             set
             {
-                if (Employee != null && value == 0)
+                if (value == 0 && ForeignLanguage != null)
                 {
-                    if (Employee.Mexfilik == "10")
-                    {
-                        mexfilik = positionSalary * 10 / 100;
-                    }
-                    else if (Employee.Mexfilik == "15")
-                    {
-                        mexfilik = positionSalary * 15 / 100;
-                    }
-                    else if (Employee.Mexfilik == "20")
-                    {
-                        mexfilik = positionSalary * 20 / 100;
-                    }
+                    _foreignLanguagePrice = _positionSalary * ForeignLanguage.Percentage / 100;
                 }
                 else
                 {
-                    mexfilik = value;
+                    _foreignLanguagePrice = value;
                 }
             }
             get
             {
-                return mexfilik;
+                return _foreignLanguagePrice;
             }
         }
-        public double Zererlilik { get; set; } = 0;
-        private double xariciDil = 0;
-        public double XariciDil
+        public double CyberSecurityPrice { get; set; } = 0;
+        public double ExploretionPrice { get; set; } = 0;
+        private double _scientificDegreePrice = 0;
+        public double ScientificDegreePrice
         {
             set
             {
-                if (Employee != null && Employee.XariciDil != null && value == 0)
-                {
-                    xariciDil = positionSalary * Employee.XariciDil.Percentage / 100;
-                }
-                else
-                {
-                    xariciDil = value;
-                }
-            }
-            get
-            {
-                return xariciDil;
-            }
-        }
-        public double Kibertehlukesizlik { get; set; } = 0;
-        public double Kesfiyyat { get; set; } = 0;
-        private double elmiDerece { get; set; } = 0;
-        public double ElmiDerece
-        {
-            set
-            {
-                if (Employee != null && Employee.ElmiDerece != null && value == 0)
+                if (value == 0 && ScientificDegree != null)
                 {
                     int workExperience = DateTime.Now.Year - Employee.StartDate.Year;
 
                     if (workExperience >= 5 && workExperience <= 10)
                     {
-                        elmiDerece = Employee.ElmiDerece.For5to10Salary;
+                        _scientificDegreePrice = ScientificDegree.For5to10Salary;
                     }
                     else if (workExperience > 10 && workExperience <= 15)
                     {
-                        elmiDerece = Employee.ElmiDerece.For10to15Salary;
+                        _scientificDegreePrice = ScientificDegree.For10to15Salary;
                     }
                     else if (workExperience > 15 && workExperience <= 20)
                     {
-                        elmiDerece = Employee.ElmiDerece.For15to20Salary;
+                        _scientificDegreePrice = ScientificDegree.For15to20Salary;
                     }
                     else if (workExperience > 20)
                     {
-                        elmiDerece = Employee.ElmiDerece.For20Salary;
+                        _scientificDegreePrice = ScientificDegree.For20Salary;
                     }
                     else
                     {
-                        elmiDerece = 0;
+                        _scientificDegreePrice = 0;
                     }
                 }
                 else
                 {
-                    elmiDerece = value;
+                    _scientificDegreePrice = value;
                 }
             }
             get
             {
-                return elmiDerece;
+                return _scientificDegreePrice;
             }
         }
-        private double fexriAd = 0;
-        public double FexriAd
+        private double _honorTitlePrice = 0;
+        public double HonorTitlePrice
         {
             set
             {
-                if (Employee != null && Employee.FexriAd != null && value == 0)
+                if (value == 0 && HonorTitle != null)
                 {
-                    fexriAd = Employee.FexriAd.Salary;
+                    _honorTitlePrice = HonorTitle.Salary;
                 }
                 else
                 {
-                    fexriAd = value;
+                    _honorTitlePrice = value;
                 }
             }
             get
             {
-                return fexriAd;
+                return _honorTitlePrice;
             }
         }
         public double ExtraMoney { get; set; } = 0;
         public double ExtraMoney2 { get; set; } = 0;
-        public double TotalIncome
+        public bool IsMatry { get; set; } = false;
+        public bool IsChernobyl { get; set; } = false;
+        public bool IsVeteran { get; set; } = false;
+        public bool IsDisabled { get; set; } = false;
+        public bool IsOwner { get; set; } = false;
+        public bool IsRefugee { get; set; } = false;
+
+        private double _tax = 0;
+        public int VeteranQat { get; set; } = 1;
+          public double TotalIncome
         {
             get
             {
-                return XIMoney + pTMoney + rankSalary + positionSalary + meharetlilik + Temsilcilik + Mexfilik + Zererlilik + XariciDil + Kibertehlukesizlik + Kesfiyyat + ElmiDerece + FexriAd + ExtraMoney + ExtraMoney2;
+                return XIMoney + pTMoney + _rankSalary + _positionSalary + _abilityPrice + Representing + Confidentiality + Harmfulness +
+                 _foreignLanguagePrice + CyberSecurityPrice + ExploretionPrice + _scientificDegreePrice + _honorTitlePrice + ExtraMoney +
+                 ExtraMoney2;
             }
         }
-        public int DiscountId { get; set; }
-        public Discount Discount { get; set; }
-
-        public bool isMatry { get; set; }
-        public bool isChernobil { get; set; }
-        public bool isVeteran { get; set; }
-        public bool isDisabled { get; set; }
-        public bool isOwner { get; set; }
-        public bool isQachqin { get; set; }
-
-        private double tax = 0;
-        public int VeteranQat { get; set; } = 1;
         public double Tax
         {
             get
             {
-                return tax;
+                return _tax;
             }
             set
             {
-                if (Discount != null && value == 0)
+                Console.WriteLine("value: " + DiscountId);
+                if (value == 0 && Discount != null)
                 {
-                    tax = TotalIncome * Discount.TaxPercentage / 100;
+                    _tax = TotalIncome * Discount.TaxPercentage / 100;
                 }
                 else
                 {
-                    tax = value;
+                    _tax = value;
                 }
             }
         }
-
-        public double TotalDiscount
-        {
-            get
-            {
-                double totalDiscount = 0;
-
-                if (isMatry)
-                {
-                    totalDiscount += Discount.Martyr;
-                }
-                if (isChernobil)
-                {
-                    totalDiscount += Discount.Chernobil;
-                }
-                if (isVeteran)
-                {
-                    totalDiscount += Discount.Veteran * VeteranQat;
-                    tax = tax - Discount.VeteranTaxDiscount > 0 ? tax - Discount.VeteranTaxDiscount : 0;
-                }
-                if (isDisabled)
-                {
-                    totalDiscount += Discount.Disability;
-                }
-                if (isOwner)
-                {
-                    totalDiscount += Discount.Owner;
-                }
-                if (isQachqin)
-                {
-                    totalDiscount += Discount.Qachqin;
-                }
-                return totalDiscount;
-            }
-        }
-
-        private double dSMF = 0;
+        private double _dSMF = 0;
         public double DSMF
         {
             get
             {
-                return dSMF;
+                return _dSMF;
             }
             set
             {
-                if (Discount != null)
+                if (value == 0 && Discount != null)
                 {
-                    dSMF = TotalIncome * Discount.Dsmf / 100;
+                    _dSMF = TotalIncome * Discount.Dsmf / 100;
                 }
                 else
                 {
-                    dSMF = value;
+                    _dSMF = value;
                 }
             }
         }
 
-        private double healthInsurance = 0;
+        private double _healthInsurance = 0;
         public double HealthInsurance
         {
             get
             {
-                return healthInsurance;
+                return _healthInsurance;
             }
             set
             {
                 if (Discount != null && value == 0)
                 {
-                    healthInsurance = TotalIncome * Discount.HealthInjurance / 100;
+                    _healthInsurance = TotalIncome * Discount.HealthInjurance / 100;
                 }
                 else
                 {
-                    healthInsurance = value;
+                    _healthInsurance = value;
                 }
             }
         }
-        public double Kesirler { get; set; }
-        public double AlimentPercentage { get; set; }
-        private double aliment = 0;
-        public double Aliment
+        public double Fails { get; set; }
+        public double AlimonyPercentage { get; set; }
+        private double _alimony = 0;
+        public double Alimony
         {
             get
             {
-                return aliment;
+                return _alimony;
             }
             set
             {
                 if (value == 0)
                 {
-                    aliment = (TotalIncome - Tax) * AlimentPercentage / 100;
+                    _alimony = (TotalIncome - _tax) * AlimonyPercentage / 100;
                 }
                 else
                 {
-                    aliment = value;
+                    _alimony = value;
                 }
             }
         }
@@ -465,7 +411,7 @@ namespace WebApplication1.Models
                 if (Discount != null)
                 {
                     muavin = Discount.Veteran;
-                    tax = tax - Discount.VeteranTaxDiscount > 0 ? tax - Discount.VeteranTaxDiscount : 0;
+                    _tax = _tax - Discount.VeteranTaxDiscount > 0 ? _tax - Discount.VeteranTaxDiscount : 0;
                 }
                 else
                 {
@@ -477,64 +423,267 @@ namespace WebApplication1.Models
                 return muavin;
             }
         }
-        public double Mezuniyyet { get; set; }
+        public bool IsVocationGiven { get; set; } = false;
+        double _vacation = 0;
+        public double Vacation
+        {
+            get
+            {
+                return _vacation;
+            }
+            set
+            {
+                if (value == 0 && IsVocationGiven == true)
+                {
+                    _vacation = _positionSalary;
+                }
+                else if (IsVocationGiven == false)
+                {
+                    _vacation = 0;
+                }
+                else
+                {
+                    _vacation = value;
+                }
+            }
+        }
+        double _vacationDSMF = 0;
+        public double VacationDSMF
+        {
+            get
+            {
+                return _vacationDSMF;
+            }
+            set
+            {
+                if (value == 0 && Discount != null)
+                {
+                    _vacationDSMF = _vacation * Discount.Dsmf / 100;
+                }
+                else
+                {
+                    _vacationDSMF = value;
+                }
+            }
+        }
         public double KesfMezun { get; set; }
         public double KesfXeste { get; set; }
-        public Kiraye Kiraye { get; set; }
-        public int KirayeId { get; set; }
         public int FamilyCount { get; set; } = 0;
-        public int KirayeQat { get; set; } = 0;
-        private double kirayePrice = 0;
-        public double KirayePrice
+        public int RentQat { get; set; } = 0;
+        private double _rentPrice = 0;
+        public double RentPrice
         {
             get
             {
-                return kirayePrice;
+                return _rentPrice;
             }
             set
             {
-                if (Kiraye != null && value == 0)
+                if (value == 0 && Rent != null)
                 {
-                    kirayePrice = (KirayeQat + 1) * (Kiraye.Price + FamilyCount * 0.5 * Kiraye.Price);
+                    _rentPrice = (RentQat + 1) * (Rent.Price + FamilyCount * 0.5 * Rent.Price);
                 }
                 else
                 {
-                    kirayePrice = value;
+                    _rentPrice = value;
                 }
             }
         }
-        public double MaddiYardim { get; set; }
-        public double Ezamiyyet { get; set; }
-        private double sehra = 0;
-        public double Sehra
+        public bool IsFinancialAidGiven { get; set; } = false;
+        double _financialAid = 0;
+        public double FinancialAid
         {
+            get
+            {
+                return _financialAid;
+            }
             set
             {
-                if (Discount != null && value == 0)
+                if (IsFinancialAidGiven == false)
                 {
-                    sehra = Discount.Desert;
+                    _financialAid = 0;
+                }
+                else if (value == 0 && IsFinancialAidGiven == true)
+                {
+                    _financialAid = _rankSalary + _positionSalary;
                 }
                 else
                 {
-                    sehra = value;
+                    _financialAid = value;
+                }
+            }
+        }
+        double _financialAidDSMF = 0;
+        public double FinancialAidDSMF
+        {
+            get
+            {
+                return _financialAidDSMF;
+            }
+            set
+            {
+                if (value == 0 && Discount != null)
+                {
+                    _financialAidDSMF = _financialAid * Discount.Dsmf / 100;
+                }
+                else
+                {
+                    _financialAidDSMF = value;
+                }
+            }
+        }
+
+        public double BusinessTrip { get; set; }
+        private double _desertPrice = 0;
+        public double DesertPrice
+        {
+            set
+            {
+                if (value == 0 && Discount != null)
+                {
+                    _desertPrice = Discount.Desert;
+                }
+                else
+                {
+                    _desertPrice = value;
                 }
             }
             get
             {
-                return sehra;
+                return _desertPrice;
             }
         }
-        public double YolXerci { get; set; }
+        public double TripExpense { get; set; }
         public double YukPulu { get; set; }
-        public double CixisMuv { get; set; }
-        public double BPM { get; set; }
-        public double BPMPercentage { get; set; }
-        public double TotalDSMF { get; set; }
+        public bool IsExitAidGiven { get; set; } = false;
+        double _exitAid = 0;
+        public double ExitAid
+        {
+            get
+            {
+                return _exitAid;
+            }
+            set
+            {
+                if (IsExitAidGiven == false)
+                {
+                    _exitAid = 0;
+                }
+                else if (value == 0 && IsExitAidGiven == true)
+                {
+                    _exitAid = _rankSalary + _positionSalary;
+                }
+                else
+                {
+                    _exitAid = value;
+                }
+            }
+        }
+        double _exitAidDSMF = 0;
+        public double ExitAidDSMF
+        {
+            get
+            {
+                return _exitAidDSMF;
+            }
+            set
+            {
+                if (value == 0 && Discount != null)
+                {
+                    _exitAidDSMF = _exitAid * Discount.Dsmf / 100;
+                }
+                else
+                {
+                    _exitAidDSMF = value;
+                }
+            }
+        }
+        public int BPMQat { get; set; } = 0;
+        double _bPM = 0;
+        public double BPM
+        {
+            get
+            {
+                return _bPM;
+            }
+            set
+            {
+                if (value == 0)
+                {
+                    _bPM = BPMQat * 67;
+                }
+                else
+                {
+                    _bPM = value;
+                }
+            }
+        }
+        double _bPMDSMF = 0;
+        public double BPMDSMF
+        {
+            get
+            {
+                return _bPMDSMF;
+            }
+            set
+            {
+                if (value == 0 && Discount != null)
+                {
+                    _bPMDSMF = _bPM * Discount.Dsmf / 100;
+                }
+                else
+                {
+                    _bPMDSMF = value;
+                }
+            }
+        }
+        // Totals
+        public double TotalDiscount
+        {
+            get
+            {
+                double totalDiscount = 0;
+
+                if (IsMatry)
+                {
+                    totalDiscount += Discount.Martyr;
+                }
+                if (IsChernobyl)
+                {
+                    totalDiscount += Discount.Chernobyl;
+                }
+                if (IsVeteran)
+                {
+                    totalDiscount += Discount.Veteran * VeteranQat;
+                    _tax = _tax - Discount.VeteranTaxDiscount > 0 ? _tax - Discount.VeteranTaxDiscount : 0;
+                }
+                if (IsDisabled)
+                {
+                    totalDiscount += Discount.Disability;
+                }
+                if (IsOwner)
+                {
+                    totalDiscount += Discount.Owner;
+                }
+                if (IsRefugee)
+                {
+                    totalDiscount += Discount.Refugee;
+                }
+                return totalDiscount;
+            }
+        }
+        public double TotalDSMF
+        {
+            get
+            {
+                return VacationDSMF + FinancialAidDSMF + BPMDSMF + ExitAidDSMF;
+            }
+        }
         public double TotalTaken
         {
             get
             {
-                return Tax + DSMF + HealthInsurance + Kesirler + Aliment + Extra211100 + ExtraGivenMoney;
+                return _tax + DSMF + HealthInsurance + Fails + Alimony + Extra211100 + ExtraGivenMoney;
             }
         }
         public double TotalGiven
@@ -548,12 +697,13 @@ namespace WebApplication1.Models
         {
             get
             {
-                return TotalGiven - TotalDSMF + KirayePrice + Food;
+                return TotalGiven - TotalDSMF + RentPrice + Food + BPM + Vacation + DesertPrice +
+                 TripExpense + YukPulu + ExitAid;
             }
         }
-
         public string Comment { get; set; }
         public string AccountNumber { get; set; }
-        public bool isNotGiven { get; set; } = true;
+        public bool IsGiven { get; set; } = true;
+
     }
 }

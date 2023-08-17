@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import OperationService from "../../api/operationService";
 import Swal from "sweetalert2";
+import Toastify from "../../utility/Toastify";
 
 const Organizations = () => {
   const [organizations, setOrganizations] = useState<any[]>([]);
@@ -12,6 +13,8 @@ const Organizations = () => {
     const data = res.data;
     return data;
   };
+
+  const toast = new Toastify();
 
   useEffect(() => {
     const gettingData = async () => {
@@ -34,15 +37,10 @@ const Organizations = () => {
   // Idare silmek
   const deleteOrganization = async (id: number | null) => {
     if (!id) {
-      alert("Zəhmət olmasa ilk öncə idarə seçin");
+      toast.info("Zəhmət olmasa ilk öncə idarə seçin");
       return;
     }
-    Swal.fire({
-      title: "Silmək istədiyinizə əminsiniz?",
-      showDenyButton: true,
-      confirmButtonText: "Bəli",
-      denyButtonText: `Xeyr`,
-    }).then(async (result: any) => {
+    toast.warning(async (result: any) => {
       /* Read more about isConfirmed, isDenied below */
       const newOrganizations = organizations.filter(
         (organization) => organization.id !== id
@@ -52,10 +50,11 @@ const Organizations = () => {
           await OperationService.deleteAdminstrationById(id);
         }
         setOrganizations(newOrganizations);
+        toast.success("Idarə silindi");
       } else if (result.isDenied) {
-        Swal.fire("Dəyişiklik baş tutmadı", "", "info");
+        toast.info();
       }
-    });
+    }, "Silmək istədiyinizə əminsinizmi?");
   };
 
   // Idareni secmek klikle
@@ -84,6 +83,7 @@ const Organizations = () => {
   // Idareni yadda saxlamaq
   const saveOrganization = async () => {
     await OperationService.saveAdminstration(organizations);
+    toast.success("Idarələr yadda saxlanıldı");
   };
 
   return (
@@ -94,7 +94,7 @@ const Organizations = () => {
           variant="primary"
           className="me-2"
         >
-          Yeni idarə
+          Əlave et
         </Button>
         <Button
           onClick={() => deleteOrganization(selectedOrganization?.id)}
@@ -113,6 +113,7 @@ const Organizations = () => {
       <Table bordered>
         <thead>
           <tr className="text-center">
+            <th>Seç</th>
             <th>№</th>
             <th>İdarələr</th>
             <th>Qısa adı</th>
@@ -126,8 +127,18 @@ const Organizations = () => {
                   ? { backgroundColor: "#e6e6e6" }
                   : {}
               }
-              onClick={() => selectOrganization(organization)}
             >
+              <td className="text-center">
+                <input
+                  style={{ width: "30px" }}
+                  type="checkbox"
+                  className="form-check-input text-center form-control"
+                  checked={selectedOrganization?.id === organization.id}
+                  onChange={() => {
+                    selectOrganization(organization);
+                  }}
+                />
+              </td>
               <td className="text-center">{index + 1}</td>
               <td>
                 <input
@@ -138,8 +149,9 @@ const Organizations = () => {
                   }
                   name="name"
                   onChange={(e) => changeOrganization(e, organization.id)}
-                  className="border-0 user-none w-100 select-none"
+                  className="border-0 user-none form-control initial w-100 select-none"
                   value={organization.name}
+                  placeholder="İdarə adı"
                 />
               </td>
               <td>
@@ -151,8 +163,9 @@ const Organizations = () => {
                   }
                   name="shortName"
                   onChange={(e) => changeOrganization(e, organization.id)}
-                  className="border-0 user-none select-none"
+                  className="border-0 user-none form-control initial select-none"
                   value={organization.shortName}
+                  placeholder="Qısa adı"
                 />
               </td>
             </tr>

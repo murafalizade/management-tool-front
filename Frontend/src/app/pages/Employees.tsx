@@ -21,27 +21,17 @@ import OperationService from "../api/operationService";
 import { ELMI_DERECE } from "../constants/elmiDerece";
 
 function Create() {
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "bottom-end",
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.addEventListener("mouseenter", Swal.stopTimer);
-      toast.addEventListener("mouseleave", Swal.resumeTimer);
-    },
-  });
+  const Toast = new Toastify();
 
   const state = useSelector((state: RootState) => state.showModal);
   const [selectedColumn, setSelectedColumn] = useState<any>(state.selectedRow);
   const [employees, setEmployees] = useState<EmployeeData[]>([]);
-  const [ranks, setRanks] = useState<any>([]);
-  const [positions, setPositions] = useState<any>([]);
-  const [xariciDil, setXariciDil] = useState<any>([]);
-  const [fexriAd, setFexriAd] = useState<any[]>([]);
-  const [elmiDerece, setElmiDerece] = useState<any[]>(ELMI_DERECE);
-  const [meharet, setMeharet] = useState<any[]>([]);
+  // const [ranks, setRanks] = useState<any>([]);
+  // const [positions, setPositions] = useState<any>([]);
+  // const [xariciDil, setXariciDil] = useState<any>([]);
+  // const [fexriAd, setFexriAd] = useState<any[]>([]);
+  // const [elmiDerece, setElmiDerece] = useState<any[]>(ELMI_DERECE);
+  // const [meharet, setMeharet] = useState<any[]>([]);
 
   const [updatedEmployees, setUpdatedEmployees] = useState<EmployeeData[]>([]);
 
@@ -54,20 +44,20 @@ function Create() {
     try {
       const response = await EmployeeService.getEmployeeByAll();
       setEmployees(response);
-      const response2 = await OperationService.getRanks();
-      setRanks(response2);
-      const response3 = await OperationService.getPosition();
-      setPositions(response3);
-      const xariciDils = await OperationService.getXariciDil();
-      const fexriAds = await OperationService.getFexriAd();
-      const meharet = await OperationService.getMeharet();
-      const elmiDerece = await OperationService.getElmiDerece();
-      setElmiDerece(elmiDerece);
-      setMeharet(meharet);
-      setXariciDil(xariciDils);
-      setFexriAd(fexriAds);
-    } catch (err) {
-      Toastify.success("Xəta baş verdi!", "top-end");
+      // const response2 = await OperationService.getRanks();
+      // setRanks(response2);
+      // const response3 = await OperationService.getPosition();
+      // setPositions(response3);
+      // const xariciDils = await OperationService.getXariciDil();
+      // const fexriAds = await OperationService.getFexriAd();
+      // const meharet = await OperationService.getMeharet();
+      // const elmiDerece = await OperationService.getElmiDerece();
+      // setElmiDerece(elmiDerece);
+      // setMeharet(meharet);
+      // setXariciDil(xariciDils);
+      // setFexriAd(fexriAds);
+    } catch (err: any) {
+      Toast.error(err.toString());
     }
   };
 
@@ -78,31 +68,16 @@ function Create() {
       return;
     }
     try {
-      Swal.fire({
-        title: "Silmək istədiyinizə əminsiniz?",
-        text: "Bu əməliyyatı geri qaytara bilməyəcəksiniz!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Bəli",
-        cancelButtonText: "Xeyr",
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-      }).then(async (result) => {
+      Toast.warning(async (result: any) => {
         if (result.isConfirmed) {
           await EmployeeService.deleteEmployeeById(selectedColumn.id);
           dispatch(setSelectedRow(null));
-          Toast.fire({
-            icon: "success",
-            title: "Məlumat silindi",
-          });
+          Toast.success("Məlumat silindi");
           await getEmployees();
-        } else {
-          return;
         }
       });
     } catch (e: any) {
-      console.log(e);
-      alert(e.toString() || "Xəta baş verdi!");
+      Toast.error(e.toString());
     }
   };
 
@@ -168,18 +143,13 @@ function Create() {
     updatedEmployees.forEach(async (employee) => {
       await EmployeeService.updateEmployee(employee);
     });
-    console.log(updatedEmployees);
-    Toast.fire({
-      icon: "success",
-      title: "Məlumatlar yeniləndi",
-    });
+    Toast.success("Məlumatlar yeniləndi");
     setUpdatedEmployees([]);
   };
 
   const tableInstance = useTable({ columns: employeeHeaders, data: employees });
 
-  const { getTableProps, getTableBodyProps} =
-    tableInstance;
+  const { getTableProps, getTableBodyProps } = tableInstance;
 
   return (
     <main>
@@ -227,7 +197,7 @@ function Create() {
                 Qəbul olunma
               </th>
 
-              <th rowSpan={2} className="table_header">
+              {/* <th rowSpan={2} className="table_header">
                 Rütbənin dəyişdirilməsi
               </th>
 
@@ -249,7 +219,7 @@ function Create() {
 
               <th rowSpan={2} className="table_header">
                 Fəxri ad
-              </th>
+              </th> */}
             </tr>
             <tr>
               <th className="table_subheader">vaxtı</th>
@@ -257,8 +227,8 @@ function Create() {
               <th className="table_subheader">vaxtı</th>
               <th className="table_subheader">əmri</th>
 
-              <th className="table_subheader">verilmə tarixi</th>
-              <th className="table_subheader">Məharət dərəcəsi</th>
+              {/* <th className="table_subheader">verilmə tarixi</th>
+              <th className="table_subheader">Məharət dərəcəsi</th> */}
             </tr>
           </thead>
           <tbody {...getTableBodyProps()}>
@@ -383,7 +353,7 @@ function Create() {
                   />
                 </td>
 
-                <td>
+                {/* <td>
                   <input
                     className={`table_input form-control ${
                       employee === selectedColumn ? "selected" : ""
@@ -392,9 +362,9 @@ function Create() {
                     onChange={handleInputChange}
                     value={employee.enteranceCommand}
                   />
-                </td>
+                </td> */}
 
-                <td>
+                {/* <td>
                   <select
                     className={`table_input form-control ${
                       employee === selectedColumn ? "selected" : ""
@@ -413,9 +383,9 @@ function Create() {
                       <option value={rank.id}>{rank.shortName}</option>
                     ))}
                   </select>
-                </td>
+                </td> */}
 
-                <td>
+                {/* <td>
                   <select
                     className={`table_input form-control ${
                       employee === selectedColumn ? "selected" : ""
@@ -441,9 +411,9 @@ function Create() {
                     onChange={handleInputChange}
                     value={employee.meharetDate}
                   />
-                </td>
+                </td> */}
 
-                <td>
+                {/* <td>
                   <select
                     className={`table_input form-control ${
                       employee === selectedColumn ? "selected" : ""
@@ -459,9 +429,9 @@ function Create() {
                         <option value={mh.id}>{mh.name}</option>
                       ))}
                   </select>
-                </td>
+                </td> */}
 
-                <td>
+                {/* <td>
                   <select
                     className={`table_input form-control ${
                       employee === selectedColumn ? "selected" : ""
@@ -481,7 +451,7 @@ function Create() {
 
                 <td>
                   <select
-                    className={`table_input form-control ${
+                    className={`table_input form-control d-none ${
                       employee === selectedColumn ? "selected" : ""
                     }`}
                     name={"elmiDereceId"}
@@ -499,7 +469,7 @@ function Create() {
 
                 <td>
                   <select
-                    className={`table_input form-control ${
+                    className={`table_input form-control d-none ${
                       employee === selectedColumn ? "selected" : ""
                     }`}
                     name="fexriAdName"
@@ -513,7 +483,7 @@ function Create() {
                       </option>
                     ))}
                   </select>
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>
