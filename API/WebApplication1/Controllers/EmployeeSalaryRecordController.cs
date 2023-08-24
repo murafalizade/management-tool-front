@@ -138,5 +138,27 @@ namespace WebApplication1.Controllers
             }
             return BadRequest(obj.data);
         }
+
+        [HttpPost("veteran")]
+        public async Task<IActionResult> AddVeteranQat([FromQuery] int veteranQat)
+        {
+            ErrorHandelerDto obj = await _employeeSalaryRecordService.AddVeteranQat(veteranQat);
+            if ((bool)!obj.isError)
+            {
+                return Ok(obj.data);
+            }
+            return BadRequest(obj.data);
+        }
+
+        [HttpPost("bpm")]
+        public async Task<IActionResult> AddBPMQat([FromQuery] int bpmQat)
+        {
+            ErrorHandelerDto obj = await _employeeSalaryRecordService.AddBPMQat(bpmQat);
+            if ((bool)!obj.isError)
+            {
+                return Ok(obj.data);
+            }
+            return BadRequest(obj.data);
+        }
     }
 }

@@ -1,5 +1,3 @@
-import { EnumDeclaration } from "typescript";
-
 export type SalaryRecordData = {
   recordDateMonth: number;
   recordDateYear: number;
@@ -7,10 +5,10 @@ export type SalaryRecordData = {
   employeeStartDateYear: number;
   employeeStartDateDay: number;
   fullName: string;
-  employeeRankName: string;
-  employeePositionName: string;
-  employeePositionDepartmentName: string;
-  employeePositionDepartmentAdminstrationName: string;
+  rankName: string;
+  positionName: string;
+  positionDepartmentName: string;
+  positionDepartmentAdminstrationName: string;
   rankSalary: number;
   positionSalary: number;
   total: number;
@@ -18,19 +16,19 @@ export type SalaryRecordData = {
   xiMoney: number;
   xiPercent: number;
   ptMoney: number;
-  meharetlilik: number;
-  temsilcilik: number;
-  mexfilik: number;
-  zererlilik: number;
+  abilityPrice: number;
+  representing: number;
+  confidentiality: number;
+  harmfulness: number;
   totalIncome: number;
   xiYears: number;
   xiDays: number;
   xiMonths: number;
-  xariciDil: number;
-  kibertehlukesizlik: number;
-  kesfiyyat: number;
-  elmiDerece: number;
-  fexriAd: number;
+  scientificDegreePrice: number;
+  cyberSecurityPrice: number;
+  exploretionPrice: number;
+  foreignLanguagePrice: number;
+  honorTitlePrice: number;
   employeeMeharetlilik: number;
   //   RecordDate: string;
   extraMoney: number;
@@ -39,18 +37,18 @@ export type SalaryRecordData = {
   dsmf: number;
   totalTaken: number;
   healthInsurance: number;
-  kesirler: number;
-  aliment: number;
+  fails: number;
+  alimony: number;
   extra211100: number;
   totalDiscount: number;
   extraGivenMoney: number;
   food: number;
   muavin: number;
   totalGiven: number;
-  mezuniyyet: number;
+  vacation: number;
   kesfMezun: number;
   kesfXeste: number;
-  kirayePrice: number;
+  rentPrice: number;
   employeePositionId: number;
   maddiYardim: number;
   ezamiyyet: number;
@@ -66,4 +64,11 @@ export type SalaryRecordData = {
   totalSalary: number;
   isMatry: boolean;
   kirayeName: string;
+
+  financialAid: number;
+  businessTrip: number;
+  tripExpense: number;
+  desert: number;
+  exitAid: number;
+
 };

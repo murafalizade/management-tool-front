@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230819140423_mig2")]
+    partial class mig2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -244,8 +246,8 @@ namespace WebApplication1.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ConfidentialityPercentage")
-                        .HasColumnType("int");
+                    b.Property<double>("Confidentiality")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -310,8 +312,8 @@ namespace WebApplication1.Migrations
                     b.Property<double>("ForeignLanguagePrice")
                         .HasColumnType("float");
 
-                    b.Property<int>("HarmfulnessPercentage")
-                        .HasColumnType("int");
+                    b.Property<double>("Harmfulness")
+                        .HasColumnType("float");
 
                     b.Property<double>("HealthInsurance")
                         .HasColumnType("float");
@@ -321,9 +323,6 @@ namespace WebApplication1.Migrations
 
                     b.Property<double>("HonorTitlePrice")
                         .HasColumnType("float");
-
-                    b.Property<bool>("IsBPMGiven")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsChernobyl")
                         .HasColumnType("bit");
@@ -352,10 +351,10 @@ namespace WebApplication1.Migrations
                     b.Property<bool>("IsRefugee")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsVacationGiven")
+                    b.Property<bool>("IsVeteran")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsVeteran")
+                    b.Property<bool>("IsVocationGiven")
                         .HasColumnType("bit");
 
                     b.Property<double>("KesfMezun")
@@ -397,8 +396,8 @@ namespace WebApplication1.Migrations
                     b.Property<int>("RentQat")
                         .HasColumnType("int");
 
-                    b.Property<int>("RepresentingPercentage")
-                        .HasColumnType("int");
+                    b.Property<double>("Representing")
+                        .HasColumnType("float");
 
                     b.Property<int?>("ScientificDegreeId")
                         .HasColumnType("int");

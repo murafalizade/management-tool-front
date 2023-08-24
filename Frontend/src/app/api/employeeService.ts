@@ -71,7 +71,11 @@ export default class EmployeeService {
   }
 
   static async addMvQat(qat: number): Promise<any> {
-    return await fetch.post(`/api/employee/salary/record/mv?foodQat=${qat}`);
+    return await fetch.post(`/api/employee/salary/record/veteran?veteranQat=${qat}`);
+  }
+
+  static async addBpmQat(qat: number): Promise<any> {
+    return await fetch.post(`/api/employee/salary/record/bpm?bpmQat=${qat}`);
   }
 
   static async exportEmployeeSalaryRecord(

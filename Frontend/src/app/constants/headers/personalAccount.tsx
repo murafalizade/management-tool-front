@@ -3,7 +3,7 @@ import { SalaryRecordData } from "../../types/SalaryRecordData";
 import moment from "moment";
 
 // Custom cell converter string for boolean values in table
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+
 const CustomCellRenderer: React.FunctionComponent<
   CellProps<SalaryRecordData, boolean>
 > = ({ value }) => {
@@ -21,19 +21,19 @@ export const personalAccountHeaders: Column<SalaryRecordData>[] = [
   },
   {
     Header: "idarə",
-    accessor: "employeePositionDepartmentAdminstrationName",
+    accessor: "positionDepartmentAdminstrationName",
   },
   {
     Header: "Şöbə, bölmə",
-    accessor: "employeePositionDepartmentName",
+    accessor: "positionDepartmentName",
   },
   {
     Header: "Vəzifə",
-    accessor: "employeePositionName",
+    accessor: "positionName",
   },
   {
     Header: "Hərbi rütbə",
-    accessor: "employeeRankName",
+    accessor: "rankName",
   },
   {
     Header: "Uzun müddətli Xİ",
@@ -95,35 +95,35 @@ export const personalAccountHeaders: Column<SalaryRecordData>[] = [
       },
       {
         Header: "Məharət dər.",
-        accessor: "meharetlilik",
+        accessor: "abilityPrice",
       },
       {
         Header: "Təmsilçilik",
-        accessor: "temsilcilik",
+        accessor: "representing",
       },
       {
         Header: "Məxfiçilik",
-        accessor: "mexfilik",
+        accessor: "confidentiality",
       },
       {
         Header: "Zərərliyə görə",
-        accessor: "zererlilik",
+        accessor: "harmfulness",
       },
       {
         Header: "Xarici dil",
-        accessor: "xariciDil",
+        accessor: "foreignLanguagePrice",
       },
       {
         Header: "Kəşf. mükaf.",
-        accessor: "kesfiyyat",
+        accessor: "exploretionPrice",
       },
       {
         Header: "Elmi dərəcə",
-        accessor: "elmiDerece",
+        accessor: "scientificDegreePrice",
       },
       {
         Header: "Fəxri ad",
-        accessor: "fexriAd",
+        accessor: "honorTitlePrice",
       },
       {
         Header: "Əlavə öd. (gvti)",
@@ -156,11 +156,11 @@ export const personalAccountHeaders: Column<SalaryRecordData>[] = [
       },
       {
         Header: "Kəsirlər",
-        accessor: "kesirler",
+        accessor: "fails",
       },
       {
         Header: "Aliment",
-        accessor: "aliment",
+        accessor: "alimony",
       },
       {
         Header: "Artıq 211100",
@@ -190,7 +190,7 @@ export const personalAccountHeaders: Column<SalaryRecordData>[] = [
   },
   {
     Header: "Məzuniyyət",
-    accessor: "mezuniyyet",
+    accessor: "vacation",
   },
   {
     Header: "Kəşf. məzun.",
@@ -202,7 +202,7 @@ export const personalAccountHeaders: Column<SalaryRecordData>[] = [
   },
   {
     Header: "Kirayə. komp.",
-    accessor: "kirayePrice",
+    accessor: "rentPrice",
   },
   {
     Header: "Maddi yardım",

@@ -6,52 +6,72 @@ namespace WebApplication1.Dtos
     public class EmployeeSalaryEditDto
     {
         public int Id { get; set; }
+        public int EmployeeId { get; set; }
+        public int? ForeignLanguageId { get; set; }
+        public int? HonorTitleId { get; set; }
+        public int? AbilityId { get; set; }
+        public int? PositionId { get; set; }
+        public int? RankId { get; set; }
+        public int? ScientificDegreeId { get; set; }
+        public int? RentId { get; set; }
+        public int DiscountId { get; set; }
         public double PTMoney { get; set; }
-         public int PTQat { get; set; } = 0;
+        public int PTQat { get; set; } = 0;
         public bool IsEternalQat { get; set; } = false;
         public string AccountNumber { get; set; }
-        public double Kibertehlukesizlik { get; set; }
+        public double AbilityPrice { get; set; } = 0;
+        public double CyberSecurityPrice { get; set; }
+        public double ForeignLanguagePrice { get; set; } = 0;
+        public double ScientificDegreePrice { get; set; } = 0;
+        public double HonorTitlePrice { get; set; } = 0;
         public double RankSalary { get; set; }
-        public int KirayeId { get; set; } = 1;
         public int FamilyCount { get; set; } = 0;
-        public int KirayeQat { get; set; } = 0;
-        public double KirayePrice { get; set; }
+        public int RentQat { get; set; } = 0;
+        public double RentPrice { get; set; }
         public double PositionSalary { get; set; }
-        public double Meharetlilik { get; set; }
-        public double Temsilcilik { get; set; }
-        public double Mexfilik { get; set; }
-        public double Zererlilik { get; set; }
-        public double XariciDil { get; set; }
-        public double Kesfiyyat { get; set; }
-        public double ElmiDerece { get; set; }
-        public double FexriAd { get; set; }
+        public double RepresentingPercentage { get; set; }
+        public double ConfidentialityPercentage { get; set; }
+        public double HarmfulnessPercentage { get; set; }
+        public double ExploretionPrice { get; set; }
         public double ExtraMoney { get; set; }
         public double ExtraMoney2 { get; set; }
         public string Comment { get; set; }
         public double Tax { get; set; }
         public double DSMF { get; set; }
-        public double Sehra { get; set; }
-        public double Kesirler { get; set; }
-        public double AlimentPercentage { get; set; }
-        public double Aliment { get; set; }
+        public double Desert { get; set; }
+        public double Fails { get; set; }
+        public double AlimonyPercentage { get; set; }
+        public double Alimony { get; set; }
         public double HealthInsurance { get; set; }
         public double Extra211100 { get; set; }
-        public bool isMatry { get; set; }
-        public bool isNotGiven { get; set; }
-        public bool isChernobil { get; set; }
-        public bool isVeteran { get; set; }
-        public bool isDisabled { get; set; }
-        public bool isOwner { get; set; }
-        public bool isQachqin { get; set; }
-        public double MaddiYardim { get; set; }
-        public double Ezamiyyet { get; set; }
+        public bool IsMatry { get; set; }
+        public bool IsNotGiven { get; set; }
+        public bool IsChernobil { get; set; }
+        public bool IsVeteran { get; set; }
+        public bool IsDisabled { get; set; }
+        public bool IsOwner { get; set; }
+        public bool IsQachqin { get; set; }
+        public double FinancialAid { get; set; }
+        public double Vacation { get; set; }
         public double KesfMezun { get; set; }
         public double KesfXeste { get; set; }
-        public double YolXerci { get; set; }
+        public double TripExpense { get; set; }
         public double YukPulu { get; set; }
-        public double CixisMuv { get; set; }
-        public double Mezuniyyet { get; set; }
+        public double ExitAid { get; set; }
+        public double BusinessTrip { get; set; }
         public bool FoodGiven { get; set; }
         public double Food { get; set; }
+        public bool IsFinancialAidGiven { get; set; }
+        public bool IsVacationGiven { get; set; }
+        public double VacationDSMF { get; set; }
+        public bool IsExitAidGiven { get; set; }
+        public double BPM { get; set; }
+        public double BPMDSMF { get; set; }
+        public int BPMQat { get; set; }
+
+        public bool IsRankSalaryHand { get; set; }
+        public bool IsPositionSalaryHand { get; set; }
+        public bool IsLanguagePriceHand { get; set; }
+        public bool IsPayerHand { get; set; }
     }
 }

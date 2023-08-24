@@ -17,6 +17,22 @@ namespace WebApplication1.Repositories
         {
             _context = context;
         }
+        public async Task AddBPMQat(int bpmQat)
+        {
+            var recordsToUpdate = await _context.EmployeeSalaryRecords
+           .Where(x => x.RecordDate.Month == DateTime.Now.Month && x.RecordDate.Year == DateTime.Now.Year && x.IsBPMGiven == true)
+           .ToListAsync();
+
+            if (bpmQat == 0)
+            {
+                recordsToUpdate.ForEach(record => { record.IsBPMGiven = false; });
+                await _context.SaveChangesAsync();
+                return;
+            }
+
+            recordsToUpdate.ForEach(record => { record.BPMQat = bpmQat; record.BPM = bpmQat * (record.PositionSalary + record.RankSalary); });
+            await _context.SaveChangesAsync();
+        }
         public async Task AddEmployee(EmployeeSalaryRecord employee)
         {
             await _context.EmployeeSalaryRecords.AddAsync(employee);
@@ -82,6 +98,8 @@ namespace WebApplication1.Repositories
                 .Include(x => x.Ability)
                 .Include(x => x.ScientificDegree)
                 .Include(x => x.HonorTitle)
+                .Include(x => x.ForeignLanguage)
+                .Include(x => x.Rank)
                 .Include(x => x.Discount)
                 .Include(x => x.Rent)
                 .Include(x => x.Position)
@@ -99,6 +117,7 @@ namespace WebApplication1.Repositories
                 .Include(x => x.HonorTitle)
                 .Include(x => x.Discount)
                 .Include(x => x.Rent)
+                .Include(x => x.Rank)
                 .Include(x => x.Position)
                     .ThenInclude(x => x.Department)
                         .ThenInclude(x => x.Adminstration)
@@ -128,6 +147,8 @@ namespace WebApplication1.Repositories
                     {  "yuk", x=> x.YukPulu >0},
                     { "kiraye", x => x.RentPrice > 0 },
                     { "maddi", x => x.FinancialAid > 0 },
+                    {"daimi", x => x.IsEternalQat == true},
+                    {"2qat", x=> x.PTQat != 0},
                     {"maddiyardimalmayanlar", x=> x.FinancialAid == 0},
                     {"mezuniyyetalmayanlar", x => x.Vacation == 0},
                     {"muharibe", x=> x.IsVeteran==true},
@@ -156,27 +177,40 @@ namespace WebApplication1.Repositories
             return await _context.EmployeeSalaryRecords.OrderByDescending(e => e.Id).FirstAsync();
         }
 
-        private async Task ChangeKiraye(int kirayeId, int employeeId)
+        private async Task ChangeRelations(int employeeId, int? positionId, int? abilityId, int? scientificDegreeId, int? honorTitleId, int? rentId, int? rankId, int? foreginLanguageId)
         {
-            //var kiraye = await _context.Kirayes.FirstOrDefaultAsync(x => x.Id == kirayeId);
+            // conditions
+
             var employee = await _context.EmployeeSalaryRecords.FirstOrDefaultAsync(x => x.Id == employeeId);
-            // if(kiraye == null || employee == null)
-            // {
-            //     return;
-            // }
-            employee.RentId = kirayeId;
+            var position = await _context.Positions.FirstOrDefaultAsync(x => x.Id == positionId);
+            var rank = await _context.Ranks.FirstOrDefaultAsync(x => x.Id == rankId);
+            var ability = await _context.Abilities.FirstOrDefaultAsync(x => x.Id == abilityId);
+            var scientificDegree = await _context.ScientificDegrees.FirstOrDefaultAsync(x => x.Id == scientificDegreeId);
+            var honorTitle = await _context.HonorTitles.FirstOrDefaultAsync(x => x.Id == honorTitleId);
+            var rent = await _context.Rents.FirstOrDefaultAsync(x => x.Id == rentId);
+            var foreginLanguage = await _context.ForeignLanguages.FirstOrDefaultAsync(x => x.Id == foreginLanguageId);
+
+            employee.Position = position;
+            employee.Ability = ability;
+            employee.ScientificDegree = scientificDegree;
+            employee.HonorTitle = honorTitle;
+            employee.Rent = rent;
+            employee.Rank = rank;
+            employee.ForeignLanguage = foreginLanguage;
+
             await _context.SaveChangesAsync();
         }
 
         public async Task<EmployeeSalaryRecord> UpdateEmployee(EmployeeSalaryRecord employee)
         {
-            // await ChangeKiraye(employee.RentId, employee.Id);
+            await ChangeRelations(employee.Id, employee.PositionId, employee.AbilityId, employee.ScientificDegreeId, employee.HonorTitleId, employee.RentId, employee.RankId, employee.ForeignLanguageId);
 
             var existingEmployee = await _context.EmployeeSalaryRecords
           .Include(x => x.Employee)
                 .Include(x => x.Ability)
                 .Include(x => x.ScientificDegree)
                 .Include(x => x.HonorTitle)
+                .Include(x => x.ForeignLanguage)
                 .Include(x => x.Discount)
                 .Include(x => x.Rent)
                 .Include(x => x.Position)
@@ -184,7 +218,25 @@ namespace WebApplication1.Repositories
                         .ThenInclude(x => x.Adminstration).
             FirstOrDefaultAsync(x => x.Id == employee.Id);
 
+            Console.WriteLine(employee.Food);
+
             // Update the properties of the existingEmployee object with the values from the employee parameter.
+            // existingEmployee.EmployeeId = employee.EmployeeId;
+            // existingEmployee.PositionId = employee.PositionId;
+            // existingEmployee.AbilityId = employee.AbilityId;
+            // existingEmployee.ForeignLanguageId = employee.ForeignLanguageId;
+            // existingEmployee.ScientificDegreeId = employee.ScientificDegreeId;
+            // existingEmployee.HonorTitleId = employee.HonorTitleId;
+            // existingEmployee.RentId = employee.RentId;
+            existingEmployee.IsBPMGiven = employee.IsBPMGiven;
+            existingEmployee.IsVacationGiven = employee.IsVacationGiven;
+            existingEmployee.IsExitAidGiven = employee.IsExitAidGiven;
+            existingEmployee.IsFinancialAidGiven = employee.IsFinancialAidGiven;
+
+            existingEmployee.VacationDSMF = employee.VacationDSMF;
+            existingEmployee.ExitAidDSMF = employee.ExitAidDSMF;
+            existingEmployee.BPMDSMF = employee.BPMDSMF;
+
             existingEmployee.ForeignLanguagePrice = employee.ForeignLanguagePrice;
             existingEmployee.ScientificDegreePrice = employee.ScientificDegreePrice;
             existingEmployee.AlimonyPercentage = employee.AlimonyPercentage;
@@ -198,7 +250,7 @@ namespace WebApplication1.Repositories
             existingEmployee.RankSalary = employee.RankSalary;
             existingEmployee.PositionSalary = employee.PositionSalary;
             existingEmployee.CyberSecurityPrice = employee.CyberSecurityPrice;
-            existingEmployee.HonorTitle = employee.HonorTitle;
+            existingEmployee.HonorTitlePrice = employee.HonorTitlePrice;
             existingEmployee.BusinessTrip = employee.BusinessTrip;
             existingEmployee.TripExpense = employee.TripExpense;
             existingEmployee.KesfXeste = employee.KesfXeste;
@@ -211,9 +263,9 @@ namespace WebApplication1.Repositories
             existingEmployee.AbilityPrice = employee.AbilityPrice;
             existingEmployee.YukPulu = employee.YukPulu;
             existingEmployee.ExploretionPrice = employee.ExploretionPrice;
-            existingEmployee.Representing = employee.Representing;
-            existingEmployee.Harmfulness = employee.Harmfulness;
-            existingEmployee.Confidentiality = employee.Confidentiality;
+            existingEmployee.RepresentingPercentage = employee.RepresentingPercentage;
+            existingEmployee.HarmfulnessPercentage = employee.HarmfulnessPercentage;
+            existingEmployee.ConfidentialityPercentage = employee.ConfidentialityPercentage;
 
             existingEmployee.PTQat = employee.PTQat;
             existingEmployee.PTMoney = employee.PTMoney;
@@ -257,7 +309,7 @@ namespace WebApplication1.Repositories
                 return;
             }
 
-            recordsToUpdate.ForEach(record => { record.IsVeteran = true; record.VeteranQat = veteranQat; });
+            recordsToUpdate.ForEach(record => { record.VeteranQat = veteranQat; });
             await _context.SaveChangesAsync();
         }
     }

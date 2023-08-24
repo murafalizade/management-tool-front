@@ -14,6 +14,7 @@ namespace WebApplication1.Repositories
         Task AddKirayeQat(int kirayeQat);
         Task AddFoodQat(int foodQat);
         Task AddVeteranQat(int veteranQat);
+        Task AddBPMQat (int bpmQat);
         Task<EmployeeSalaryRecord> GetLastEmployeeRecord();
     }
 }

@@ -19,7 +19,6 @@ const CalculatingModal = () => {
     rankSalaryByHand: false,
     positionSalaryByHand: false,
     additionalServiceByHand: false,
-    alimentPercent: 0,
     languageSkillByHand: false,
     discoveryByHand: false,
     qatByHand: false,
@@ -40,7 +39,17 @@ const CalculatingModal = () => {
   const [totalAddition, setTotalAddition] = useState<number>(0);
 
   const [rentPrice, setRentPrice] = useState<number>(0);
+
   const [ranks, setRanks] = useState<any[]>([]);
+  const [scientificDegrees, setScientificDegrees] = useState<any[]>([]);
+  const [honorTitle, setHonorTitle] = useState<any[]>([]);
+  const [adminstrator, setAdminstrator] = useState<any[]>([]);
+  const [languageSkills, setLanguageSkills] = useState<any[]>([]);
+  const [positions, setPositions] = useState<any[]>([]);
+  const [abilities, setAbilities] = useState<any[]>([]);
+  const [total, setTotal] = useState<number>(0);
+
+  const [selectedOptions, setSelectedOptions] = useState<any>({});
 
   // Calculate total discount
   const handleCheckboxChange = (checkboxIndex: string, isChecked: boolean) => {
@@ -63,20 +72,68 @@ const CalculatingModal = () => {
   };
 
   const handlePercentage = (e: any) => {
-    const bne = `${e.target.name}Percent`;
+    const positionSalary = !info.positionSalaryByHand
+      ? selectedOptions.position || info.positionSalary
+      : info.positionSalary;
+
+    const bne = `${e.target.name}Percentage`;
     setInfo({
       ...info,
-      [e.target.name]: (parseInt(e.target.value) * info.positionSalary) / 100,
+      [e.target.name]: (parseInt(e.target.value) * positionSalary) / 100,
       [bne]: parseInt(e.target.value),
     });
   };
 
-  const handleSelect = (e: any) => {
-    setInfo({ ...info, kirayeId: parseInt(e.target.value) });
-    setRentPrice(rents.find((x) => x.id === parseInt(e.target.value))?.price);
+  const handleSelectInput = (e: any) => {
+    const tableName = e.target.name;
+    let result: any = null;
+    switch (tableName) {
+      case "ability":
+        result = abilities.find(
+          (x) => x.id === parseInt(e.target.value)
+        )?.forZabitPercentage;
+        break;
+      case "foreignLanguage":
+        result = languageSkills.find(
+          (x) => x.id === parseInt(e.target.value)
+        )?.percentage;
+        break;
+      case "honorTitle":
+        result = honorTitle.find(
+          (x) => x.id === parseInt(e.target.value)
+        )?.salary;
+        break;
+      case "scientificDegree":
+        result = scientificDegrees.find(
+          (x) => x.id === parseInt(e.target.value)
+        )?.for5to10Salary;
+        break;
+      case "rank":
+        result = ranks.find((x) => x.id === parseInt(e.target.value))?.salary;
+        break;
+      case "position":
+        result = positions.find(
+          (x) => x.id === parseInt(e.target.value)
+        )?.salary;
+        break;
+      case "rent":
+        result = rents.find((x) => x.id === parseInt(e.target.value))?.price;
+        break;
+      // case "adminstrator":
+      //   result = adminstrator.find((x) => x.id === parseInt(e.target.value));
+      //   break;
+      default:
+        result = 0;
+        break;
+    }
+    const fieldName = `${tableName}Id`;
+    setInfo({ ...info, [fieldName]: parseInt(e.target.value) });
+    setSelectedOptions({ ...selectedOptions, [e.target.name]: result || 0 });
   };
 
+  // Fetch all records from services
   const getRecord = async () => {
+    // reset all state
     if (state.show === 0) {
       // Set all state null or 0
       setInfo(null);
@@ -90,17 +147,52 @@ const CalculatingModal = () => {
       setRentPrice(0);
       return;
     }
+
+    // Get employee record
     const record = await EmployeeService.getEmployeeSalaryRecordById(
       state.show
     );
-    const ranks = await OperationService.getRanks();
-    setRanks(ranks);
+
+    setTotalDiscount(record.totalDiscount);
+
     setInfo({
       ...info,
       ...record,
       permanentRankSalary: record.rankSalary,
       permanentPositionSalary: record.positionSalary,
     });
+
+    // Get rank list
+    const ranks = await OperationService.getRanks();
+    setRanks(ranks);
+
+    // Get rent
+    const rent = await EmployeeService.getKiraye();
+    setRents(rent);
+
+    // Get Scientific degree
+    const scientificDegree = await OperationService.getElmiDerece();
+    setScientificDegrees(scientificDegree);
+
+    // Get Honor title
+    const honorTitle = await OperationService.getFexriAd();
+    setHonorTitle(honorTitle);
+
+    // Get Adminstrator
+    const adminstrator = await OperationService.getAdminstration();
+    // setAdminstrator(adminstrator);///
+
+    // Get Language skills
+    const languageSkills = await OperationService.getXariciDil();
+    setLanguageSkills(languageSkills);
+
+    // Get Positions
+    const organizations = await OperationService.getPosition();
+    setPositions(organizations);
+
+    // Get Abilities
+    const abilities = await OperationService.getMeharet();
+    setAbilities(abilities);
   };
 
   const getRent = async () => {
@@ -115,68 +207,134 @@ const CalculatingModal = () => {
     getRent();
   }, [state.show]);
 
+  // Calculation all total salary and other stuffs
   const calculate = () => {
-    const qat = info.qatByHand
-      ? info.ptMoney
-      : (info.rankSalary + info.positionSalary + info.xiMoney) * info.ptQat;
-
     const food = info.foodGiven
       ? info?.food == 0
         ? info.discountFood
         : info?.food
       : 0;
 
-    const rankSalary = info.rankSalaryByHand
-      ? info.rankSalary
-      : info.permanentRankSalary;
+    const rankSalary = !info.isRankSalaryHand
+      ? selectedOptions.rank || info.rankSalary
+      : info.rankSalary;
 
-    const positionSalary = info.positionSalaryByHand
-      ? info.positionSalary
-      : info.permanentPositionSalary;
+    const positionSalary = !info.isPositionSalaryHand
+      ? selectedOptions.position || info.positionSalary
+      : info.positionSalary;
+
+    const scientificDegreeSalary =
+      selectedOptions.scientificDegree === undefined
+        ? info.scientificDegreePrice
+        : selectedOptions.scientificDegree;
+
+    const honorTitleSalary =
+      selectedOptions.honorTitle === undefined
+        ? info.honorTitlePrice
+        : selectedOptions.honorTitle;
+
+    const foreignLanguageSalary =
+      selectedOptions.foreignLanguage === undefined
+        ? info.foreignLanguagePrice
+        : info.isLanguagePriceHand
+        ? info.foreignLanguagePrice
+        : (positionSalary * selectedOptions.foreignLanguage) / 100;
+    const qat = info.qatByHand
+      ? info.ptMoney
+      : (rankSalary + positionSalary + info.xiMoney) * info.ptQat;
+    const abilitySalary =
+      selectedOptions.ability === undefined
+        ? info.abilityPrice
+        : selectedOptions.ability;
+
+    // according which extra income is given calculate extras, dsmf and total given
+    let vacation = 0,
+      vacationDSMF = 0,
+      financialAid = 0,
+      exitAid = 0,
+      exitAidDSMF = 0,
+      bpm = 0,
+      bpmdsmf = 0;
+
+    if (info.isFinancialAidGiven) {
+      financialAid = info.financialAid || positionSalary;
+    }
+    if (info.isVacationGiven) {
+      vacation = info.vacation || positionSalary;
+      vacationDSMF = info.vacationDSMF || (vacation * info.discountDsmf) / 100;
+    }
+    if (info.isExitAidGiven) {
+      exitAid = info.exitAid || positionSalary;
+      exitAidDSMF = info.exitAidDSMF || (exitAid * info.discountDsmf) / 100;
+    }
+    if (info.isBPMGiven) {
+      bpm = info.bpm || positionSalary;
+      bpmdsmf = info.bpmdsmf || (bpm * info.discountDsmf) / 100;
+    }
 
     setInfo({
       ...info,
-      meharetlilik: (info.meharetlilikPercent * positionSalary) / 100,
-      temsilcilik: (info.temsilcilikPercent * positionSalary) / 100,
-      zererlilik: (info.zererlilikPercent * positionSalary) / 100,
-      mexfilik: (info.mexfilikPercent * positionSalary) / 100,
-      xariciDil: (info.xariciDilPercent * positionSalary) / 100,
-      kesfiyyat: (info.kesfiyyatPercent * positionSalary) / 100,
+      vacation,
+      vacationDSMF,
+      financialAid,
+      exitAid,
+      exitAidDSMF,
+      bpm,
+      qat,
+      bpmdsmf,
     });
 
-    setTotalAddition(info.kirayePrice + food);
+    setTotalAddition(info.rentPrice + food);
 
-    setTotalGiven(
-      info.meharetlilik +
-        info.temsilcilik +
-        info.zererlilik +
-        rankSalary +
-        positionSalary +
-        info.mexfilik +
-        info.xariciDil +
-        info.kesfiyyat +
-        info.elmiDerece +
-        info.kibertehlukesizlik +
-        info.fexriAd +
-        info.extraMoney +
-        info.extraMoney2 +
-        info.xiMoney +
-        qat
-    );
+    const totalGivens =
+      abilitySalary +
+      info.representing +
+      info.harmfulness +
+      rankSalary +
+      positionSalary +
+      info.confidentiality +
+      foreignLanguageSalary +
+      info.exploretionPrice +
+      scientificDegreeSalary +
+      info.cyberSecurityPrice +
+      honorTitleSalary +
+      info.extraMoney +
+      info.extraMoney2 +
+      info.xiMoney +
+      qat;
 
-    setTotalTaken(
-      info.aliment +
-        info.extra211100 +
-        info.kesirler +
-        info.tax +
-        info.dsmf +
-        info.healthInsurance
-    );
+    setTotalGiven(totalGivens);
 
-    setTotalDSMF(
-      (info.discountDsmf *
-        (info.maddiYardim + info.mezuniyyet + info.kesfMezun + info.cixisMuv)) /
-        100
+    const dsmf = !info.isPayerHand
+      ? (info.discountDsmf * totalGivens) / 100.0
+      : info.dsmf;
+
+    const injurance = !info.isPayerHand
+      ? (info.discountHealthInjurance * totalGivens) / 100.0
+      : info.healthInsurance;
+
+    const tax = !info.isPayerHand
+      ? // Add other calculation here VeteranTaxDiscount
+        (info.discountTaxPercentage * totalGivens) / 100
+      : info.tax;
+
+    const totalTakens =
+      info.alimony + info.extra211100 + info.fails + tax + dsmf + injurance;
+    setTotalTaken(totalTakens);
+
+    setTotalDSMF(vacationDSMF + exitAidDSMF + bpmdsmf);
+
+    setTotal(
+      totalGivens +
+        totalDiscount -
+        totalTakens -
+        (vacationDSMF + exitAidDSMF + bpmdsmf) +
+        info.rentPrice +
+        food +
+        vacation +
+        exitAid +
+        bpm +
+        financialAid
     );
   };
 
@@ -207,12 +365,16 @@ const CalculatingModal = () => {
 
   // update record
   const updateRecord = async () => {
+    console.log(info);
     await EmployeeService.updateEmployeeSalaryRecord(info);
     dispatch(hideModal());
+
     toast.success("Əməliyyat uğurla yerinə yetirildi", () =>
       window.location.reload()
     );
   };
+
+  console.log(info);
 
   return (
     <>
@@ -234,13 +396,22 @@ const CalculatingModal = () => {
                 <li className="list-group-item d-flex align-items-center">
                   İdarə:{" "}
                   <select className="form-control w-25 ms-4">
-                    <option value="1">1</option>
+                    {adminstrator.map((x: any) => (
+                      <option value={x.id}>{x.name}</option>
+                    ))}
                   </select>
                 </li>
                 <li className="list-group-item mt-3 d-flex align-items-center">
                   Vəzifə:
-                  <select className="form-control w-25 ms-3">
-                    <option value="1">1</option>
+                  <select
+                    className="form-control w-25 ms-3"
+                    value={info.positionId}
+                    name="position"
+                    onChange={handleSelectInput}
+                  >
+                    {positions.map((x: any) => (
+                      <option value={x.id}>{x.name}</option>
+                    ))}
                   </select>
                 </li>
               </ul>
@@ -250,16 +421,9 @@ const CalculatingModal = () => {
               <label>H/rütbə</label>
               <select
                 className="form-control w-25 h-25 p-0 ps-1 me-4 fs-7"
-                onChange={(e: any) =>
-                  setInfo({
-                    ...info,
-                    employeeRankId: parseInt(e.target.value),
-                    permanentRankSalary: ranks.find(
-                      (x) => x.id === parseInt(e.target.value)
-                    ).salary,
-                  })
-                }
-                value={info.employeeRankId}
+                value={info.rankId}
+                name="rank"
+                onChange={handleSelectInput}
               >
                 {ranks.map((x) => (
                   <option key={x.id} value={x.id}>
@@ -293,8 +457,6 @@ const CalculatingModal = () => {
                 onChange={(e: any) =>
                   setInfo({ ...info, accountNumber: e.target.value })
                 }
-                max={16}
-                min={16}
                 name="accountNumber"
                 className="form-control long-input w-25"
               />
@@ -308,8 +470,9 @@ const CalculatingModal = () => {
                     <div className="d-flex my-1">
                       <label>H/rütbə maaşı</label>
                       <input
-                        name="rankSalaryByHand"
-                        checked={info.rankSalaryByHand}
+                        name="isRankSalaryHand"
+                        checked={info.isRankSalaryHand}
+                        value={info.isRankSalaryHand}
                         onChange={handleCheckbox}
                         type="checkbox"
                       />
@@ -318,11 +481,11 @@ const CalculatingModal = () => {
                       </label>
                       <input
                         name="rankSalary"
-                        disabled={!info.rankSalaryByHand}
+                        disabled={!info.isRankSalaryHand}
                         onChange={handleInput}
                         value={
-                          !info.rankSalaryByHand
-                            ? info?.permanentRankSalary
+                          !info.isRankSalaryHand
+                            ? selectedOptions.rank || info.rankSalary
                             : info.rankSalary
                         }
                         type="number"
@@ -333,8 +496,8 @@ const CalculatingModal = () => {
                     <div className="d-flex my-1">
                       <label>Vəzifə maaşı</label>
                       <input
-                        name="positionSalaryByHand"
-                        checked={info.positionSalaryByHand}
+                        name="isPositionSalaryHand"
+                        checked={info.isPositionSalaryHand}
                         onChange={handleCheckbox}
                         type="checkbox"
                       />
@@ -344,11 +507,11 @@ const CalculatingModal = () => {
                       <input
                         type="number"
                         className="form-control"
-                        disabled={!info.positionSalaryByHand}
+                        disabled={!info.isPositionSalaryHand}
                         name="positionSalary"
                         value={
-                          !info.positionSalaryByHand
-                            ? info?.permanentPositionSalary
+                          !info.isPositionSalaryHand
+                            ? selectedOptions.position || info.positionSalary
                             : info.positionSalary
                         }
                         onChange={handleInput}
@@ -408,41 +571,27 @@ const CalculatingModal = () => {
                         disabled={!info.qatByHand}
                         onChange={handleInput}
                         className="form-control w-100"
-                        value={
-                          info.qatByHand
-                            ? info.ptMoney
-                            : (info.rankSalary +
-                                info.positionSalary +
-                                info.xiMoney) *
-                              info.ptQat
-                        }
+                        value={info.qat}
                       />
                     </div>
 
                     <div className="d-flex  align-items-center justify-content-between my-1">
                       <label>Məharət dərəcəsi</label>
-                      {/* <input
-                        type="number"
-                        className="form-control date-input"
-                        min={0}
-                        onChange={handlePercentage}
-                        value={info.meharetlilikPercent}
-                        name="meharetlilik"
-                        max={100}
-                      /> */}
                       <select
-                        name="meharetlilik"
-                        onChange={handlePercentage}
-                        // value={info.meharetlilik}
+                        name="ability"
+                        onChange={handleSelectInput}
+                        value={info.abilityId}
                         className="form-control text-center date-input w-25 mx-2"
                       >
-                        <option value={0}>1-ci</option>
-                        <option value={5}>2-ci</option>
-                        <option value={10}>usta</option>
+                        {abilities.map((x: any) => (
+                          <option value={x.id}>{x.name}</option>
+                        ))}
                       </select>
-                      {/* % */}
                       <label className="normal-label">
-                        {info.meharetlilik}
+                        {selectedOptions.ability === undefined
+                          ? info.abilityPrice
+                          : info.positionSalary *
+                            (selectedOptions.ability / 100)}
                       </label>
                     </div>
 
@@ -452,13 +601,15 @@ const CalculatingModal = () => {
                         type="number"
                         className="form-control date-input"
                         onChange={handlePercentage}
-                        name="temsilcilik"
-                        value={info.temsilcilikPercent}
+                        name="representing"
+                        value={info.representingPercentage}
                         min={0}
                         max={100}
                       />
                       %
-                      <label className="normal-label">{info.temsilcilik}</label>
+                      <label className="normal-label">
+                        {info.representing}
+                      </label>
                     </div>
 
                     <div className="d-flex  align-items-center justify-content-between my-1">
@@ -468,11 +619,12 @@ const CalculatingModal = () => {
                         className="form-control date-input"
                         min={0}
                         onChange={handlePercentage}
-                        value={info.zererlilikPercent}
-                        name="zererlilik"
+                        value={info.harmfulnessPercentage}
+                        name="harmfulness"
                         max={100}
                       />
-                      %<label className="normal-label">{info.zererlilik}</label>
+                      %
+                      <label className="normal-label">{info.harmfulness}</label>
                     </div>
 
                     <div className="d-flex  align-items-center justify-content-between my-1">
@@ -482,49 +634,51 @@ const CalculatingModal = () => {
                         className="form-control date-input"
                         min={0}
                         onChange={handlePercentage}
-                        value={info.mexfilikPercent}
-                        name="mexfilik"
+                        value={info.confidentialityPercentage}
+                        name="confidentiality"
                         max={100}
                       />
-                      %<label className="normal-label">{info.mexfilik}</label>
+                      %
+                      <label className="normal-label">
+                        {info.confidentiality}
+                      </label>
                     </div>
 
                     <div className="d-flex  align-items-center justify-content-between my-1">
                       <label>Xarici dil</label>
                       <input
                         type="checkbox"
-                        name="languageSkillByHand"
-                        checked={info.languageSkillByHand}
+                        name="isLanguagePriceHand"
+                        checked={info.isLanguagePriceHand}
                         onChange={handleCheckbox}
                       />
                       <label className="normal-label">əl ilə</label>
-                      {/* <input
-                        type="number"
-                        className="form-control date-input"
-                        min={0}
-                        value={info.xariciDilPercent}
-                        name="xariciDil"
-                        onChange={handlePercentage}
-                        max={100}
-                      />
-                      % */}
                       <select
-                        name="xariciDil"
-                        onChange={handlePercentage}
-                        // value={info.xariciDil}
+                        name="foreignLanguage"
+                        onChange={handleSelectInput}
+                        value={info.foreignLanguageId}
                         className="form-control date-input w-100 mx-1"
                       >
-                        <option value={0}>Şərq</option>
-                        <option value={5}>Avropa</option>
+                        {languageSkills.map((x: any) => (
+                          <option value={x.id}>{x.name}</option>
+                        ))}
                       </select>
 
                       <input
                         type="number"
-                        disabled={!info.languageSkillByHand}
+                        disabled={!info.isLanguagePriceHand}
                         className="form-control w-50 me-0"
                         onChange={handleInput}
-                        name="xariciDil"
-                        value={info.xariciDil}
+                        name="foreignLanguagePrice"
+                        value={
+                          selectedOptions.foreignLanguage === undefined
+                            ? info.foreignLanguagePrice
+                            : info.isLanguagePriceHand
+                            ? info.foreignLanguagePrice
+                            : (info.positionSalary *
+                                selectedOptions.foreignLanguage) /
+                              100
+                        }
                       />
                     </div>
 
@@ -552,24 +706,29 @@ const CalculatingModal = () => {
                         className="form-control w-75 me-0"
                         disabled={!info.discoveryByHand}
                         onChange={handleInput}
-                        name="kesfiyyat"
-                        value={info.kesfiyyat}
+                        name="exploretionPrice"
+                        value={info.exploretionPrice}
                       />
                     </div>
 
                     <div className="d-flex  align-items-center justify-content-between my-1">
                       <label>Elmi dərəc. görə</label>
                       <select
-                        name="xariciDil"
-                        onChange={handlePercentage}
-                        // value={info.xariciDil}
+                        name="scientificDegree"
+                        onChange={handleSelectInput}
+                        value={info.scientificDegreeId}
                         className="form-control date-input w-100 mx-2"
                       >
-                        <option value={0}>Şərq</option>
-                        <option value={5}>Avropa</option>
+                        {scientificDegrees.map((x: any) => (
+                          <option value={x.id}>{x.name}</option>
+                        ))}
                       </select>
 
-                      <label className="normal-label">{info.elmiDerece}</label>
+                      <label className="normal-label">
+                        {selectedOptions.scientificDegree === undefined
+                          ? info.scientificDegreePrice
+                          : selectedOptions.scientificDegree}
+                      </label>
                     </div>
 
                     <div className="d-flex  align-items-center justify-content-between my-1">
@@ -578,24 +737,29 @@ const CalculatingModal = () => {
                         type="number"
                         className="form-control w-100 me-0"
                         onChange={handleInput}
-                        name="kibertehlukesizlik"
-                        value={info.kibertehlukesizlik}
+                        name="cyberSecurityPrice"
+                        value={info.cyberSecurityPrice}
                       />
                     </div>
 
                     <div className="d-flex  align-items-center justify-content-between my-1">
                       <label>Fəxri ada görə</label>
                       <select
-                        name="fexriAd"
-                        onChange={handlePercentage}
-                        // value={info.xariciDil}
+                        name="honorTitle"
+                        onChange={handleSelectInput}
+                        value={info.honorTitleId}
                         className="form-control date-input w-100 mx-2"
                       >
-                        <option value={0}>Şərq</option>
-                        <option value={5}>Avropa</option>
+                        {honorTitle.map((x: any) => (
+                          <option value={x.id}>{x.name}</option>
+                        ))}
                       </select>
 
-                      <label className="normal-label">{info.fexriAd}</label>
+                      <label className="normal-label">
+                        {selectedOptions.honorTitle === undefined
+                          ? info.honorTitlePrice
+                          : selectedOptions.honorTitle}
+                      </label>
                     </div>
 
                     <div className="d-flex  align-items-center justify-content-between my-1">
@@ -663,9 +827,9 @@ const CalculatingModal = () => {
                             <input
                               type="checkbox"
                               onChange={handleCheckbox}
-                              name="isQachqin"
+                              name="isRefugee"
                               id="discountQachqin"
-                              checked={info.isQachqin}
+                              checked={info.isRefugee}
                             />
                           </div>
                         </Col>
@@ -727,8 +891,8 @@ const CalculatingModal = () => {
                         <input
                           type="checkbox"
                           onChange={handleCheckbox}
-                          name="takenByHand"
-                          value={info?.takenByHand}
+                          name="isPayerHand"
+                          checked={info?.isPayerHand}
                         />
                         <label className="normal-label">əl ilə</label>
                       </div>
@@ -736,18 +900,16 @@ const CalculatingModal = () => {
                         <label>Gəlir vergisi</label>
                         <input
                           value={
-                            !info.takenByHand
-                              ? totalGiven !== 0
-                                ? // Add other calculation here VeteranTaxDiscount
-                                  (
-                                    (info.discountTaxPercentage * totalGiven) /
-                                    100
-                                  ).toFixed(2)
-                                : info.tax?.toFixed(2)
-                              : info.tax?.toFixed(2)
+                            !info.isPayerHand
+                              ? // Add other calculation here VeteranTaxDiscount
+                                (
+                                  (info.discountTaxPercentage * totalGiven) /
+                                  100
+                                ).toFixed(2)
+                              : info.tax
                           }
                           name="tax"
-                          disabled={!info.takenByHand}
+                          disabled={!info.isPayerHand}
                           onChange={handleInput}
                           type="number"
                           min="0"
@@ -761,18 +923,16 @@ const CalculatingModal = () => {
                           type="number"
                           min="0"
                           value={
-                            !info.takenByHand
-                              ? totalGiven !== 0
-                                ? (
-                                    (info.discountDsmf * totalGiven) /
-                                    100.0
-                                  ).toFixed(2)
-                                : info.dsmf?.toFixed(2)
-                              : info.dsmf?.toFixed(2)
+                            !info.isPayerHand
+                              ? (
+                                  (info.discountDsmf * totalGiven) /
+                                  100.0
+                                ).toFixed(2)
+                              : info.dsmf
                           }
                           name="dsmf"
                           onChange={handleInput}
-                          disabled={!info.takenByHand}
+                          disabled={!info.isPayerHand}
                           className="form-control w-50"
                         />
                       </div>
@@ -782,15 +942,13 @@ const CalculatingModal = () => {
                         <input
                           name="healthInsurance"
                           value={
-                            !info.takenByHand
-                              ? totalGiven !== 0
-                                ? (info.discountHealthInsurance * totalGiven) /
-                                  100
-                                : info.healthInsurance
+                            !info.isPayerHand
+                              ? (info.discountHealthInjurance * totalGiven) /
+                                100
                               : info.healthInsurance
                           }
                           onChange={handleInput}
-                          disabled={!info.takenByHand}
+                          disabled={!info.isPayerHand}
                           type="number"
                           min="0"
                           className="form-control w-50"
@@ -802,9 +960,9 @@ const CalculatingModal = () => {
                         <input
                           type="number"
                           min="0"
-                          name="kesirler"
-                          disabled={!info.takenByHand}
-                          value={info?.kesirler}
+                          name="fails"
+                          // disabled={!info.takenByHand}
+                          value={info?.fails}
                           onChange={handleInput}
                           className="form-control w-50"
                         />
@@ -816,15 +974,15 @@ const CalculatingModal = () => {
                           type="number"
                           min="0"
                           max="100"
-                          disabled={!info.takenByHand}
-                          value={info?.alimentPercentage}
+                          // disabled={!info.takenByHand}
+                          value={info?.alimonyPercentage}
                           onChange={(e: any) => {
                             setInfo({
                               ...info,
-                              aliment:
+                              alimony:
                                 (e.target.value * (totalGiven - info.tax)) /
                                 100,
-                              alimentPercentage: e.target.value,
+                              alimonyPercentage: e.target.value,
                             });
                           }}
                           className="form-control w-50"
@@ -833,10 +991,10 @@ const CalculatingModal = () => {
                         <input
                           type="number"
                           min="0"
-                          value={info.aliment}
-                          disabled={!info.takenByHand}
+                          value={info.alimony}
+                          disabled={!info.isPayerHand}
                           onChange={handleInput}
-                          name="aliment"
+                          name="alimony"
                           className="form-control w-50"
                         />
                       </div>
@@ -848,7 +1006,7 @@ const CalculatingModal = () => {
                           value={info?.extra211100}
                           type="number"
                           min="0"
-                          disabled={!info.takenByHand}
+                          // disabled={!info.takenByHand}
                           name="Extra211100"
                           className="form-control w-50"
                         />
@@ -856,27 +1014,14 @@ const CalculatingModal = () => {
 
                       <div className="d-flex  align-items-center justify-content-between my-1">
                         <label>Cəmi tutulur:</label>
-                        <b>{totalTaken.toFixed(2)}</b>
+                        <b>{totalTaken}</b>
                       </div>
                     </div>
 
                     <div className="section">
                       <div className="d-flex  align-items-center justify-content-between my-1">
                         <label>Veriləcək məbləğ:</label>
-                        <b>
-                          {(
-                            totalGiven -
-                            totalTaken +
-                            totalDiscount -
-                            totalDSMF +
-                            (info.maddiYardim +
-                              info.mezuniyyet +
-                              info.kesfMezun +
-                              info.cixisMuv +
-                              info.sehra +
-                              info.yolXerci)
-                          ).toFixed(2)}
-                        </b>
+                        <b>{totalGiven - totalTaken + totalDiscount}</b>
                       </div>
                     </div>
                   </div>
@@ -932,24 +1077,16 @@ const CalculatingModal = () => {
                       <div className="d-flex  align-items-center justify-content-between my-1">
                         <label className="normal-label">Yaş. yeri</label>
                         <select
-                          value={info.kirayeId}
-                          onChange={handleSelect}
+                          value={info.rentId}
+                          onChange={handleSelectInput}
+                          name="rent"
                           className="form-control w-25 h-25 p-0 ps-1 fs-7"
                         >
-                          <option value={info.kirayeId}>
-                            {
-                              rents?.find(
-                                (item: any) => item.id == info.kirayeId
-                              )?.name
-                            }
-                          </option>
-                          {rents
-                            ?.filter((item: any) => item.id != info.kirayeId)
-                            .map((item: any) => (
-                              <option value={item.id} key={item.id}>
-                                {item.name}
-                              </option>
-                            ))}
+                          {rents.map((item: any) => (
+                            <option value={item.id} key={item.id}>
+                              {item.name}
+                            </option>
+                          ))}
                         </select>
                         <input
                           type="number"
@@ -961,8 +1098,8 @@ const CalculatingModal = () => {
                         <label className="normal-label">nəfər</label>
                         <input
                           type="number"
-                          value={info.kirayeQat}
-                          name="kirayeQat"
+                          value={info.rentQat}
+                          name="rentQat"
                           onChange={handleInput}
                           className="form-control date-input"
                         />
@@ -970,9 +1107,15 @@ const CalculatingModal = () => {
                         <input
                           type="number"
                           disabled={!info.rentByHand}
-                          name="kirayePrice"
+                          name="rentPrice"
                           onChange={handleInput}
-                          value={info.kirayePrice}
+                          value={
+                            !info.rentByHand
+                              ? selectedOptions.rent === undefined
+                                ? info.rentPrice
+                                : selectedOptions.rent
+                              : info.rentPrice
+                          }
                           className="form-control date-input"
                         />
                         <input
@@ -1001,24 +1144,21 @@ const CalculatingModal = () => {
                             <label>Maddi yardim</label>
                             <input
                               type="number"
-                              value={info.maddiYardim}
+                              value={info.financialAid}
                               onChange={handleInput}
-                              name="maddiYardim"
+                              name="financialAid"
+                              disabled={!info.isFinancialAidGiven}
                               className="form-control w-100"
                             />
                             <input
                               type="number"
-                              value={
-                                (info.discountDsmf * info.maddiYardim) / 100
-                              }
+                              onChange={handleInput}
+                              disabled
                               className="form-control border-0  w-100"
                             />
                             <input
                               type="number"
-                              value={
-                                info.maddiYardim -
-                                (info.discountDsmf * info.maddiYardim) / 100
-                              }
+                              value={info.financialAid}
                               className="form-control w-100"
                             />
                           </div>
@@ -1027,24 +1167,23 @@ const CalculatingModal = () => {
                             <label>Məzuniyyət</label>
                             <input
                               type="number"
-                              value={info.mezuniyyet}
+                              value={info.vacation}
                               onChange={handleInput}
-                              name="mezuniyyet"
+                              disabled={!info.isVacationGiven}
+                              name="vacation"
                               className="form-control w-100"
                             />
                             <input
-                              value={
-                                (info.discountDsmf * info.mezuniyyet) / 100
-                              }
+                              value={info.vacationDSMF}
                               type="number"
+                              name="vacationDSMF"
+                              onChange={handleInput}
+                              disabled={!info.isVacationGiven}
                               className="form-control w-100"
                             />
                             <input
                               type="number"
-                              value={
-                                info.mezuniyyet -
-                                (info.discountDsmf * info.mezuniyyet) / 100
-                              }
+                              value={info.vacation - info.vacationDSMF}
                               className="form-control w-100"
                             />
                           </div>
@@ -1074,25 +1213,25 @@ const CalculatingModal = () => {
                           </div>
 
                           <div className="d-flex my-2 justify-content-between">
-                            <label>
-                              BPM
-                              {/* <select className="form-control d-none date-input">
-                                {Array.from(Array(100).keys()).map((item) => (
-                                  <option key={item}>{item}</option>
-                                ))}
-                              </select> */}
-                            </label>
+                            <label>BPM</label>
 
                             <input
                               type="number"
+                              value={info.bpm}
+                              name="bpm"
+                              onChange={handleInput}
                               className="form-control w-100"
                             />
                             <input
                               type="number"
+                              value={info.bpmdsmf}
+                              onChange={handleInput}
+                              name="bpmdsmf"
                               className="form-control w-100"
                             />
                             <input
                               type="number"
+                              value={info.bpm - info.bpmdsmf}
                               className="form-control w-100"
                             />
                           </div>
@@ -1101,21 +1240,19 @@ const CalculatingModal = () => {
                             <label>Çıxış müavinatı</label>
                             <input
                               type="number"
-                              value={info.cixisMuv}
+                              value={info.exitAid}
                               onChange={handleInput}
-                              name="cixisMuv"
+                              name="exitAid"
                               className="form-control w-100"
                             />
                             <input
                               type="number"
-                              value={(info.discountDsmf * info.cixisMuv) / 100}
+                              value={info.exitAidDSMF}
+                              name="exitAidDSMF"
                               className="form-control w-100"
                             />
                             <input
-                              value={
-                                info.cixisMuv -
-                                (info.discountDsmf * info.cixisMuv) / 100
-                              }
+                              value={info.exitAid - info.exitAidDSMF}
                               type="number"
                               className="form-control w-100"
                             />
@@ -1123,48 +1260,63 @@ const CalculatingModal = () => {
                         </Col>
 
                         <Col md={1}>
-                          <div className="d-flex ms-4 flex-column mt-3 justify-content-center align-items-center">
-                            <label className="normal-label d-flex align-items-center my-2">
+                          <div className="d-flex ms-4 flex-column mt-3 justify-content-center align-items-center ">
+                            <label className="normal-label d-flex align-items-center z-index-highest my-2">
+                              <label className="normal-label">Verilir</label>
+                              <input
+                                type="checkbox"
+                                title="Verilmir"
+                                checked={info.isFinancialAidGiven}
+                                name="isFinancialAidGiven"
+                                onChange={handleCheckbox}
+                              />
+                            </label>
+                            <label className="normal-label d-flex align-items-center z-index-highest my-2">
+                              <label className="normal-label">Verilir</label>
+                              <input
+                                type="checkbox"
+                                title="Verilmir"
+                                checked={info.isVacationGiven}
+                                name="isVacationGiven"
+                                onChange={handleCheckbox}
+                              />
+                            </label>
+                            <label className="normal-label d-flex align-items-center z-index-highest my-2">
                               <label className="normal-label">Verilir</label>
                               <input type="checkbox" title="Verilmir" />
                             </label>
-                            <label className="normal-label d-flex align-items-center my-2">
+                            <label className="normal-label d-flex align-items-center z-index-highest my-2">
                               <label className="normal-label">Verilir</label>
-                              <input type="checkbox" title="Verilmir" />
+                              <input
+                                type="checkbox"
+                                title="Verilmir"
+                                checked={info.isBPMGiven}
+                                name="isBPMGiven"
+                                onChange={handleCheckbox}
+                              />
                             </label>
-                            <label className="normal-label d-flex align-items-center my-2">
+                            <label className="normal-label d-flex align-items-center z-index-highest my-2">
                               <label className="normal-label">Verilir</label>
-                              <input type="checkbox" title="Verilmir" />
-                            </label>
-                            <label className="normal-label d-flex align-items-center my-2">
-                              <label className="normal-label">Verilir</label>
-                              <input type="checkbox" title="Verilmir" />
-                            </label>
-                            <label className="normal-label d-flex align-items-center my-2">
-                              <label className="normal-label">Verilir</label>
-                              <input type="checkbox" title="Verilmir" />
+                              <input
+                                type="checkbox"
+                                title="Verilmir"
+                                checked={info.isExitAidGiven}
+                                name="isExitAidGiven"
+                                onChange={handleCheckbox}
+                              />
                             </label>
                           </div>
                         </Col>
                         <Col className="p-0 mt-3" md={4}>
                           <div>
                             <label className="d-flex my-2 min-width-30">
-                              <label className="min-width-30">
-                                {/* <input
-                                  type="checkbox"
-                                  checked={info.discountDsmf}
-                                  onChange={handleCheckbox}
-                                  className="ms-1"
-                                  name="discountDsmf"
-                                />
-                                <label className="min-width-20">Verilir</label> */}
-                              </label>
+                              <label className="min-width-30"></label>
                               <span className="min-wdith-30">Ezamiyyet</span>
                               <input
                                 type="number"
-                                value={info.ezamiyyet}
+                                value={info.businessTrip}
                                 onChange={handleInput}
-                                name="ezamiyyet"
+                                name="businessTrip"
                                 className="form-control w-75 d-block"
                               />
                             </label>
@@ -1172,9 +1324,9 @@ const CalculatingModal = () => {
                               <label className="min-width-30"></label>
                               <span className="min-width-30">Səhra pulu</span>
                               <input
-                                value={info?.sehra}
+                                value={info?.desertPrice}
                                 onChange={handleInput}
-                                name="sehra"
+                                name="desertPrice"
                                 type="number"
                                 className="form-control w-75"
                               />
@@ -1197,8 +1349,8 @@ const CalculatingModal = () => {
                               Yol. xərcə.
                               <input
                                 type="number"
-                                name="yolXerci"
-                                value={info.yolXerci}
+                                name="tripExpense"
+                                value={info.tripExpense}
                                 onChange={handleInput}
                                 className="form-control w-75"
                               />
@@ -1227,15 +1379,7 @@ const CalculatingModal = () => {
 
                       <div className="section w-75 d-flex justify-content-between ms-2">
                         <label>Cəmi verilir:</label>
-                        <b>
-                          {(
-                            totalGiven -
-                            totalTaken +
-                            totalDiscount -
-                            totalDSMF +
-                            totalAddition
-                          ).toFixed(2)}
-                        </b>
+                        <b>{total}</b>
                       </div>
                     </div>
                   </div>

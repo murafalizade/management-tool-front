@@ -41,15 +41,30 @@ function Layout() {
 
   const state = useSelector((root: RootState) => root.showModal);
 
-  useEffect(() => {
-    // get theme from cookie
-    const theme = localStorage.getItem("theme");
-    // if theme is dark then toggle checked state
-    if (theme === "dark") {
-      document.body.classList.add("inverse");
-    } else {
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+
+  const handleClick = () => {
+    if(isDarkMode) {
       document.body.classList.remove("inverse");
+      localStorage.setItem("theme", "light");
+    } else {
+      document.body.classList.add("inverse");
+      localStorage.setItem("theme", "dark");
     }
+    setIsDarkMode(!isDarkMode);
+  };
+
+  useEffect(() => {
+     // get theme from cookie
+     const theme = localStorage.getItem("theme");
+     // if theme is dark then toggle checked state
+     if (theme === "dark") {
+       document.body.classList.add("inverse");
+       setIsDarkMode(true);
+     } else {
+       document.body.classList.remove("inverse");
+       setIsDarkMode(false);
+     }
   }, []);
 
   const logout = () => {
@@ -87,6 +102,15 @@ function Layout() {
   const addMvQat = async (qat: number) => {
     try {
       await EmployeeService.addMvQat(qat);
+      toast.success();
+    } catch (err: any) {
+      toast.error(err.response.data.message);
+    }
+  };
+
+  const addBpmQat = async (qat: number) => {
+    try {
+      await EmployeeService.addBpmQat(qat);
       toast.success();
     } catch (err: any) {
       toast.error(err.response.data.message);
@@ -315,10 +339,18 @@ function Layout() {
                 id="basic-nav-dropdown"
                 drop="end"
               >
-                <NavDropdown.Item href="#">Verilmir</NavDropdown.Item>
-                <NavDropdown.Item href="#">1 qat</NavDropdown.Item>
-                <NavDropdown.Item href="#">2 qat</NavDropdown.Item>
-                <NavDropdown.Item href="#">3 qat</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => addBpmQat(0)}>
+                  Verilmir
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => addBpmQat(1)}>
+                  1 qat
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => addBpmQat(2)}>
+                  2 qat
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => addBpmQat(3)}>
+                  3 qat
+                </NavDropdown.Item>
               </NavDropdown>
               <NavDropdown.Item href="#" onClick={() => uploadNextMonth()}>
                 Bu ayın cədvəlini gələn aya köçür
@@ -372,15 +404,27 @@ function Layout() {
               </NavDropdown.Item>
             </NavDropdown>
 
-            <Navbar.Text>
-            <a href="/settings" className="text-decoration-none ">
-              Tənzimləmələr
-            </a>
-          </Navbar.Text>
+            <NavDropdown
+              onClick={() => chooseRow("Tənzimləmələr")}
+              style={
+                selectedRow === "Tənzimləmələr"
+                  ? { backgroundColor: "#1E90FF", color: "white" }
+                  : {}
+              }
+              title={"Tənzimləmələr"}
+              id="basic-nav-dropdown"
+            >
+              <NavDropdown.Item onClick={()=>handleClick()}>
+                {isDarkMode ? "Gündüz rejimi" : "Qaranlıq rejim"}
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/profile">
+                İstifadəçi tənzimləmələri
+              </NavDropdown.Item>
+            </NavDropdown>
           </Nav>
         </Navbar.Collapse>
         <Navbar expand="lg" className="justify-content-end h-100 mx-2">
-          <DarkModeToggler />
+          {/* <DarkModeToggler /> */}
           <Navbar.Text onClick={() => logout()}>
             <a type="button" className="text-decoration-none ">
               Çıxış

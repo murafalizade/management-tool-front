@@ -85,25 +85,35 @@ namespace WebApplication1.Services
 
         public async Task<ErrorHandelerDto> UpdateEmployee(EmployeeSalaryEditDto employee)
         {
-            try
+            // try
+            // {
+            EmployeeSalaryRecord obj = await _employeeSalaryRecordRepository.GetEmployeeById(employee.Id);
+            if (!employee.IsRankSalaryHand)
             {
-                await _employeeSalaryRecordRepository.UpdateEmployee(_mapper.Map<EmployeeSalaryRecord>(employee));
-                return new ErrorHandelerDto
-                {
-                    data = "Employee Updated Successfully",
-                    StatusCode = 200
-                };
+                employee.RankSalary = 0;
             }
-            catch (System.Exception)
+            if (!employee.IsPositionSalaryHand)
             {
-                return new ErrorHandelerDto
-                {
-                    data = "Employee Updated Failed",
-                    StatusCode = 400,
-                    isError = true
-
-                };
+                employee.PositionSalary = 0;
             }
+            if (!employee.IsLanguagePriceHand)
+            {
+                employee.ForeignLanguagePrice = 0;
+            }
+            if (!employee.IsPayerHand)
+            {
+                employee.Tax = 0;
+                employee.DSMF = 0;
+                employee.Fails = 0;
+                employee.Alimony = 0;
+                employee.HealthInsurance = 0;
+            }
+            await _employeeSalaryRecordRepository.UpdateEmployee(_mapper.Map<EmployeeSalaryRecord>(employee));
+            return new ErrorHandelerDto
+            {
+                data = "Employee Updated Successfully",
+                StatusCode = 200
+            };
         }
 
         public async Task<ErrorHandelerDto> AddEmployeeForNextMonth()
@@ -290,8 +300,8 @@ namespace WebApplication1.Services
             {
                 worksheet.Cells[row, 1].Value = item.EmployeePositionDepartmentAdminstrationName;
                 worksheet.Cells[row, 2].Value = item.EmployeePositionDepartmentName;
-                worksheet.Cells[row, 3].Value = item.EmployeePositionName;
-                worksheet.Cells[row, 4].Value = item.EmployeeRankName;
+                worksheet.Cells[row, 3].Value = item.PositionName;
+                worksheet.Cells[row, 4].Value = item.RankName;
                 worksheet.Cells[row, 5].Value = item.FullName;
                 worksheet.Cells[row, 6].Value = "gün";
                 worksheet.Cells[row, 7].Value = "ay";
@@ -302,44 +312,44 @@ namespace WebApplication1.Services
                 worksheet.Cells[row, 12].Value = item.PositionSalary;
                 worksheet.Cells[row, 13].Value = item.XIPercent;
                 worksheet.Cells[row, 14].Value = item.PTMoney;
-                worksheet.Cells[row, 15].Value = item.Meharetlilik;
-                worksheet.Cells[row, 16].Value = item.Temsilcilik;
-                worksheet.Cells[row, 17].Value = item.Mexfilik;
-                worksheet.Cells[row, 18].Value = item.Zererlilik;
-                worksheet.Cells[row, 19].Value = item.Kibertehlukesizlik;
-                worksheet.Cells[row, 20].Value = item.XariciDil;
-                worksheet.Cells[row, 21].Value = item.Kesfiyyat;
-                worksheet.Cells[row, 22].Value = item.ElmiDerece;
+                worksheet.Cells[row, 15].Value = item.AbilityPrice;
+                worksheet.Cells[row, 16].Value = item.Representing;
+                worksheet.Cells[row, 17].Value = item.Confidentiality;
+                worksheet.Cells[row, 18].Value = item.Harmfulness;
+                worksheet.Cells[row, 19].Value = item.CyberSecurityPrice;
+                worksheet.Cells[row, 20].Value = item.ForeignLanguagePrice;
+                worksheet.Cells[row, 21].Value = item.ExploretionPrice;
+                worksheet.Cells[row, 22].Value = item.ScientificDegreePrice;
                 worksheet.Cells[row, 23].Value = item.ExtraMoney;
                 worksheet.Cells[row, 24].Value = item.ExtraMoney2;
                 worksheet.Cells[row, 25].Value = item.TotalIncome;
                 worksheet.Cells[row, 26].Value = item.Tax;
                 worksheet.Cells[row, 27].Value = item.DSMF;
                 worksheet.Cells[row, 28].Value = item.HealthInsurance;
-                worksheet.Cells[row, 29].Value = item.Kesirler;
-                worksheet.Cells[row, 30].Value = item.Aliment;
+                worksheet.Cells[row, 29].Value = item.Fails;
+                worksheet.Cells[row, 30].Value = item.Alimony;
                 worksheet.Cells[row, 31].Value = item.Extra211100;
                 worksheet.Cells[row, 32].Value = item.TotalDiscount;
                 worksheet.Cells[row, 33].Value = item.TotalTaken;
                 worksheet.Cells[row, 34].Value = item.TotalGiven;
                 worksheet.Cells[row, 35].Value = item.Food;
                 worksheet.Cells[row, 36].Value = item.DiscountVeteran;
-                worksheet.Cells[row, 37].Value = item.Mezuniyyet;
+                worksheet.Cells[row, 37].Value = item.Vacation;
                 worksheet.Cells[row, 38].Value = item.KesfMezun;
                 worksheet.Cells[row, 39].Value = item.KesfXeste;
-                worksheet.Cells[row, 40].Value = item.KirayePrice;
-                worksheet.Cells[row, 41].Value = item.MaddiYardim;
-                worksheet.Cells[row, 42].Value = item.Ezamiyyet;
-                worksheet.Cells[row, 43].Value = item.Sehra;
-                worksheet.Cells[row, 44].Value = item.YolXerci;
+                worksheet.Cells[row, 40].Value = item.RentPrice;
+                worksheet.Cells[row, 41].Value = item.FinancialAid;
+                worksheet.Cells[row, 42].Value = item.BusinessTrip;
+                worksheet.Cells[row, 43].Value = item.DesertPrice;
+                worksheet.Cells[row, 44].Value = item.TripExpense;
                 worksheet.Cells[row, 45].Value = item.YukPulu;
-                worksheet.Cells[row, 46].Value = item.CixisMuv;
+                worksheet.Cells[row, 46].Value = item.ExitAid;
                 worksheet.Cells[row, 47].Value = "BPM faiz";
                 worksheet.Cells[row, 48].Value = "BPM";
                 worksheet.Cells[row, 49].Value = item.TotalDSMF;
                 worksheet.Cells[row, 50].Value = item.TotalSalary;
                 worksheet.Cells[row, 51].Value = item.Comment;
-                worksheet.Cells[row, 52].Value = item.İsVeteran ? "Bəli" : "Xeyr";
+                worksheet.Cells[row, 52].Value = item.IsVeteran ? "Bəli" : "Xeyr";
                 worksheet.Cells[row, 53].Value = item.AccountNumber;
                 worksheet.Cells[row, 54].Value = 0;
                 worksheet.Cells[row, 55].Value = 0;
@@ -374,6 +384,32 @@ namespace WebApplication1.Services
             try
             {
                 await _employeeSalaryRecordRepository.AddFoodQat(foodQat);
+                return new ErrorHandelerDto { isError = false, data = "Əməliyyat uğurla yerinə yetirildi" };
+            }
+            catch (Exception)
+            {
+                return new ErrorHandelerDto { isError = true, data = "U" };
+            }
+        }
+
+        public async Task<ErrorHandelerDto> AddVeteranQat(int veteranQat)
+        {
+            try
+            {
+                await _employeeSalaryRecordRepository.AddVeteranQat(veteranQat);
+                return new ErrorHandelerDto { isError = false, data = "Əməliyyat uğurla yerinə yetirildi" };
+            }
+            catch (Exception)
+            {
+                return new ErrorHandelerDto { isError = true, data = "U" };
+            }
+        }
+
+        public async Task<ErrorHandelerDto> AddBPMQat(int bpmQat)
+        {
+            try
+            {
+                await _employeeSalaryRecordRepository.AddBPMQat(bpmQat);
                 return new ErrorHandelerDto { isError = false, data = "Əməliyyat uğurla yerinə yetirildi" };
             }
             catch (Exception)

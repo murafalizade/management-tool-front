@@ -7,6 +7,7 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+
 /* Remove number input arrows */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
@@ -187,4 +188,8 @@ body.inverse {
     .comment {
         color: white !important;
     }
+}
+
+.z-index-highest{
+    z-index:2!important;
 }

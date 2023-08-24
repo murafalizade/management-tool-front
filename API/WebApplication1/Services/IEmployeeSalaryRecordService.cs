@@ -17,5 +17,7 @@ namespace WebApplication1.Services
         Task<byte[]> ExportExcel(string search, int month, int year);
         Task<ErrorHandelerDto> AddKirayeQat(int kirayeQat);
         Task<ErrorHandelerDto> AddFoodQat(int foodQat);
+        Task<ErrorHandelerDto> AddVeteranQat(int veteranQat);
+        Task<ErrorHandelerDto> AddBPMQat(int bpmQat);
     }
 }

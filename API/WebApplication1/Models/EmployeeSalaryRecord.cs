@@ -162,14 +162,27 @@ namespace WebApplication1.Models
                 }
             }
         }
-        public DateTime RecordDate { get; set; } = DateTime.Now;
+        private DateTime _recordDate = DateTime.Now;
+
+        public DateTime RecordDate
+        {
+            get
+            {
+                return _recordDate;
+            }
+            set
+            {
+                _recordDate = new DateTime(_recordDate.Year, _recordDate.Month, 1).AddMonths(1);
+            }
+        }
+
         private double _abilityPrice = 0;
         public double AbilityPrice
         {
             set
             {
 
-                if (value == 0 && Ability != null)
+                if (Ability != null && Position != null)
                 {
                     if (Position.Name == "zabit")
                     {
@@ -184,6 +197,10 @@ namespace WebApplication1.Models
                         _abilityPrice = _positionSalary * Ability.ForMuddetliPercentage / 100;
                     }
                 }
+                else if (Ability != null && Position == null)
+                {
+                    _abilityPrice = _positionSalary * Ability.ForMuddetliPercentage / 100;
+                }
                 else
                 {
                     _abilityPrice = value;
@@ -194,16 +211,38 @@ namespace WebApplication1.Models
                 return _abilityPrice;
             }
         }
-        public double Representing { get; set; } = 0;
-        public double Confidentiality { get; set; } = 0;
-        public double Harmfulness { get; set; } = 0;
+        public int RepresentingPercentage { get; set; } = 0;
+        public double Representing
+        {
+            get
+            {
+                return _positionSalary * RepresentingPercentage / 100; ;
+            }
+        }
+        public int ConfidentialityPercentage { get; set; } = 0;
+        public double Confidentiality
+        {
+            get
+            {
+                return _positionSalary * ConfidentialityPercentage / 100;
+            }
+        }
+        public int HarmfulnessPercentage { get; set; } = 0;
+        public double Harmfulness
+        {
+            get
+            {
+                return _positionSalary * HarmfulnessPercentage / 100;
+            }
+        }
         private double _foreignLanguagePrice = 0;
         public double ForeignLanguagePrice
         {
             set
             {
-                if (value == 0 && ForeignLanguage != null)
+                if (value == 0 & ForeignLanguage != null)
                 {
+                    Console.WriteLine("Foreign Language Salary is not null");
                     _foreignLanguagePrice = _positionSalary * ForeignLanguage.Percentage / 100;
                 }
                 else
@@ -223,8 +262,9 @@ namespace WebApplication1.Models
         {
             set
             {
-                if (value == 0 && ScientificDegree != null)
+                if (ScientificDegree != null)
                 {
+                    Console.WriteLine("Scientific Degree Salary is not null");
                     int workExperience = DateTime.Now.Year - Employee.StartDate.Year;
 
                     if (workExperience >= 5 && workExperience <= 10)
@@ -245,7 +285,7 @@ namespace WebApplication1.Models
                     }
                     else
                     {
-                        _scientificDegreePrice = 0;
+                        _scientificDegreePrice = ScientificDegree.ForEveryoneSalary;
                     }
                 }
                 else
@@ -263,8 +303,9 @@ namespace WebApplication1.Models
         {
             set
             {
-                if (value == 0 && HonorTitle != null)
+                if (HonorTitle != null)
                 {
+                    Console.WriteLine("HonorTitlePrice is not null ");
                     _honorTitlePrice = HonorTitle.Salary;
                 }
                 else
@@ -288,7 +329,7 @@ namespace WebApplication1.Models
 
         private double _tax = 0;
         public int VeteranQat { get; set; } = 1;
-          public double TotalIncome
+        public double TotalIncome
         {
             get
             {
@@ -305,9 +346,11 @@ namespace WebApplication1.Models
             }
             set
             {
-                Console.WriteLine("value: " + DiscountId);
                 if (value == 0 && Discount != null)
                 {
+                    Console.WriteLine("value: " + Discount.TaxPercentage);
+                    Console.WriteLine("Discount is not null");
+                    Console.WriteLine(TotalIncome * Discount.TaxPercentage / 100);
                     _tax = TotalIncome * Discount.TaxPercentage / 100;
                 }
                 else
@@ -388,6 +431,8 @@ namespace WebApplication1.Models
             }
             set
             {
+                Console.WriteLine("Food is set");
+                Console.WriteLine(value);
                 if (Discount != null && value == 0 && FoodGiven == true)
                 {
                     food = Discount.Food;
@@ -423,7 +468,7 @@ namespace WebApplication1.Models
                 return muavin;
             }
         }
-        public bool IsVocationGiven { get; set; } = false;
+        public bool IsVacationGiven { get; set; } = false;
         double _vacation = 0;
         public double Vacation
         {
@@ -433,11 +478,11 @@ namespace WebApplication1.Models
             }
             set
             {
-                if (value == 0 && IsVocationGiven == true)
+                if (value == 0 && IsVacationGiven == true)
                 {
                     _vacation = _positionSalary;
                 }
-                else if (IsVocationGiven == false)
+                else if (IsVacationGiven == false)
                 {
                     _vacation = 0;
                 }
@@ -522,9 +567,13 @@ namespace WebApplication1.Models
             }
             set
             {
-                if (value == 0 && Discount != null)
+                if (value == 0 && Discount != null && IsFinancialAidGiven)
                 {
                     _financialAidDSMF = _financialAid * Discount.Dsmf / 100;
+                }
+                else if (IsFinancialAidGiven == false)
+                {
+                    _financialAidDSMF = 0;
                 }
                 else
                 {
@@ -592,14 +641,21 @@ namespace WebApplication1.Models
                 {
                     _exitAidDSMF = _exitAid * Discount.Dsmf / 100;
                 }
+
+                else if (IsExitAidGiven == false)
+                {
+                    _exitAidDSMF = 0;
+                }
+
                 else
                 {
                     _exitAidDSMF = value;
                 }
             }
         }
-        public int BPMQat { get; set; } = 0;
+        public int BPMQat { get; set; } = 1;
         double _bPM = 0;
+        public bool IsBPMGiven { get; set; } = false;
         public double BPM
         {
             get
@@ -608,13 +664,13 @@ namespace WebApplication1.Models
             }
             set
             {
-                if (value == 0)
+                if (IsBPMGiven == true)
                 {
-                    _bPM = BPMQat * 67;
+                    _bPM = BPMQat * (_rankSalary + _positionSalary);
                 }
                 else
                 {
-                    _bPM = value;
+                    _bPM = 0;
                 }
             }
         }
@@ -627,7 +683,7 @@ namespace WebApplication1.Models
             }
             set
             {
-                if (value == 0 && Discount != null)
+                if (Discount != null)
                 {
                     _bPMDSMF = _bPM * Discount.Dsmf / 100;
                 }

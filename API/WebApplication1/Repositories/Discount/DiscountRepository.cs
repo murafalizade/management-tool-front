@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,15 +24,20 @@ namespace WebApplication1.Repositories
         }
 
 
-        public async Task<Discount> GetDiscountByDate(int? year=0, int? month=0)
+        public async Task<Discount> GetDiscountByDate(int? year, int? month)
         {
-
-            // Check if year and month exist get last discount
-            if (year == 0 || month == 0)
+            if (year == null || month == null || year == 0 || month == 0)
             {
-                return await _context.Discounts.OrderByDescending(d => d.CreatedAt).FirstOrDefaultAsync();
+                return await _context.Discounts.FirstOrDefaultAsync();
             }
-            return await _context.Discounts.FirstOrDefaultAsync(d => d.CreatedAt.Year == year && d.CreatedAt.Month == month);
+            int yearInt = (int)year;
+            int monthInt = (int)month;
+            var targetDate = new DateTime(yearInt, monthInt, 1);
+
+            var exactDiscount = await _context.Discounts
+                .FirstOrDefaultAsync(d => d.CreatedAt.Date <= targetDate.Date);
+
+            return exactDiscount;
         }
 
         public async Task<Discount> GetDiscounts(int id)

@@ -13,6 +13,7 @@ namespace WebApplication1.Models
         public int For10to15Salary { get; set; }
         public int For15to20Salary { get; set; }
         public int For20Salary { get; set; }
+        public int ForEveryoneSalary { get; set; }
         public ICollection<EmployeeSalaryRecord> EmployeeSalaryRecords { get; set; }
     }
 }

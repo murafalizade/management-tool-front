@@ -3,7 +3,6 @@ import { SalaryRecordData } from "../../types/SalaryRecordData";
 import moment from "moment";
 
 // Custom cell converter string for boolean values in table
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const CustomCellRenderer: React.FunctionComponent<
   CellProps<SalaryRecordData, boolean>
 > = ({ value }) => {
@@ -13,19 +12,19 @@ const CustomCellRenderer: React.FunctionComponent<
 const salaryRecordHeaders: Column<SalaryRecordData>[] = [
   {
     Header: "idarə",
-    accessor: "employeePositionDepartmentAdminstrationName",
+    accessor: "positionDepartmentAdminstrationName",
   },
   {
     Header: "Şöbə, bölmə",
-    accessor: "employeePositionDepartmentName",
+    accessor: "positionDepartmentName",
   },
   {
     Header: "Vəzifə",
-    accessor: "employeePositionName",
+    accessor: "positionName",
   },
   {
     Header: "Hərbi rütbə",
-    accessor: "employeeRankName",
+    accessor: "rankName",
   },
   {
     Header: "S.A.A.",
@@ -91,39 +90,39 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
       },
       {
         Header: "Məharət dər.",
-        accessor: "meharetlilik",
+        accessor: "abilityPrice",
       },
       {
         Header: "Təmsilçilik",
-        accessor: "temsilcilik",
+        accessor: "representing",
       },
       {
         Header: "Məxfiçilik",
-        accessor: "mexfilik",
+        accessor: "confidentiality",
       },
       {
         Header: "Zərərliyə görə",
-        accessor: "zererlilik",
+        accessor: "harmfulness",
       },
       {
         Header: "Kibertəhlükəsizlik əlavəsi",
-        accessor: "kibertehlukesizlik",
+        accessor: "cyberSecurityPrice",
       },
       {
         Header: "Xarici dil",
-        accessor: "xariciDil",
+        accessor: "foreignLanguagePrice",
       },
       {
         Header: "Kəşf. mükaf.",
-        accessor: "kesfiyyat",
+        accessor: "exploretionPrice",
       },
       {
         Header: "Elmi dərəcə",
-        accessor: "elmiDerece",
+        accessor: "scientificDegreePrice",
       },
       {
         Header: "Fəxri ad",
-        accessor: "fexriAd",
+        accessor: "honorTitlePrice",
       },
       {
         Header: "Əlavə öd. (gvti)",
@@ -156,11 +155,11 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
       },
       {
         Header: "Kəsirlər",
-        accessor: "kesirler",
+        accessor: "fails",
       },
       {
         Header: "Aliment",
-        accessor: "aliment",
+        accessor: "alimony",
       },
       {
         Header: "Artıq 211100",
@@ -190,7 +189,7 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
   },
   {
     Header: "Məzuniyyət",
-    accessor: "mezuniyyet",
+    accessor: "vacation",
   },
   {
     Header: "Kəşf. məzun.",
@@ -202,23 +201,23 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
   },
   {
     Header: "Kirayə. komp.",
-    accessor: "kirayePrice",
+    accessor: "rentPrice",
   },
   {
     Header: "Maddi yardım",
-    accessor: "maddiYardim",
+    accessor: "financialAid",
   },
   {
     Header: "Ezamiyyət",
-    accessor: "ezamiyyet",
+    accessor: "businessTrip",
   },
   {
     Header: "Səhra pulu",
-    accessor: "sehra",
+    accessor: "desert",
   },
   {
     Header: "Yol xərci",
-    accessor: "yolXerci",
+    accessor: "tripExpense",
   },
   {
     Header: "Yük pulu",
@@ -226,7 +225,7 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
   },
   {
     Header: "Çıxış müav.",
-    accessor: "cixisMuv",
+    accessor: "exitAid",
   },
   {
     Header: "BPM faiz",
@@ -298,39 +297,39 @@ const totalSalaryRecordHeaders = [
   },
   {
     Header: "Məhar.",
-    accessor: "meharetlilik",
+    accessor: "abilityPrice",
   },
   {
     Header: "Təmsil",
-    accessor: "temsilcilik",
+    accessor: "representing",
   },
   {
     Header: "Məxfi",
-    accessor: "mexfilik",
+    accessor: "confidentiality",
   },
   {
     Header: "Zərər",
-    accessor: "zererlilik",
+    accessor: "harmfulness",
   },
   {
     Header: "Kibertəhlükəsizlik",
-    accessor: "kibertehlukesizlik",
+    accessor: "cyberSecurityPrice",
   },
   {
     Header: "Dil",
-    accessor: "xariciDil",
+    accessor: "foreignLanguagePrice",
   },
   {
     Header: "K. mükf.",
-    accessor: "kesfiyyat",
+    accessor: "expolerationPrice",
   },
   {
     Header: "Elmi",
-    accessor: "elmiDerece",
+    accessor: "scientificDegreePrice",
   },
   {
     Header: "Fəxri",
-    accessor: "fexriAd",
+    accessor: "honorTitlePrice",
   },
   {
     Header: "Əl.(gvt)",
@@ -358,11 +357,11 @@ const totalSalaryRecordHeaders = [
   },
   {
     Header: "Kəsir",
-    accessor: "kesirler",
+    accessor: "fails",
   },
   {
     Header: "Aliment",
-    accessor: "aliment",
+    accessor: "alimony",
   },
   {
     Header: "Artıq",
@@ -390,7 +389,7 @@ const totalSalaryRecordHeaders = [
   },
   {
     Header: "Məzun",
-    accessor: "mezuniyyet",
+    accessor: "vacation",
   },
   {
     Header: "K.məz.",
@@ -402,23 +401,23 @@ const totalSalaryRecordHeaders = [
   },
   {
     Header: "Kirayə",
-    accessor: "kirayePrice",
+    accessor: "rentPrice",
   },
   {
     Header: "Maddi",
-    accessor: "maddiYardim",
+    accessor: "financialAid",
   },
   {
     Header: "Ezam",
-    accessor: "ezamiyyet",
+    accessor: "businessTrip",
   },
   {
     Header: "Səhra",
-    accessor: "sehra",
+    accessor: "desertPrice",
   },
   {
     Header: "Yol",
-    accessor: "yolXerci",
+    accessor: "tripExpense",
   },
   {
     Header: "Yük",
@@ -426,7 +425,7 @@ const totalSalaryRecordHeaders = [
   },
   {
     Header: "Çıxış",
-    accessor: "cixisMuv",
+    accessor: "exitAid",
   },
   {
     Header: " ",
@@ -434,6 +433,7 @@ const totalSalaryRecordHeaders = [
   },
   {
     Header: "BPM",
+    accessor: "bpm",
   },
   {
     Header: "DSMF t.",

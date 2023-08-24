@@ -1,3 +1,4 @@
+using System;
 using WebApplication1.Models;
 
 namespace WebApplication1.Dtos
@@ -7,6 +8,7 @@ namespace WebApplication1.Dtos
         public int XIPercent { get; set; } = 0;
         public double RankSalary { get; set; } = 0;
         public double PositionSalary { get; set; } = 0;
+        public DateTime StartDate { get; set; } = DateTime.Now;
         public double ExtraMoney { get; set; } = 0;
         public double ExtraMoney2 { get; set; } = 0;
         public double Representing { get; set; } = 0;
