@@ -53,6 +53,10 @@ export default class OperationService {
     return await fetch.delete(`/api/department/${id}`);
   }
 
+  static async deleteElmiDereceById(id: number): Promise<any> {
+    return await fetch.delete(`/api/ElmiDerece/${id}`);
+  }
+
   static async saveOrganization(data: any): Promise<any> {
     return await fetch.post(`/api/department/save-all`, data);
   }
@@ -69,8 +73,16 @@ export default class OperationService {
     return await fetch.post(`/api/position/save-all`, data);
   }
 
+  static async UpdateScientificDegree(data: any): Promise<any> {
+    return await fetch.put(`/api/ElmiDerece`, data);
+  }
+
   static async getRanks(): Promise<any> {
     return await fetch.get(`/api/rank`);
+  }
+
+  static async AddScientificDegree(data: any): Promise<any> {
+    return await fetch.post(`/api/ElmiDerece`, data);
   }
 
   static async getDiscount(month?: number, year?: number): Promise<any> {
