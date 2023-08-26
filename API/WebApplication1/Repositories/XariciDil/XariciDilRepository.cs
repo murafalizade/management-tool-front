@@ -13,9 +13,22 @@ namespace WebApplication1.Repositories{
             _dbContext = dbContext;
         }
 
+        public async Task Delete(int id)
+        {
+            ForeignLanguage foreignLanguage = await _dbContext.ForeignLanguages.FindAsync(id);
+            _dbContext.ForeignLanguages.Remove(foreignLanguage);
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task<List<ForeignLanguage>> GetXariciDils()
         {
             return await _dbContext.ForeignLanguages.ToListAsync();
+        }
+
+        public async Task Update(ForeignLanguage foreignLanguage)
+        {
+            _dbContext.ForeignLanguages.Update(foreignLanguage);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

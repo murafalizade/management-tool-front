@@ -108,6 +108,12 @@ namespace WebApplication1.Services
                 employee.Alimony = 0;
                 employee.HealthInsurance = 0;
             }
+
+            if(!employee.IsQatHand)
+            {
+                employee.PTMoney = 0;
+            }
+
             await _employeeSalaryRecordRepository.UpdateEmployee(_mapper.Map<EmployeeSalaryRecord>(employee));
             return new ErrorHandelerDto
             {

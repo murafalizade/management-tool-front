@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApplication1.Dtos;
+using WebApplication1.Models;
 using WebApplication1.Repositories;
 
 namespace WebApplication1.Services
@@ -12,6 +13,17 @@ namespace WebApplication1.Services
         {
             _meharetRepistory = MehIMeharetRepistory;
         }
+
+        public async Task<ErrorHandelerDto> DeleteMeharet(int id)
+        {
+            await _meharetRepistory.Delete(id);
+            return new ErrorHandelerDto
+            {
+                StatusCode = 200,
+                data = null
+            };
+        }
+
         public async Task<ErrorHandelerDto> GetMeharets()
         {
             try
@@ -31,6 +43,16 @@ namespace WebApplication1.Services
                     data = null
                 };
             }
+        }
+
+        public async Task<ErrorHandelerDto> UpdateMeharet(Ability meharet)
+        {
+            await _meharetRepistory.Update(meharet);
+            return new ErrorHandelerDto
+            {
+                StatusCode = 200,
+                data = null
+            };
         }
     }
 }

@@ -13,9 +13,24 @@ namespace WebApplication1.Repositories{
             _dbContext = dbContext;
         }
 
+        public async Task Delete(int id)
+        {
+            HonorTitle honorTitle = await _dbContext.HonorTitles.FindAsync(id);
+            _dbContext.HonorTitles.Remove(honorTitle);
+            await _dbContext.SaveChangesAsync();
+
+        }
+
         public async Task<List<HonorTitle>> GetFexriAds()
         {
             return await _dbContext.HonorTitles.ToListAsync();
+        }
+
+        public async Task<HonorTitle> Update(HonorTitle honorTitle)
+        {
+            _dbContext.HonorTitles.Update(honorTitle);
+            await _dbContext.SaveChangesAsync();
+            return honorTitle;
         }
     }
 }

@@ -14,9 +14,22 @@ namespace WebApplication1.Repositories
             _dbContext = dbContext;
         }
 
+        public async Task Delete(int id)
+        {
+            _dbContext.Abilities.Remove(await _dbContext.Abilities.FindAsync(id));
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task<List<Ability>> GetMeharets()
         {
             return await _dbContext.Abilities.ToListAsync();
+        }
+
+        public async Task Update(Ability ability)
+        {
+            _dbContext.Abilities.Update(ability);
+            await _dbContext.SaveChangesAsync();
+
         }
     }
 }

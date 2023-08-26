@@ -7,5 +7,7 @@ namespace WebApplication1.Repositories
     public interface IFexriAdRepository
     {
        Task<List<HonorTitle>> GetFexriAds();
+        Task Delete(int id);
+        Task<HonorTitle> Update(HonorTitle honorTitle);
     }
 }

@@ -239,13 +239,13 @@ const CalculatingModal = () => {
         : info.isLanguagePriceHand
         ? info.foreignLanguagePrice
         : (positionSalary * selectedOptions.foreignLanguage) / 100;
-    const qat = info.qatByHand
+    const qat = info.isQatHand
       ? info.ptMoney
       : (rankSalary + positionSalary + info.xiMoney) * info.ptQat;
     const abilitySalary =
       selectedOptions.ability === undefined
         ? info.abilityPrice
-        : selectedOptions.ability;
+        : (positionSalary * selectedOptions.ability) / 100;
 
     // according which extra income is given calculate extras, dsmf and total given
     let vacation = 0,
@@ -536,10 +536,10 @@ const CalculatingModal = () => {
                       <label className="normal-label">daimi</label>
                       <input
                         type="checkbox"
-                        name="qatByHand"
+                        name="isQatHand"
                         onChange={handleCheckbox}
-                        checked={info.qatByHand}
-                        value={info.qatByHand}
+                        checked={info.isQatHand}
+                        value={info.isQatHand}
                       />
                       <label className="normal-label">əl ilə</label>
                     </div>
@@ -568,7 +568,7 @@ const CalculatingModal = () => {
                       <input
                         type="number"
                         name="ptMoney"
-                        disabled={!info.qatByHand}
+                        disabled={!info.isQatHand}
                         onChange={handleInput}
                         className="form-control w-100"
                         value={info.qat}
@@ -1217,6 +1217,7 @@ const CalculatingModal = () => {
 
                             <input
                               type="number"
+                              disabled={!info.isBPMGiven}
                               value={info.bpm}
                               name="bpm"
                               onChange={handleInput}
@@ -1225,6 +1226,7 @@ const CalculatingModal = () => {
                             <input
                               type="number"
                               value={info.bpmdsmf}
+                              disabled={!info.isBPMGiven}
                               onChange={handleInput}
                               name="bpmdsmf"
                               className="form-control w-100"
@@ -1240,6 +1242,7 @@ const CalculatingModal = () => {
                             <label>Çıxış müavinatı</label>
                             <input
                               type="number"
+                              disabled={!info.isExitAidGiven}
                               value={info.exitAid}
                               onChange={handleInput}
                               name="exitAid"
@@ -1247,6 +1250,7 @@ const CalculatingModal = () => {
                             />
                             <input
                               type="number"
+                              disabled={!info.isExitAidGiven}
                               value={info.exitAidDSMF}
                               name="exitAidDSMF"
                               className="form-control w-100"

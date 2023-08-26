@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication1.Models;
 using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
@@ -22,5 +23,20 @@ namespace WebApplication1.Controllers
             var result = await _meharetService.GetMeharets();
             return StatusCode(result.StatusCode, result.data);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMeharet(int id)
+        {
+            var result = await _meharetService.DeleteMeharet(id);
+            return StatusCode(result.StatusCode, result.data);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateMeharet([FromBody] Ability meharet)
+        {
+            var result = await _meharetService.UpdateMeharet(meharet);
+            return StatusCode(result.StatusCode, result.data);
+        }
+        
     }
 }

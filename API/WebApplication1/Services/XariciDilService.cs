@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApplication1.Dtos;
+using WebApplication1.Models;
 using WebApplication1.Repositories;
 
 namespace WebApplication1.Services
@@ -12,6 +13,17 @@ namespace WebApplication1.Services
         {
             _XariciDilRepository = IXariciDilRepository;
         }
+
+        public async Task<ErrorHandelerDto> DeleteXariciDil(int id)
+        {
+            await _XariciDilRepository.Delete(id);
+            return new ErrorHandelerDto
+            {
+                StatusCode = 200,
+                data = null
+            };
+        }
+
         public async Task<ErrorHandelerDto> GetXariciDil()
         {
             try
@@ -31,6 +43,16 @@ namespace WebApplication1.Services
                     data = null
                 };
             }
+        }
+
+        public async Task<ErrorHandelerDto> UpdateXariciDil(ForeignLanguage xariciDil)
+        {
+            await _XariciDilRepository.Update(xariciDil);
+            return new ErrorHandelerDto
+            {
+                StatusCode = 200,
+                data = null
+            };
         }
     }
 }

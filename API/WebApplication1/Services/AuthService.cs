@@ -55,7 +55,8 @@ namespace WebApplication1.Services
         public async Task<ErrorHandelerDto> Register(string email, string password)
         {
             User currentUser = await _userRepository.GetUserByEmail(email);
-            if (currentUser != null){
+            if (currentUser != null)
+            {
                 ErrorHandelerDto error = new ErrorHandelerDto();
                 error.isError = true;
                 error.StatusCode = 400;
@@ -116,6 +117,38 @@ namespace WebApplication1.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public async Task<ErrorHandelerDto> UpdateUser(UserUpdateDto user)
+        {
+            User user1 = await _userRepository.GetUserByEmail(user.Email);
+            ErrorHandelerDto error = new ErrorHandelerDto();
+
+            if (user == null)
+            {
+                error.isError = true;
+                error.StatusCode = 404;
+                error.data = "İstifadeçi tapılmadı";
+                return error;
+            }
+            if (!ComparePassword(user.Password, user1.PasswordSalt, user1.PasswordHash))
+            {
+                error.isError = true;
+                error.StatusCode = 401;
+                error.data = "İstifadəçi adı və ya şifrə yanlışdır";
+                return error;
+            }
+            user1.Email = user.Email;
+            CreatePasswordHash(user.NewPassword, out byte[] passwordSalt, out byte[] passwordHash);
+            user1.PasswordSalt = passwordSalt;
+            user1.PasswordHash = passwordHash;
+
+            await _userRepository.UpdateUser(user1);
+
+            error.StatusCode = 200;
+            error.data = "Şifrə dəyişdirildi";
+
+            return error;
         }
     }
 }

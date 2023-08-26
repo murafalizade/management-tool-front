@@ -14,9 +14,22 @@ namespace WebApplication1.Repositories
             _dbContext = dbContext;
         }
 
+        public async Task Delete(int id)
+        {
+            _dbContext.ScientificDegrees.Remove(await _dbContext.ScientificDegrees.FindAsync(id));
+            await _dbContext.SaveChangesAsync();
+
+        }
+
         public async Task<List<ScientificDegree>> GetElmiDereces()
         {
             return await _dbContext.ScientificDegrees.ToListAsync();
+        }
+
+        public async Task Update(ScientificDegree degree)
+        {
+            _dbContext.ScientificDegrees.Update(degree);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

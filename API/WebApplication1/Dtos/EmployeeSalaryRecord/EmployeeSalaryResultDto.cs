@@ -110,5 +110,7 @@ namespace WebApplication1.Dtos
     public bool IsPositionSalaryHand { get; set; } = true;
     public bool IsLanguagePriceHand { get; set; } = true;
     public bool IsPayerHand { get; set; } = true;
+    public bool IsQatHand { get; set; } = true;
+  
   }
 }

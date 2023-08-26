@@ -7,5 +7,7 @@ namespace WebApplication1.Repositories
     public interface IXariciDilRepository
     {
        Task<List<ForeignLanguage>> GetXariciDils();
+        Task Delete(int id);
+        Task Update(ForeignLanguage foreignLanguage);
     }
 }

@@ -71,5 +71,27 @@ namespace WebApplication1.Controllers
             return Ok(req.data);
         }
 
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser([FromBody] UserUpdateDto user)
+        {
+            ErrorHandelerDto req = await _authService.UpdateUser(user);
+            if (req.isError == true)
+            {
+                switch (req.StatusCode)
+                {
+                    case 400:
+                        return BadRequest(req.data);
+                    case 404:
+                        return NotFound(req.data);
+                    case 500:
+                        return StatusCode(500, req.data);
+                    default:
+                        return BadRequest(req.data);
+                }
+            }
+
+            return Ok(req.data);
+        }
+
     }
 }

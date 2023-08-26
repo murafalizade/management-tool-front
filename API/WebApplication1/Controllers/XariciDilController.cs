@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication1.Models;
 using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
@@ -21,5 +22,20 @@ namespace WebApplication1.Controllers
             var result = await _xariciDilService.GetXariciDil();
             return StatusCode(result.StatusCode, result.data);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteFexriAd(int id)
+        {
+            var result = await _xariciDilService.DeleteXariciDil(id);
+            return StatusCode(result.StatusCode, result.data);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateFexriAd([FromBody] ForeignLanguage fexriAd)
+        {
+            var result = await _xariciDilService.UpdateXariciDil(fexriAd);
+            return StatusCode(result.StatusCode, result.data);
+        }
+
     }
 }
