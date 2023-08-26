@@ -8,6 +8,7 @@ import Create from "./app/pages/Employees";
 import Login from "./app/pages/Login";
 import HomeFilter from "./app/pages/HomeFilter";
 import NotFound from "./app/pages/NotFound";
+import Profile from "./app/pages/Profile";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/employees" element={<Create />} />
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
   );

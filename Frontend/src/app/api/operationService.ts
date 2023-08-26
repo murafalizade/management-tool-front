@@ -53,6 +53,10 @@ export default class OperationService {
     return await fetch.delete(`/api/department/${id}`);
   }
 
+  static async deleteElmiDereceById(id: number): Promise<any> {
+    return await fetch.delete(`/api/ElmiDerece/${id}`);
+  }
+
   static async saveOrganization(data: any): Promise<any> {
     return await fetch.post(`/api/department/save-all`, data);
   }
