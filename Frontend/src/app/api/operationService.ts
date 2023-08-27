@@ -5,6 +5,10 @@ export default class OperationService {
     return await fetch.post(`/api/login`, data);
   }
 
+  static async update(data: any): Promise<any> {
+    return await fetch.put(`/api`, data);
+  }
+
   static async getFexriAd(): Promise<any> {
     return await fetch.get(`/api/fexriad`);
   }
@@ -19,6 +23,14 @@ export default class OperationService {
 
   static async getElmiDerece(): Promise<any> {
     return await fetch.get(`/api/elmiderece`);
+  }
+
+  static async getKiraye(): Promise<any> {
+    return await fetch.get(`/api/kiraye`);
+  }
+
+  static async getRanks(): Promise<any> {
+    return await fetch.get(`/api/rank`);
   }
 
   static async getAdminstration(): Promise<any> {
@@ -57,6 +69,26 @@ export default class OperationService {
     return await fetch.delete(`/api/ElmiDerece/${id}`);
   }
 
+  static async deleteFexriAdById(id: number): Promise<any> {
+    return await fetch.delete(`/api/FexriAd/${id}`);
+  }
+
+  static async deleteMeharetById(id: number): Promise<any> {
+    return await fetch.delete(`/api/Meharet/${id}`);
+  }
+
+  static async deleteXariciDilById(id: number): Promise<any> {
+    return await fetch.delete(`/api/XariciDil/${id}`);
+  }
+
+  static async deleteRanksById(id: number): Promise<any> {
+    return await fetch.delete(`/api/rank/${id}`);
+  }
+
+  static async deleteKirayeById(id: number): Promise<any> {
+    return await fetch.delete(`/api/Kiraye/${id}`);
+  }
+
   static async saveOrganization(data: any): Promise<any> {
     return await fetch.post(`/api/department/save-all`, data);
   }
@@ -77,14 +109,50 @@ export default class OperationService {
     return await fetch.put(`/api/ElmiDerece`, data);
   }
 
-  static async getRanks(): Promise<any> {
-    return await fetch.get(`/api/rank`);
+  static async UpdateHonorTitle(data: any): Promise<any> {
+    return await fetch.put(`/api/fexriad`, data);
+  }
+
+  static async UpdateAbility(data: any): Promise<any> {
+    return await fetch.put(`/api/Meharet`, data);
+  }
+  
+  static async UpdateForeignLanguage(data: any): Promise<any> {
+    return await fetch.put(`/api/XariciDil`, data);
+  }
+  
+  static async UpdateRank(data: any): Promise<any> {
+    return await fetch.put(`/api/rank`, data);
+  }
+  
+  static async UpdateRent(data: any): Promise<any> {
+    return await fetch.put(`/api/kiraye`, data);
   }
 
   static async AddScientificDegree(data: any): Promise<any> {
     return await fetch.post(`/api/ElmiDerece`, data);
   }
+  
+  static async AddHonorTitle(data: any): Promise<any> {
+    return await fetch.post(`/api/fexriad`, data);
+  }
 
+  static async AddAbility(data: any): Promise<any> {
+    return await fetch.post(`/api/Meharet`, data);
+  }
+  
+  static async AddForeignLanguage(data: any): Promise<any> {
+    return await fetch.post(`/api/XariciDil`, data);
+  }
+  
+  static async AddRank(data: any): Promise<any> {
+    return await fetch.post(`/api/rank`, data);
+  }
+  
+  static async AddRent(data: any): Promise<any> {
+    return await fetch.post(`/api/kiraye`, data);
+  }
+  
   static async getDiscount(month?: number, year?: number): Promise<any> {
     return await fetch.get(`/api/discount?month=${month}&year=${year}`);
   }

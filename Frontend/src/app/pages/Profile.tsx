@@ -3,21 +3,27 @@ import "../styles/profile.scss";
 import TableLayout from "../components/tables/TableLayout";
 import Toastify from "../utility/Toastify";
 import OperationService from "../api/operationService";
-import axios, { AxiosError } from "axios";
-import { useDispatch, useSelector } from "react-redux";
+import { AxiosError } from "axios";
 
 const Profile = () => {
   const [isShowBtn, setIsShowBtn] = useState<boolean>(true);
-  const [isFirstTab, setIsFirstTab] = useState<boolean>(true);
-  const [isSecondTab, setIsSecondTab] = useState<boolean>(false);
-  const [isThirdTab, setIsThirdTab] = useState<boolean>(false);
-  const [isFourthTab, setIsFourthTab] = useState<boolean>(false);
-  const [isFifthTab, setIsFifthTab] = useState<boolean>(false);
-  const [isSixthTab, setIsSixthTab] = useState<boolean>(false);
-  const [selectedRow, setSelectedRow] = useState<any>(null);
-  const [rows, setRows] = useState<any>([]);
+  const [isScientificDegrees, setIsScientificDegrees] = useState<boolean>(true);
+  const [isHonorTitles, setIsHonorTitles] = useState<boolean>(false);
+  const [isAbilities, setIsAbilities] = useState<boolean>(false);
+  const [isForeignLanguages, setIsForeignLanguages] = useState<boolean>(false);
+  const [isRanks, setIsRanks] = useState<boolean>(false);
+  const [isRents, setIsRents] = useState<boolean>(false);
+  const [rowsOfScientificDegrees, setRowsOfScientificDegrees] = useState<any>(
+    []
+  );
+  const [rowsOfHonorTitles, setRowsOfHonorTitles] = useState<any>([]);
+  const [rowsOfAbilities, setRowsOfAbilities] = useState<any>([]);
+  const [rowsOfForeignLanguages, setRowsOfForeignLanguages] = useState<any>([]);
+  const [rowsOfRanks, setRowsOfRanks] = useState<any>([]);
+  const [rowsOfRents, setRowsOfRents] = useState<any>([]);
   const [newEdit, setNewEdit] = useState<boolean>(false);
-  const scienttificDegreesColumns = [
+  const [selectedRow, setSelectedRow] = useState<any>(null);
+  const scientificDegreesColumns = [
     { title: "Seç", field: "select" },
     { title: "№", field: "id" },
     { title: "Ad", field: "name" },
@@ -46,7 +52,7 @@ const Profile = () => {
     { title: "Ad", field: "name" },
     { title: "Faiz dərəcəsi", field: "percentage" },
   ];
-  const militaryAccountingSystemColumns = [
+  const ranksColumns = [
     { title: "Seç", field: "select" },
     { title: "№", field: "id" },
     { title: "Ad", field: "name" },
@@ -60,15 +66,77 @@ const Profile = () => {
     { title: "Qısa adı", field: "shortName" },
     { title: "Pul əlavəsi", field: "salary" },
   ];
+  const newRowOfScientificDegrees = {
+    id: -(Math.abs(rowsOfScientificDegrees.length) + 1),
+    name: "",
+    for5to10Salary: 0,
+    for10to15Salary: 0,
+    for15to20Salary: 0,
+    for20Salary: 0,
+  };
+  const newRowOfHonorTitles = {
+    id: -(Math.abs(rowsOfHonorTitles.length) + 1),
+    name: "",
+    salary: 0,
+  };
+  const newRowOfAbilities = {
+    id: -(Math.abs(rowsOfAbilities.length) + 1),
+    name: "",
+    forZabitPercentage: 0,
+    forGizirPercentage: 0,
+    forMuddetliPercentage: 0,
+  };
+  const newRowOfForeignLanguages = {
+    id: -(Math.abs(rowsOfForeignLanguages.length) + 1),
+    name: "",
+    percentage: 0,
+  };
+  const newRowOfRanks = {
+    id: -(Math.abs(rowsOfRanks) + 1),
+    name: "",
+    shortName: 0,
+    salary: 0,
+  };
+  const newRowOfRents = {
+    id: -(Math.abs(rowsOfRents.length) + 1),
+    name: "",
+    shortName: 0,
+    salary: 0,
+  };
   const toast = new Toastify();
 
-  useEffect(()=>{
+  useEffect(() => {
     const getElmiDerece = async () => {
       const res = await OperationService.getElmiDerece();
-      setRows(res);
+      setRowsOfScientificDegrees(res);
+    };
+    const getFexriAd = async () => {
+      const res = await OperationService.getFexriAd();
+      setRowsOfHonorTitles(res);
+    };
+    const getMeharet = async () => {
+      const res = await OperationService.getMeharet();
+      setRowsOfAbilities(res);
+    };
+    const getXariciDil = async () => {
+      const res = await OperationService.getXariciDil();
+      setRowsOfForeignLanguages(res);
+    };
+    const getRanks = async () => {
+      const res = await OperationService.getRanks();
+      setRowsOfRanks(res);
+    };
+    const getKiraye = async () => {
+      const res = await OperationService.getKiraye();
+      setRowsOfRents(res);
     };
     getElmiDerece();
-  },[]);
+    getFexriAd();
+    getMeharet();
+    getXariciDil();
+    getRanks();
+    getKiraye();
+  }, []);
 
   const deleteRow = async (id: number | null) => {
     if (!id) {
@@ -77,45 +145,118 @@ const Profile = () => {
     }
 
     toast.warning(async (result: any) => {
-      const updatedRows = rows.filter((row: any) => row.id !== id);
-      console.log(id)
+      const rowsOfTable = isScientificDegrees
+        ? rowsOfScientificDegrees
+        : isHonorTitles
+        ? rowsOfHonorTitles
+        : isAbilities
+        ? rowsOfAbilities
+        : isForeignLanguages
+        ? rowsOfForeignLanguages
+        : isRanks
+        ? rowsOfRanks
+        : rowsOfRents;
+      const updatedRows = rowsOfTable.filter((row: any) => row.id !== id);
       if (result.isConfirmed) {
         if (id > 0) {
-          await OperationService.deleteElmiDereceById(id);
+          isScientificDegrees &&
+            (await OperationService.deleteElmiDereceById(id));
+          isHonorTitles && (await OperationService.deleteFexriAdById(id));
+          isAbilities && (await OperationService.deleteMeharetById(id));
+          isForeignLanguages &&
+            (await OperationService.deleteXariciDilById(id));
+          isRanks && (await OperationService.deleteRanksById(id));
+          isRents && (await OperationService.deleteKirayeById(id));
           toast.success("Sətir silindi");
         }
-        setRows(updatedRows);
+        isScientificDegrees && setRowsOfScientificDegrees(updatedRows);
+        isHonorTitles && setRowsOfHonorTitles(updatedRows);
+        isAbilities && setRowsOfAbilities(updatedRows);
+        isForeignLanguages && setRowsOfForeignLanguages(updatedRows);
+        isRanks && setRowsOfRanks(updatedRows);
+        isRents && setRowsOfRents(updatedRows);
       }
     }, "Sətri silmək istəyirsinizmi?");
   };
 
   const addRow = () => {
-    const newRow = {
-      id: -(Math.abs(rows.length) + 1),
-      name: "",
-      for5to10Salary: 0,
-      for10to15Salary: 0,
-      for15to20Salary: 0,
-      for20Salary: 0
-    };
+    const newRow = isScientificDegrees
+      ? newRowOfScientificDegrees
+      : isHonorTitles
+      ? newRowOfHonorTitles
+      : isAbilities
+      ? newRowOfAbilities
+      : isForeignLanguages
+      ? newRowOfForeignLanguages
+      : isRanks
+      ? newRowOfRanks
+      : newRowOfRents;
 
-    setRows([...rows, newRow]);
+    isScientificDegrees &&
+      setRowsOfScientificDegrees([...rowsOfScientificDegrees, newRow]);
+    isHonorTitles && setRowsOfHonorTitles([...rowsOfHonorTitles, newRow]);
+    isAbilities && setRowsOfAbilities([...rowsOfAbilities, newRow]);
+    isForeignLanguages &&
+      setRowsOfForeignLanguages([...rowsOfForeignLanguages, newRow]);
+    isRanks && setRowsOfRanks([...rowsOfRanks, newRow]);
+    isRents && setRowsOfRents([...rowsOfRents, newRow]);
   };
 
   const selectRow = async (id: number) => {
     if (id < 0) return;
-    const res = await OperationService.getElmiDerece();
+    const res = isScientificDegrees
+      ? await OperationService.getElmiDerece()
+      : isHonorTitles
+      ? await OperationService.getFexriAd()
+      : isAbilities
+      ? await OperationService.getMeharet()
+      : isForeignLanguages
+      ? await OperationService.getXariciDil()
+      : isRanks
+      ? await OperationService.getRanks()
+      : await OperationService.getKiraye();
     setSelectedRow(selectedRow);
   };
 
   const saveRow = async () => {
+    const rowsOfTable = isScientificDegrees
+      ? rowsOfScientificDegrees
+      : isHonorTitles
+      ? rowsOfHonorTitles
+      : isAbilities
+      ? rowsOfAbilities
+      : isForeignLanguages
+      ? rowsOfForeignLanguages
+      : isRanks
+      ? rowsOfRanks
+      : rowsOfRents;
     try {
-      rows.map(async (row: any) => {
+      rowsOfTable.map(async (row: any) => {
         if (row.id < 0) {
           row.id = 0;
-          const res = await OperationService.AddScientificDegree(row);
+          const res = isScientificDegrees
+            ? await OperationService.AddScientificDegree(row)
+            : isHonorTitles
+            ? await OperationService.AddHonorTitle(row)
+            : isAbilities
+            ? await OperationService.AddAbility(row)
+            : isForeignLanguages
+            ? await OperationService.AddForeignLanguage(row)
+            : isRanks
+            ? await OperationService.AddRank(row)
+            : await OperationService.AddRent(row);
         } else {
-          const res = await OperationService.UpdateScientificDegree(row);
+          const res = isScientificDegrees
+            ? await OperationService.UpdateScientificDegree(row)
+            : isHonorTitles
+            ? await OperationService.UpdateHonorTitle(row)
+            : isAbilities
+            ? await OperationService.UpdateAbility(row)
+            : isForeignLanguages
+            ? await OperationService.UpdateForeignLanguage(row)
+            : isRanks
+            ? await OperationService.UpdateRank(row)
+            : await OperationService.UpdateRent(row);
         }
       });
       toast.success("Bölmələr yadda saxlanıldı");
@@ -125,7 +266,18 @@ const Profile = () => {
   };
 
   const changeRow = (e: any, id: number) => {
-    const newRows = rows.map((row: any) => {
+    const rowsOfTable = isScientificDegrees
+      ? rowsOfScientificDegrees
+      : isHonorTitles
+      ? rowsOfHonorTitles
+      : isAbilities
+      ? rowsOfAbilities
+      : isForeignLanguages
+      ? rowsOfForeignLanguages
+      : isRanks
+      ? rowsOfRanks
+      : rowsOfRents;
+    const newRows = rowsOfTable.map((row: any) => {
       if (row.id === id) {
         return {
           ...row,
@@ -135,54 +287,73 @@ const Profile = () => {
       return row;
     });
 
-    setRows(newRows);
-
+    isScientificDegrees && setRowsOfScientificDegrees(newRows);
+    isHonorTitles && setRowsOfHonorTitles(newRows);
+    isAbilities && setRowsOfAbilities(newRows);
+    isForeignLanguages && setRowsOfForeignLanguages(newRows);
+    isRanks && setRowsOfRanks(newRows);
+    isRents && setRowsOfRents(newRows);
   };
 
   // Change Password
-  const [newUsername, setNewUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [updatedUser, setUpdatedUser] = useState({
-    email: newUsername,
-    password: newPassword,
+    email: "",
+    password: "",
+    newPassword: "",
   });
 
-  const handleChangeUsername = (e: any) => {
-    setNewUsername(e.target.value);
+  const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    setUpdatedUser((updatedUser) => ({
+      ...updatedUser,
+      email: e.target.value,
+    }));
   };
-  const handleChangePassword = (e: any) => {
+  const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    setUpdatedUser((updatedUser) => ({
+      ...updatedUser,
+      password: e.target.value,
+    }));
+  };
+  const handleChangeNewPassword = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setNewPassword(e.target.value);
+    setUpdatedUser((updatedUser) => ({
+      ...updatedUser,
+      newPassword: e.target.value,
+    }));
   };
-  const handleChangeConfirmPassword = (e: any) => {
-    setConfirmPassword(e.target.value);
-  };
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!newUsername || !newPassword) {
+    if (!email || !password || !newPassword) {
       toast.error("Xahiş olunur bütün xanaları doldurun!");
       return;
     }
+    console.log(updatedUser)
     try {
-      if (newPassword == confirmPassword) {
-        const res = await OperationService.login(updatedUser);
-        setNewUsername("");
-        setNewPassword("");
-      }
+      const res = await OperationService.update(updatedUser);
+      toast.success("Şifrə yeniləndi");
     } catch (error) {
       const err = error as AxiosError;
       toast.error((err.response?.data as string) || "Xəta baş verdi!");
     }
   };
-  
+
   return (
     <>
       <div className="d-flex my-3">
         <div className="info-part d-flex flex-column align-items-center">
           <div className="d-flex flex-column align-items-center">
-            <div className="profile-img"></div>
+            <div className="profile-img">
+              <img src="..\user-img.png"></img>
+            </div>
             <div>
-              <h1>Modern</h1>
+              <h2>User</h2>
             </div>
             <div>
               <p>
@@ -190,7 +361,7 @@ const Profile = () => {
               </p>
             </div>
           </div>
-          <div className="my-3">Email</div>
+          {isShowBtn && <div className="my-3"><p>Email:</p></div>}
           <div>
             {isShowBtn && (
               <div>
@@ -208,33 +379,30 @@ const Profile = () => {
               <form onSubmit={handleSubmit}>
                 <div className="d-flex flex-column gap-2">
                   <div className="d-flex flex-column gap-1">
-                    <label>İstifadəçi adı</label>
+                    <label>Email</label>
                     <input
                       type="text"
-                      placeholder="Ad"
-                      value={newUsername}
-                      onChange={handleChangeUsername}
+                      value={email}
+                      onChange={handleChangeEmail}
                       className="input"
                     />
                   </div>
                   <div className="d-flex flex-column gap-1">
-                    <label>Şifrə</label>
+                    <label>Köhnə şifrə</label>
                     <input
                       type="password"
-                      placeholder="Şifrə"
                       className="input"
-                      value={newPassword}
+                      value={password}
                       onChange={handleChangePassword}
                     />
                   </div>
                   <div className="d-flex flex-column gap-1">
-                    <label>Şifrə təsdiqlənməsi</label>
+                    <label>Yeni şifrə</label>
                     <input
                       type="password"
-                      placeholder="Şifrə təsdiqlənməsi"
                       className="input"
-                      value={confirmPassword}
-                      onChange={handleChangeConfirmPassword}
+                      value={newPassword}
+                      onChange={handleChangeNewPassword}
                     />
                   </div>
                   <button className="btn btn-primary w-75 mt-2" type="submit">
@@ -250,15 +418,15 @@ const Profile = () => {
             <div>
               <button
                 className={`btn ${
-                  isFirstTab ? "clicked-btn" : "unclicked-btn"
+                  isScientificDegrees ? "clicked-btn" : "unclicked-btn"
                 }`}
                 onClick={() => {
-                  setIsFirstTab(true);
-                  setIsSecondTab(false);
-                  setIsThirdTab(false);
-                  setIsFourthTab(false);
-                  setIsFifthTab(false);
-                  setIsSixthTab(false);
+                  setIsScientificDegrees(true);
+                  setIsHonorTitles(false);
+                  setIsAbilities(false);
+                  setIsForeignLanguages(false);
+                  setIsRanks(false);
+                  setIsRents(false);
                 }}
               >
                 Elmi dərəcələr
@@ -267,15 +435,15 @@ const Profile = () => {
             <div>
               <button
                 className={`btn ${
-                  isSecondTab ? "clicked-btn" : "unclicked-btn"
+                  isHonorTitles ? "clicked-btn" : "unclicked-btn"
                 }`}
                 onClick={() => {
-                  setIsFirstTab(false);
-                  setIsSecondTab(true);
-                  setIsThirdTab(false);
-                  setIsFourthTab(false);
-                  setIsFifthTab(false);
-                  setIsSixthTab(false);
+                  setIsScientificDegrees(false);
+                  setIsHonorTitles(true);
+                  setIsAbilities(false);
+                  setIsForeignLanguages(false);
+                  setIsRanks(false);
+                  setIsRents(false);
                 }}
               >
                 Xarici dil
@@ -284,32 +452,32 @@ const Profile = () => {
             <div>
               <button
                 className={`btn ${
-                  isThirdTab ? "clicked-btn" : "unclicked-btn"
+                  isAbilities ? "clicked-btn" : "unclicked-btn"
                 }`}
                 onClick={() => {
-                  setIsFirstTab(false);
-                  setIsSecondTab(false);
-                  setIsThirdTab(true);
-                  setIsFourthTab(false);
-                  setIsFifthTab(false);
-                  setIsSixthTab(false);
+                  setIsScientificDegrees(false);
+                  setIsHonorTitles(false);
+                  setIsAbilities(true);
+                  setIsForeignLanguages(false);
+                  setIsRanks(false);
+                  setIsRents(false);
                 }}
               >
-                Məhrətlilik
+                Məharətlilik
               </button>
             </div>
             <div>
               <button
                 className={`btn ${
-                  isFourthTab ? "clicked-btn" : "unclicked-btn"
+                  isForeignLanguages ? "clicked-btn" : "unclicked-btn"
                 }`}
                 onClick={() => {
-                  setIsFirstTab(false);
-                  setIsSecondTab(false);
-                  setIsThirdTab(false);
-                  setIsFourthTab(true);
-                  setIsFifthTab(false);
-                  setIsSixthTab(false);
+                  setIsScientificDegrees(false);
+                  setIsHonorTitles(false);
+                  setIsAbilities(false);
+                  setIsForeignLanguages(true);
+                  setIsRanks(false);
+                  setIsRents(false);
                 }}
               >
                 Fəxri ad
@@ -317,16 +485,14 @@ const Profile = () => {
             </div>
             <div>
               <button
-                className={`btn ${
-                  isFifthTab ? "clicked-btn" : "unclicked-btn"
-                }`}
+                className={`btn ${isRanks ? "clicked-btn" : "unclicked-btn"}`}
                 onClick={() => {
-                  setIsFirstTab(false);
-                  setIsSecondTab(false);
-                  setIsThirdTab(false);
-                  setIsFourthTab(false);
-                  setIsFifthTab(true);
-                  setIsSixthTab(false);
+                  setIsScientificDegrees(false);
+                  setIsHonorTitles(false);
+                  setIsAbilities(false);
+                  setIsForeignLanguages(false);
+                  setIsRanks(true);
+                  setIsRents(false);
                 }}
               >
                 Kirayə
@@ -334,64 +500,38 @@ const Profile = () => {
             </div>
             <div>
               <button
-                className={`btn ${
-                  isSixthTab ? "clicked-btn" : "unclicked-btn"
-                }`}
+                className={`btn ${isRents ? "clicked-btn" : "unclicked-btn"}`}
                 onClick={() => {
-                  setIsFirstTab(false);
-                  setIsSecondTab(false);
-                  setIsThirdTab(false);
-                  setIsFourthTab(false);
-                  setIsFifthTab(false);
-                  setIsSixthTab(true);
+                  setIsScientificDegrees(false);
+                  setIsHonorTitles(false);
+                  setIsAbilities(false);
+                  setIsForeignLanguages(false);
+                  setIsRanks(false);
+                  setIsRents(true);
                 }}
               >
-                Güzəşt
+                Hərbi rütbələr
               </button>
             </div>
           </div>
           <div>
             <div>
-              {isFirstTab && (
+              {isScientificDegrees && (
                 <TableLayout
                   isEditable={true}
-                  data={rows}
+                  data={rowsOfScientificDegrees}
                   add={addRow}
                   select={selectRow}
                   save={saveRow}
                   delete={deleteRow}
                   change={changeRow}
-                  columns={scienttificDegreesColumns}
+                  columns={scientificDegreesColumns}
                 ></TableLayout>
               )}
-              {isSecondTab && (
+              {isHonorTitles && (
                 <TableLayout
                   isEditable={true}
-                  data={rows}
-                  add={addRow}
-                  select={selectRow}
-                  save={saveRow}
-                  delete={deleteRow}
-                  change={changeRow}
-                  columns={foreignLanguagesColumns}
-                ></TableLayout>
-              )}
-              {isThirdTab && (
-                <TableLayout
-                  isEditable={true}
-                  data={rows}
-                  add={addRow}
-                  select={selectRow}
-                  save={saveRow}
-                  delete={deleteRow}
-                  change={changeRow}
-                  columns={abilitiesColumns}
-                ></TableLayout>
-              )}
-              {isFourthTab && (
-                <TableLayout
-                  isEditable={true}
-                  data={rows}
+                  data={rowsOfHonorTitles}
                   add={addRow}
                   select={selectRow}
                   save={saveRow}
@@ -400,28 +540,52 @@ const Profile = () => {
                   columns={honorTitlesColumns}
                 ></TableLayout>
               )}
-              {isFifthTab && (
+              {isAbilities && (
                 <TableLayout
                   isEditable={true}
-                  data={rows}
+                  data={rowsOfAbilities}
+                  add={addRow}
+                  select={selectRow}
+                  save={saveRow}
+                  delete={deleteRow}
+                  change={changeRow}
+                  columns={abilitiesColumns}
+                ></TableLayout>
+              )}
+              {isForeignLanguages && (
+                <TableLayout
+                  isEditable={true}
+                  data={rowsOfForeignLanguages}
+                  add={addRow}
+                  select={selectRow}
+                  save={saveRow}
+                  delete={deleteRow}
+                  change={changeRow}
+                  columns={foreignLanguagesColumns}
+                ></TableLayout>
+              )}
+              {isRanks && (
+                <TableLayout
+                  isEditable={true}
+                  data={rowsOfRanks}
+                  add={addRow}
+                  select={selectRow}
+                  save={saveRow}
+                  delete={deleteRow}
+                  change={changeRow}
+                  columns={ranksColumns}
+                ></TableLayout>
+              )}
+              {isRents && (
+                <TableLayout
+                  isEditable={true}
+                  data={rowsOfRents}
                   add={addRow}
                   select={selectRow}
                   save={saveRow}
                   delete={deleteRow}
                   change={changeRow}
                   columns={rentsColumns}
-                ></TableLayout>
-              )}
-              {isSixthTab && (
-                <TableLayout
-                  isEditable={true}
-                  data={rows}
-                  add={addRow}
-                  select={selectRow}
-                  save={saveRow}
-                  delete={deleteRow}
-                  change={changeRow}
-                  columns={militaryAccountingSystemColumns}
                 ></TableLayout>
               )}
             </div>
