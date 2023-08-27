@@ -347,18 +347,13 @@ const Profile = () => {
   return (
     <>
       <div className="d-flex my-3">
-        <div className="info-part d-flex flex-column align-items-center">
+        <div className="info-part my-5 d-flex flex-column align-items-center">
           <div className="d-flex flex-column align-items-center">
             <div className="profile-img">
-              <img src="..\user-img.png"></img>
+              <img src="..\user-img2.png"></img>
             </div>
             <div>
-              <h2>User</h2>
-            </div>
-            <div>
-              <p>
-                Son giriş vaxtı:<span></span>
-              </p>
+              <h4 className="mt-4">İstifadəçi</h4>
             </div>
           </div>
           {isShowBtn && <div className="my-3"><p>Email:</p></div>}
@@ -378,20 +373,22 @@ const Profile = () => {
             {!isShowBtn && (
               <form onSubmit={handleSubmit}>
                 <div className="d-flex flex-column gap-2">
-                  <div className="d-flex flex-column gap-1">
+                  {/* <div className="d-flex flex-column gap-1">
                     <label>Email</label>
                     <input
                       type="text"
                       value={email}
+                      placeholder="Email"
                       onChange={handleChangeEmail}
-                      className="input"
+                      className="form-control"
                     />
-                  </div>
+                  </div> */}
                   <div className="d-flex flex-column gap-1">
                     <label>Köhnə şifrə</label>
                     <input
                       type="password"
-                      className="input"
+                      className="form-control"
+                      placeholder="Köhnə şifrə"
                       value={password}
                       onChange={handleChangePassword}
                     />
@@ -400,14 +397,25 @@ const Profile = () => {
                     <label>Yeni şifrə</label>
                     <input
                       type="password"
-                      className="input"
+                      className="form-control"
+                      placeholder="Yeni şifrə"
                       value={newPassword}
                       onChange={handleChangeNewPassword}
                     />
                   </div>
+                  <div className="d-flex">
                   <button className="btn btn-primary w-75 mt-2" type="submit">
                     Yadda saxla
                   </button>
+                  <button
+                    className="btn btn-danger w-25 mt-2 ms-2"
+                    onClick={() => {
+                      setIsShowBtn(true);
+                    }}
+                  >
+                    Geri
+                  </button>
+                  </div>
                 </div>
               </form>
             )}

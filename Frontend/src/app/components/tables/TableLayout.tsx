@@ -79,7 +79,7 @@ const TableLayout = (props: Props<any>) => {
           </Button>
         </div>
       ) : null}
-      <Table className="my-2" bordered>
+      <Table className="my-2 bg-white" bordered>
         <thead>
           <tr className="text-center">
             {props.columns.map((column) => (
@@ -99,7 +99,8 @@ const TableLayout = (props: Props<any>) => {
                       : {}
                   }
                 >
-                  {!props.isEditable ? (
+                  {!props.isEditable ? 
+                   (
                     column.field === "id" ? (
                       index + 1
                     ) : column.field === "select" ? (
@@ -130,7 +131,7 @@ const TableLayout = (props: Props<any>) => {
                       name={column.field as string}
                       onChange={(e) => changeOrganization(e, d.id)}
                       placeholder="Daxil edin"
-                      className="border-0 form-control text-center initial user-none w-100 select-none"
+                      className="border-0 form-control text-center initial user-none min-width-input select-none"
                       value={
                         column.value
                           ? column?.value(d)
