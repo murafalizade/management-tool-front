@@ -1,91 +1,89 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Roboto", sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-
 
 /* Remove number input arrows */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 input[type="number"] {
-    -moz-appearance: textfield;
+  -moz-appearance: textfield;
 }
 
-.initial{
-    font-size: inherit!important;
-    padding: inherit!important;
-    font-weight: inherit!important;
-    color: inherit!important;
-    line-height: inherit!important;
+.initial {
+  font-size: inherit !important;
+  padding: inherit !important;
+  font-weight: inherit !important;
+  color: inherit !important;
+  line-height: inherit !important;
 }
-
 
 .selected-item {
-    background-color: #1e90ff !important;
-    color: #ffffff !important;
+  background-color: #1e90ff !important;
+  color: #ffffff !important;
 }
 
 .dropdown-item.selected-item {
-    background-color: #1e90ff !important;
-    color: #ffffff !important;
+  background-color: #1e90ff !important;
+  color: #ffffff !important;
 }
 
 .fade:not(.show) {
-    display: none !important;
+  display: none !important;
 }
 
 body {
-    background-color: #f5f5f5;
-    color: #000000;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.5;
-    overflow-x: hidden !important;
+  background-color: #f5f5f5;
+  color: #000000;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  overflow-x: hidden !important;
 }
 
 main {
-    max-height: 100vh;
-    overflow-y: hidden;
-    overflow-x: hidden;
+  max-height: 100vh;
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 .fs-7 {
-    font-size: 0.7rem !important;
+  font-size: 0.7rem !important;
 }
 
 .min-width-20 {
-    min-width: 20% !important;
+  min-width: 20% !important;
 }
 
 .min-width-30 {
-    min-width: 31% !important;
+  min-width: 31% !important;
 }
 
 .min-width-50 {
-    min-width: 55% !important;
+  min-width: 55% !important;
 }
 
 .small-td {
-    width: 20px !important;
+  width: 20px !important;
 }
 
 .table {
-    margin-bottom: 0px !important;
-    th,
-    td {
-        font-size: 12px;
-        // text-align: center;
-        // word-break: keep-all;
-        // text-wrap:nowrap;
-    }
+  margin-bottom: 0px !important;
+  th,
+  td {
+    font-size: 12px;
+    // text-align: center;
+    // word-break: keep-all;
+    // text-wrap:nowrap;
+  }
 }
 
 // Dark theme
@@ -97,99 +95,115 @@ $darkModeNavbarColor: black;
 
 /* Default styles (light mode) */
 .inverse {
-    background-color: $darkModeBackgroundColor;
+  background-color: $darkModeBackgroundColor;
 }
 
 /* Dark mode styles */
 body.inverse {
-    h1,
-    h3,
-    h4,
-    h5,
-    h6 {
-        color: white !important;
-    }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    color: white !important;
+  }
 
-    .slider{
-        background-color: $darkModeBackgroundColor !important;
-    }
+  .slider {
+    background-color: $darkModeBackgroundColor !important;
+  }
 
-    .login-page{
-        background-color: $darkModeBackgroundColor !important;
-        p{
-            color: $darkModeTextColor !important;
+  .login-page {
+    background-color: $darkModeBackgroundColor !important;
+    p {
+      color: $darkModeTextColor !important;
+    }
+  }
+
+  .btn-primary {
+    background-color: $darkModePrimaryColor;
+    border: none;
+    color: #ffffff;
+  }
+
+  .dropdown-menu {
+    background-color: $darkModeBackgroundColor !important;
+    color: $darkModeTextColor !important;
+    a {
+      &:hover {
+        background-color: $darkModePrimaryColor !important;
+        color: #ffffff !important;
+      }
+    }
+  }
+
+  table {
+    color: $darkModeTextColor !important;
+    background-color: $darkModeBackgroundColor !important;
+
+    tr {
+      background-color: $darkModeBackgroundColor !important;
+      color: $darkModeTextColor !important;
+      &:hover {
+        td {
+          color: inherit !important;
         }
-    }
-
-    .btn-primary {
-        background-color: $darkModePrimaryColor;
-        border: none;
-        color: #ffffff;
-    }
-
-    .dropdown-menu {
+      }
+      &:last-child {
         background-color: $darkModeBackgroundColor !important;
         color: $darkModeTextColor !important;
-        a {
-            &:hover {
-                background-color: $darkModePrimaryColor !important;
-                color: #ffffff !important;
-            }
-        }
+      }
     }
 
-    table {
-        color: $darkModeTextColor !important;
-        background-color: $darkModeBackgroundColor !important;
-
-        tr {
-            background-color: $darkModeBackgroundColor !important;
-            color: $darkModeTextColor !important;
-            &:hover {
-                td {
-                    color: inherit !important;
-                }
-            }
-            &:last-child {
-                background-color: $darkModeBackgroundColor !important;
-                color: $darkModeTextColor !important;
-            }
-        }
-
-        tfoot {
-            color: $darkModeTextColor !important;
-            background-color: $darkModeBackgroundColor !important;
-        }
+    tfoot {
+      color: $darkModeTextColor !important;
+      background-color: $darkModeBackgroundColor !important;
     }
+  }
 
-    .navbar {
-        background-color: $darkModeNavbarColor !important;
-        border: none !important;
-        a {
-            color: white !important;
-        }
+  .navbar {
+    background-color: $darkModeNavbarColor !important;
+    border: none !important;
+    a {
+      color: white !important;
     }
+  }
 
-    input:not([type="checkbox"]),
-    select {
-        background-color: $darkModeBackgroundColor !important;
-        color: $darkModeTextColor !important;
-    }
+  input:not([type="checkbox"]),
+  select {
+    background-color: $darkModeBackgroundColor !important;
+    color: $darkModeTextColor !important;
+  }
 
-    label {
-        color: $darkModeTextColor !important;
-    }
+  label {
+    color: $darkModeTextColor !important;
+  }
 
-    .modal-content {
-        background-color: $darkModeBackgroundColor !important;
-        color: $darkModeTextColor !important;
-    }
+  .modal-content {
+    background-color: $darkModeBackgroundColor !important;
+    color: $darkModeTextColor !important;
+  }
 
-    .comment {
-        color: white !important;
-    }
+  .comment {
+    color: white !important;
+  }
+
+  .input {
+    border-color: white;
+  }
+
+  .clicked-btn {
+    color: white;
+    border-color: $darkModeBackgroundColor;
+  }
+
+  .unclicked-btn:hover {
+    color: white;
+    border-color: white;
+  }
 }
 
-.z-index-highest{
-    z-index:2!important;
+.z-index-highest {
+  z-index: 2 !important;
 }

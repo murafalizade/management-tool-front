@@ -1,29 +1,32 @@
 .profile-img {
+  img {
     width: 6rem;
     height: 6rem;
-    background-color: red;
     border-radius: 0.5rem;
+  }
 }
 
 .input {
-    padding: 0.3rem;
-    border: 1px solid black;
-    border-radius: 3px;
+  padding: 0.3rem;
+  border: 1px solid black;
+  border-radius: 3px;
+  outline: none;
 }
 
 .info-part {
-    width: 40%;
+  width: 40%;
 }
 
 .tabs-part {
-    width: 60%;
+  width: 60%;
 }
 
 .unclicked-btn {
-    background-color: white;
-    border-radius: 0 !important;
+  background-color: white;
+  border-radius: 0 !important;
 }
 
 .clicked-btn {
-    border-color: #f5f5f5;
+  border-color: #f5f5f5;
+  border-radius: 0 !important;
 }
