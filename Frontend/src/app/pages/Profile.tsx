@@ -105,6 +105,7 @@ const Profile = () => {
   };
   const toast = new Toastify();
 
+  // Get table datas
   useEffect(() => {
     const getElmiDerece = async () => {
       const res = await OperationService.getElmiDerece();
@@ -138,6 +139,7 @@ const Profile = () => {
     getKiraye();
   }, []);
 
+  // Delete a row from a table
   const deleteRow = async (id: number | null) => {
     if (!id) {
       toast.info("Zəhmət olmasa silmək istədiyiniz sətri seçin");
@@ -179,6 +181,7 @@ const Profile = () => {
     }, "Sətri silmək istəyirsinizmi?");
   };
 
+  // Add a row to a table
   const addRow = () => {
     const newRow = isScientificDegrees
       ? newRowOfScientificDegrees
@@ -202,6 +205,7 @@ const Profile = () => {
     isRents && setRowsOfRents([...rowsOfRents, newRow]);
   };
 
+  // Select a row of a table
   const selectRow = async (id: number) => {
     if (id < 0) return;
     const res = isScientificDegrees
@@ -218,6 +222,7 @@ const Profile = () => {
     setSelectedRow(selectedRow);
   };
 
+  // Save rows of a table
   const saveRow = async () => {
     const rowsOfTable = isScientificDegrees
       ? rowsOfScientificDegrees
@@ -265,6 +270,7 @@ const Profile = () => {
     }
   };
 
+  // Change datas in the row
   const changeRow = (e: any, id: number) => {
     const rowsOfTable = isScientificDegrees
       ? rowsOfScientificDegrees
@@ -319,9 +325,7 @@ const Profile = () => {
       password: e.target.value,
     }));
   };
-  const handleChangeNewPassword = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleChangeNewPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewPassword(e.target.value);
     setUpdatedUser((updatedUser) => ({
       ...updatedUser,
@@ -334,7 +338,7 @@ const Profile = () => {
       toast.error("Xahiş olunur bütün xanaları doldurun!");
       return;
     }
-    console.log(updatedUser)
+    console.log(updatedUser);
     try {
       const res = await OperationService.update(updatedUser);
       toast.success("Şifrə yeniləndi");
@@ -356,7 +360,11 @@ const Profile = () => {
               <h4 className="mt-4">İstifadəçi</h4>
             </div>
           </div>
-          {isShowBtn && <div className="my-3"><p>Email:</p></div>}
+          {isShowBtn && (
+            <div className="my-3">
+              <p>Email:</p>
+            </div>
+          )}
           <div>
             {isShowBtn && (
               <div>
@@ -404,17 +412,17 @@ const Profile = () => {
                     />
                   </div>
                   <div className="d-flex">
-                  <button className="btn btn-primary w-75 mt-2" type="submit">
-                    Yadda saxla
-                  </button>
-                  <button
-                    className="btn btn-danger w-25 mt-2 ms-2"
-                    onClick={() => {
-                      setIsShowBtn(true);
-                    }}
-                  >
-                    Geri
-                  </button>
+                    <button className="btn btn-primary w-75 mt-2" type="submit">
+                      Yadda saxla
+                    </button>
+                    <button
+                      className="btn btn-danger w-25 mt-2 ms-2"
+                      onClick={() => {
+                        setIsShowBtn(true);
+                      }}
+                    >
+                      Geri
+                    </button>
                   </div>
                 </div>
               </form>
