@@ -43,9 +43,10 @@ const CalculatingModal = () => {
   const [ranks, setRanks] = useState<any[]>([]);
   const [scientificDegrees, setScientificDegrees] = useState<any[]>([]);
   const [honorTitle, setHonorTitle] = useState<any[]>([]);
-  const [adminstrator, setAdminstrator] = useState<any[]>([]);
+  const [adminstrators, setAdminstrators] = useState<any[]>([]);
   const [languageSkills, setLanguageSkills] = useState<any[]>([]);
   const [positions, setPositions] = useState<any[]>([]);
+  const [organizations, setOrganizations] = useState<any[]>([]);
   const [abilities, setAbilities] = useState<any[]>([]);
   const [total, setTotal] = useState<number>(0);
 
@@ -199,15 +200,21 @@ const CalculatingModal = () => {
 
     // Get Adminstrator
     const adminstrator = await OperationService.getAdminstration();
-    // setAdminstrator(adminstrator);///
+    setAdminstrators(adminstrator.data);
+    // console.log(adminstrator.data);
 
     // Get Language skills
     const languageSkills = await OperationService.getXariciDil();
     setLanguageSkills(languageSkills);
 
+    // Get Organizations
+    const organization = await OperationService.getOrganization();
+    setOrganizations(organization.data);
+
     // Get Positions
-    const organizations = await OperationService.getPosition();
-    setPositions(organizations);
+    const position = await OperationService.getPosition();
+    setPositions(position);
+    console.log(position);
 
     // Get Abilities
     const abilities = await OperationService.getMeharet();
@@ -399,8 +406,6 @@ const CalculatingModal = () => {
     );
   };
 
-  console.log(info);
-
   return (
     <>
       {state.show === 0 ? null : (
@@ -417,28 +422,85 @@ const CalculatingModal = () => {
           </Modal.Header>
           <Modal.Body>
             <div className="section pt-4">
-              <ul>
-                <li className="list-group-item d-flex align-items-center">
-                  İdarə:{" "}
-                  <select className="form-control w-25 ms-4">
-                    {adminstrator.map((x: any) => (
-                      <option value={x.id}>{x.name}</option>
-                    ))}
-                  </select>
-                </li>
-                <li className="list-group-item mt-3 d-flex align-items-center">
-                  Vəzifə:
-                  <select
-                    className="form-control w-25 ms-3"
-                    value={info.positionId}
-                    name="position"
-                    onChange={handleSelectInput}
-                  >
-                    {positions.map((x: any) => (
-                      <option value={x.id}>{x.name}</option>
-                    ))}
-                  </select>
-                </li>
+              <ul className="d-flex w-100">
+                <div className="w-50">
+                  <li className="list-group-item d-flex align-items-center">
+                    İdarə:{" "}
+                    <select
+                      className="form-control w-50 ms-4"
+                      value={info.adminstrationId}
+                      name="adminstration"
+                      onChange={handleSelectInput}
+                    >
+                      {adminstrators.map((x: any) => (
+                        <option value={x.id}>{x.name}</option>
+                      ))}
+                    </select>
+                  </li>
+                  <li className="list-group-item mt-3 d-flex align-items-center">
+                    Vəzifə:
+                    <select
+                      className="form-control w-50 ms-3"
+                      value={info.positionId}
+                      name="position"
+                      onChange={handleSelectInput}
+                    >
+                      {info.organizationId == undefined
+                        ? positions
+                            .filter(
+                              (position) =>
+                                position.departmentId ===
+                                ([organizations.filter((org)=>org.adminstrationId==info.adminstrationId)][0].map((y:any)=>(y.id))[0])
+                            )
+                            .map((x: any) => (
+                              <option value={x.id}>{x.name}</option>
+                            ))
+                        : positions
+                            .filter(
+                              (position) =>
+                                position.departmentId !==
+                                info.adminstrationId &&
+                                position.departmentId === info.organizationId
+                            )
+                            .map((x: any) => (
+                              <option value={x.id}>{x.name}</option>
+                            ))}
+                    </select>
+                  </li>
+                </div>
+                <div className="w-50">
+                  <li className="list-group-item d-flex align-items-center">
+                    Şöbə:
+                    <select
+                      className="form-control w-50 ms-3"
+                      value={info.organizationId}
+                      name="organization"
+                      onChange={handleSelectInput}
+                    >
+                      {info.adminstrationId == undefined
+                        ? organizations
+                            .filter(
+                              (organization) =>
+                                organization.adminstrationId ===
+                                adminstrators[0].id
+                            )
+                            .map((x: any) => (
+                              <option value={x.id}>{x.name}</option>
+                            ))
+                        : organizations
+                            .filter(
+                              (organization) =>
+                                organization.adminstrationId !==
+                                  adminstrators[0].id &&
+                                organization.adminstrationId ===
+                                  info.adminstrationId
+                            )
+                            .map((x: any) => (
+                              <option value={x.id}>{x.name}</option>
+                            ))}
+                    </select>
+                  </li>
+                </div>
               </ul>
             </div>
 
@@ -758,7 +820,7 @@ const CalculatingModal = () => {
 
                     <div className="d-flex  align-items-center justify-content-between my-1">
                       <label>Kibertəhlük. əlav.</label>
-                        <input
+                      <input
                         type="number"
                         className="form-control date-input"
                         min={0}
