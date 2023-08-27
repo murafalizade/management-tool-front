@@ -105,26 +105,26 @@ export default class OperationService {
     return await fetch.post(`/api/position/save-all`, data);
   }
 
-  static async UpdateScientificDegree(data: any): Promise<any> {
+  static async UpdateScientificDegree( data: any): Promise<any> {
     return await fetch.put(`/api/ElmiDerece`, data);
   }
 
-  static async UpdateHonorTitle(data: any): Promise<any> {
+  static async UpdateHonorTitle( data: any): Promise<any> {
     return await fetch.put(`/api/fexriad`, data);
   }
 
   static async UpdateAbility(data: any): Promise<any> {
     return await fetch.put(`/api/Meharet`, data);
   }
-  
+
   static async UpdateForeignLanguage(data: any): Promise<any> {
     return await fetch.put(`/api/XariciDil`, data);
   }
-  
-  static async UpdateRank(data: any): Promise<any> {
-    return await fetch.put(`/api/rank`, data);
+
+  static async UpdateRank(id: number, data: any): Promise<any> {
+    return await fetch.put(`/api/rank/${id}`, data);
   }
-  
+
   static async UpdateRent(data: any): Promise<any> {
     return await fetch.put(`/api/kiraye`, data);
   }
@@ -132,7 +132,7 @@ export default class OperationService {
   static async AddScientificDegree(data: any): Promise<any> {
     return await fetch.post(`/api/ElmiDerece`, data);
   }
-  
+
   static async AddHonorTitle(data: any): Promise<any> {
     return await fetch.post(`/api/fexriad`, data);
   }
@@ -140,19 +140,19 @@ export default class OperationService {
   static async AddAbility(data: any): Promise<any> {
     return await fetch.post(`/api/Meharet`, data);
   }
-  
+
   static async AddForeignLanguage(data: any): Promise<any> {
     return await fetch.post(`/api/XariciDil`, data);
   }
-  
+
   static async AddRank(data: any): Promise<any> {
     return await fetch.post(`/api/rank`, data);
   }
-  
+
   static async AddRent(data: any): Promise<any> {
     return await fetch.post(`/api/kiraye`, data);
   }
-  
+
   static async getDiscount(month?: number, year?: number): Promise<any> {
     return await fetch.get(`/api/discount?month=${month}&year=${year}`);
   }

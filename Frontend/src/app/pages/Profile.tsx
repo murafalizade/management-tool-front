@@ -63,7 +63,7 @@ const Profile = () => {
     { title: "Seç", field: "select" },
     { title: "№", field: "id" },
     { title: "Ad", field: "name" },
-    { title: "Qısa adı", field: "shortName" },
+    // { title: "Qısa adı", field: "shortName" },
     { title: "Pul əlavəsi", field: "salary" },
   ];
   const newRowOfScientificDegrees = {
@@ -92,15 +92,15 @@ const Profile = () => {
     percentage: 0,
   };
   const newRowOfRanks = {
-    id: -(Math.abs(rowsOfRanks) + 1),
+    id: -(Math.abs(rowsOfRanks.length) + 1),
     name: "",
-    shortName: 0,
+    shortName: "",
     salary: 0,
   };
   const newRowOfRents = {
     id: -(Math.abs(rowsOfRents.length) + 1),
     name: "",
-    shortName: 0,
+    // shortName: "",
     salary: 0,
   };
   const toast = new Toastify();
@@ -260,13 +260,13 @@ const Profile = () => {
             : isForeignLanguages
             ? await OperationService.UpdateForeignLanguage(row)
             : isRanks
-            ? await OperationService.UpdateRank(row)
+            ? await OperationService.UpdateRank(row.id, row)
             : await OperationService.UpdateRent(row);
         }
       });
-      toast.success("Bölmələr yadda saxlanıldı");
+      toast.success();
     } catch (err) {
-      toast.error("Bölmələr yadda saxlanılmadı");
+      toast.error();
     }
   };
 
@@ -306,7 +306,7 @@ const Profile = () => {
   const [password, setPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [updatedUser, setUpdatedUser] = useState({
-    email: "",
+    email: "admin@gmail.com",
     password: "",
     newPassword: "",
   });
@@ -362,7 +362,7 @@ const Profile = () => {
           </div>
           {isShowBtn && (
             <div className="my-3">
-              <p>Email:</p>
+              <p><b>Email: </b>admin@gmail.com</p>
             </div>
           )}
           <div>
@@ -462,7 +462,7 @@ const Profile = () => {
                   setIsRents(false);
                 }}
               >
-                Xarici dil
+                Fəxri ad
               </button>
             </div>
             <div>
@@ -496,7 +496,7 @@ const Profile = () => {
                   setIsRents(false);
                 }}
               >
-                Fəxri ad
+                Xarici dil
               </button>
             </div>
             <div>
@@ -511,7 +511,7 @@ const Profile = () => {
                   setIsRents(false);
                 }}
               >
-                Kirayə
+                Hərbi rütbələr
               </button>
             </div>
             <div>
@@ -526,11 +526,11 @@ const Profile = () => {
                   setIsRents(true);
                 }}
               >
-                Hərbi rütbələr
+                Kirayələr
               </button>
             </div>
           </div>
-          <div>
+          <div className="mt-4">
             <div>
               {isScientificDegrees && (
                 <TableLayout

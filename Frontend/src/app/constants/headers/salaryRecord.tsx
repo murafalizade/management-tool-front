@@ -106,7 +106,7 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
       },
       {
         Header: "Kibertəhlükəsizlik əlavəsi",
-        accessor: "cyberSecurityPrice",
+        accessor: "cyberSecurity",
       },
       {
         Header: "Xarici dil",
@@ -313,7 +313,7 @@ const totalSalaryRecordHeaders = [
   },
   {
     Header: "Kibertəhlükəsizlik",
-    accessor: "cyberSecurityPrice",
+    accessor: "cyberSecurity",
   },
   {
     Header: "Dil",

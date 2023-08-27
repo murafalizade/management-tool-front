@@ -429,8 +429,8 @@ const CalculatingModal = () => {
                     İdarə:{" "}
                     <select
                       className="form-control w-50 ms-4"
-                      value={info.adminstrationId}
-                      name="adminstration"
+                      value={info.positionDepartmentAdminstrationId}
+                      name="positionDepartmentAdminstration"
                       onChange={handleSelectInput}
                     >
                       {adminstrators.map((x: any) => (
@@ -446,12 +446,13 @@ const CalculatingModal = () => {
                       name="position"
                       onChange={handleSelectInput}
                     >
-                      {info.organizationId == undefined
+                      <option value={0}>{info.positionName}</option>
+                      {info.positionDepartmentId == undefined
                         ? positions
                             .filter(
                               (position) =>
                                 position.departmentId ===
-                                ([organizations.filter((org)=>org.adminstrationId==info.adminstrationId)][0].map((y:any)=>(y.id))[0])
+                                ([organizations.filter((org)=>org.adminstrationId==info.positionDepartmentAdminstrationId)][0].map((y:any)=>(y.id))[0])
                             )
                             .map((x: any) => (
                               <option value={x.id}>{x.name}</option>
@@ -460,8 +461,8 @@ const CalculatingModal = () => {
                             .filter(
                               (position) =>
                                 position.departmentId !==
-                                info.adminstrationId &&
-                                position.departmentId === info.organizationId
+                                info.positionDepartmentAdminstrationId &&
+                                position.departmentId === info.positionDepartmentId
                             )
                             .map((x: any) => (
                               <option value={x.id}>{x.name}</option>
@@ -474,8 +475,8 @@ const CalculatingModal = () => {
                     Şöbə:
                     <select
                       className="form-control w-50 ms-3"
-                      value={info.organizationId}
-                      name="organization"
+                      value={info.positionDepartmentId}
+                      name="positionDepartment"
                       onChange={handleSelectInput}
                     >
                       {info.adminstrationId == undefined
@@ -494,7 +495,7 @@ const CalculatingModal = () => {
                                 organization.adminstrationId !==
                                   adminstrators[0].id &&
                                 organization.adminstrationId ===
-                                  info.adminstrationId
+                                  info.positionDepartmentAdminstrationId
                             )
                             .map((x: any) => (
                               <option value={x.id}>{x.name}</option>

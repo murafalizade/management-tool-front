@@ -111,7 +111,7 @@ export const personalAccountHeaders: Column<SalaryRecordData>[] = [
       },
       {
         Header: "Kibertəhlükəsizlik",
-        accessor: "cyberSecurityPrice",
+        accessor: "cyberSecurity",
       },
       {
         Header: "Xarici dil",

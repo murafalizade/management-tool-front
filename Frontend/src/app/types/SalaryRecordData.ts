@@ -25,7 +25,7 @@ export type SalaryRecordData = {
   xiDays: number;
   xiMonths: number;
   scientificDegreePrice: number;
-  cyberSecurityPrice: number;
+  cyberSecurity: number;
   exploretionPrice: number;
   foreignLanguagePrice: number;
   honorTitlePrice: number;

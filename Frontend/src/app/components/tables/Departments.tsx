@@ -286,6 +286,10 @@ export default function Departments() {
 
               { title: "Hərbi rütbə", field: "rankName" },
               {
+                title: "Vəzifə maaşı",
+                field: "salary",
+              },
+              {
                 title: "Ayadək",
                 field: "till_month",
               },
