@@ -56,7 +56,7 @@ export type SalaryRecordData = {
   yolXerci: number;
   yukPulu: number;
   cixisMuv: number;
-  bPM: number;
+  bpm: number;
   bPMPercentage: number;
   totalDSMF: number;
   comment: string;
@@ -64,7 +64,8 @@ export type SalaryRecordData = {
   totalSalary: number;
   isMatry: boolean;
   kirayeName: string;
-
+  desertPrice: number;
+  bpmPercentage: number;
   financialAid: number;
   businessTrip: number;
   tripExpense: number;

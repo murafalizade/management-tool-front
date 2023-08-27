@@ -77,7 +77,7 @@ export const FILTER_DATA = [
   },
   {
     name: "Xəstəlik pulu (kəşfiyyat)",
-    value: "xestelik",
+    value: "kesfXeste",
   },
   {
     name: "Çıxış müavinəti",
@@ -113,6 +113,6 @@ export const FILTER_DATA = [
   },
   {
     name: "Himayədar",
-    value: "himayedar",
+    value: "himayeder",
   },
 ];

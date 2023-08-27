@@ -213,7 +213,7 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
   },
   {
     Header: "Səhra pulu",
-    accessor: "desert",
+    accessor: "desertPrice",
   },
   {
     Header: "Yol xərci",
@@ -233,7 +233,7 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
   },
   {
     Header: "BPM",
-    accessor: "bPM",
+    accessor: "bpm",
   },
   {
     Header: "DSMF ümumi",
@@ -293,7 +293,7 @@ const totalSalaryRecordHeaders = [
   },
   {
     Header: "Qatı",
-    accessor: "qatiSalary",
+    accessor: "ptMoney",
   },
   {
     Header: "Məhar.",
@@ -321,7 +321,7 @@ const totalSalaryRecordHeaders = [
   },
   {
     Header: "K. mükf.",
-    accessor: "expolerationPrice",
+    accessor: "exploretionPrice",
   },
   {
     Header: "Elmi",

@@ -53,7 +53,6 @@ namespace WebApplication1.Repositories
                 await _context.SaveChangesAsync();
                 return;
             }
-
             recordsToUpdate.ForEach(record => { record.Food = foodQat * record.Discount.Food; });
             await _context.SaveChangesAsync();
         }
@@ -67,12 +66,12 @@ namespace WebApplication1.Repositories
 
             if (kirayeQat == 0)
             {
-                recordsToUpdate.ForEach(record => { record.RentQat = 0; record.RentPrice = 0; record.RentId = 1; });
+                recordsToUpdate.ForEach(record => { record.RentId = 1; record.RentQat = 1; record.RentPrice = 0; });
                 await _context.SaveChangesAsync();
                 return;
             }
 
-            recordsToUpdate.ForEach(record => { record.RentPrice = kirayeQat * record.RentQat / record.RentPrice; record.RentQat = kirayeQat; });
+            recordsToUpdate.ForEach(record => { record.RentPrice = kirayeQat * record.RentPrice / record.RentQat; record.RentQat = kirayeQat;});
             await _context.SaveChangesAsync();
         }
 
@@ -129,6 +128,7 @@ namespace WebApplication1.Repositories
                     { "extra211100", x => x.Extra211100 > 0 },
                     { "fexri", x => x.HonorTitlePrice > 0 },
                     { "kesfiyyat", x => x.ExploretionPrice > 0 },
+                    {"mexficilik", x=> x.Confidentiality >0},
                     { "kesfMezun", x => x.KesfMezun > 0 },
                     { "kesfXeste", x => x.KesfXeste > 0 },
                     { "food", x => x.Food > 0 },
@@ -147,7 +147,7 @@ namespace WebApplication1.Repositories
                     {  "yuk", x=> x.YukPulu >0},
                     { "kiraye", x => x.RentPrice > 0 },
                     { "maddi", x => x.FinancialAid > 0 },
-                    {"daimi", x => x.IsEternalQat == true},
+                    {"daimi", x => x.IsEternalQat == true && x.PTQat !=0},
                     {"2qat", x=> x.PTQat != 0},
                     {"maddiyardimalmayanlar", x=> x.FinancialAid == 0},
                     {"mezuniyyetalmayanlar", x => x.Vacation == 0},
@@ -237,6 +237,7 @@ namespace WebApplication1.Repositories
             existingEmployee.ExitAidDSMF = employee.ExitAidDSMF;
             existingEmployee.BPMDSMF = employee.BPMDSMF;
 
+            existingEmployee.CyberSecurityPercentage = employee.CyberSecurityPercentage;
             existingEmployee.ForeignLanguagePrice = employee.ForeignLanguagePrice;
             existingEmployee.ScientificDegreePrice = employee.ScientificDegreePrice;
             existingEmployee.AlimonyPercentage = employee.AlimonyPercentage;

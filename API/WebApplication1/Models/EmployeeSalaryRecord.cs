@@ -255,7 +255,19 @@ namespace WebApplication1.Models
                 return _foreignLanguagePrice;
             }
         }
-        public double CyberSecurityPrice { get; set; } = 0;
+        public int CyberSecurityPercentage { get; set; } = 0;
+        double _cyberSecurityPrice = 0;
+        public double CyberSecurityPrice
+        {
+            get
+            {
+                return _cyberSecurityPrice;
+            }
+            set
+            {
+                _cyberSecurityPrice = _positionSalary * CyberSecurityPercentage / 100;
+            }
+        }
         public double ExploretionPrice { get; set; } = 0;
         private double _scientificDegreePrice = 0;
         public double ScientificDegreePrice
@@ -348,10 +360,11 @@ namespace WebApplication1.Models
             {
                 if (value == 0 && Discount != null)
                 {
-                    Console.WriteLine("value: " + Discount.TaxPercentage);
-                    Console.WriteLine("Discount is not null");
-                    Console.WriteLine(TotalIncome * Discount.TaxPercentage / 100);
                     _tax = TotalIncome * Discount.TaxPercentage / 100;
+                    if (IsVeteran)
+                    {
+                        _tax = _tax - Discount.VeteranTaxDiscount > 0 ? _tax - Discount.VeteranTaxDiscount : 0;
+                    }
                 }
                 else
                 {
@@ -421,7 +434,7 @@ namespace WebApplication1.Models
         }
         public double Extra211100 { get; set; } = 0;
         public double ExtraGivenMoney { get; set; }
-
+        public bool FoodGiven { get; set; } = false;
         private double food = 0;
         public double Food
         {
@@ -431,8 +444,6 @@ namespace WebApplication1.Models
             }
             set
             {
-                Console.WriteLine("Food is set");
-                Console.WriteLine(value);
                 if (Discount != null && value == 0 && FoodGiven == true)
                 {
                     food = Discount.Food;
@@ -447,21 +458,20 @@ namespace WebApplication1.Models
                 }
             }
         }
-        public bool FoodGiven { get; set; } = false;
         private double muavin = 0;
         public double Muavin
         {
             set
             {
-                if (Discount != null)
-                {
-                    muavin = Discount.Veteran;
-                    _tax = _tax - Discount.VeteranTaxDiscount > 0 ? _tax - Discount.VeteranTaxDiscount : 0;
-                }
-                else
-                {
-                    muavin = value;
-                }
+                // if (Discount != null && IsVeteran)
+                // {
+                //     // muavin = Discount.Veteran;
+                //      _tax = _tax - Discount.VeteranTaxDiscount > 0 ? _tax - Discount.VeteranTaxDiscount : 0;
+                // }
+                // else
+                // /{
+                muavin = value;
+                // }/
             }
             get
             {
@@ -480,7 +490,7 @@ namespace WebApplication1.Models
             {
                 if (value == 0 && IsVacationGiven == true)
                 {
-                    _vacation = _positionSalary;
+                    _vacation = 2 * _positionSalary;
                 }
                 else if (IsVacationGiven == false)
                 {
@@ -514,7 +524,7 @@ namespace WebApplication1.Models
         public double KesfMezun { get; set; }
         public double KesfXeste { get; set; }
         public int FamilyCount { get; set; } = 0;
-        public int RentQat { get; set; } = 0;
+        public int RentQat { get; set; } = 1;
         private double _rentPrice = 0;
         public double RentPrice
         {
@@ -526,7 +536,7 @@ namespace WebApplication1.Models
             {
                 if (value == 0 && Rent != null)
                 {
-                    _rentPrice = (RentQat + 1) * (Rent.Price + FamilyCount * 0.5 * Rent.Price);
+                    _rentPrice = Rent.Price * RentQat * (1 + FamilyCount * 0.5);
                 }
                 else
                 {

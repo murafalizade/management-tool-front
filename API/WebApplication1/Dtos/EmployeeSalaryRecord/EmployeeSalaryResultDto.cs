@@ -105,12 +105,14 @@ namespace WebApplication1.Dtos
     public int BPMQat { get; set; }
     public bool IsVacationGiven { get; set; }
     public bool IsBPMGiven { get; set; }
+        public int CyberSecurityPercentage { get; set; } = 0;
 
     public bool IsRankSalaryHand { get; set; } = true;
     public bool IsPositionSalaryHand { get; set; } = true;
     public bool IsLanguagePriceHand { get; set; } = true;
     public bool IsPayerHand { get; set; } = true;
     public bool IsQatHand { get; set; } = true;
+    public bool IsRentHand { get; set; } = true;
   
   }
 }

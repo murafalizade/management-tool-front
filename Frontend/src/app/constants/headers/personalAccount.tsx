@@ -110,6 +110,10 @@ export const personalAccountHeaders: Column<SalaryRecordData>[] = [
         accessor: "harmfulness",
       },
       {
+        Header: "Kibertəhlükəsizlik",
+        accessor: "cyberSecurityPrice",
+      },
+      {
         Header: "Xarici dil",
         accessor: "foreignLanguagePrice",
       },
@@ -206,19 +210,19 @@ export const personalAccountHeaders: Column<SalaryRecordData>[] = [
   },
   {
     Header: "Maddi yardım",
-    accessor: "maddiYardim",
+    accessor: "financialAid",
   },
   {
     Header: "Ezamiyyət",
-    accessor: "ezamiyyet",
+    accessor: "businessTrip",
   },
   {
     Header: "Səhra pulu",
-    accessor: "sehra",
+    accessor: "desertPrice",
   },
   {
     Header: "Yol xərci",
-    accessor: "yolXerci",
+    accessor: "tripExpense",
   },
   {
     Header: "Yük pulu",
@@ -226,14 +230,15 @@ export const personalAccountHeaders: Column<SalaryRecordData>[] = [
   },
   {
     Header: "Çıxış müav.",
-    accessor: "cixisMuv",
+    accessor: "exitAid",
   },
   {
-    Header: "BPM faiz"
+    Header: "BPM faiz",
+    accessor: "bpmPercentage",
     },
   {
     Header: "BPM",
-    accessor: "bPM",
+    accessor: "bpm",
   },
   {
     Header: "DSMF ümumi",

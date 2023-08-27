@@ -89,9 +89,17 @@ const CalculatingModal = () => {
     let result: any = null;
     switch (tableName) {
       case "ability":
-        result = abilities.find(
+        const abilityPrice = abilities.find(
           (x) => x.id === parseInt(e.target.value)
-        )?.forZabitPercentage;
+        );
+        if (info.rankId === 100) {
+          result = abilityPrice?.forZabitPercentage;
+        } else if (info.rankId === 200) {
+          result = abilityPrice?.forGizirPercentage;
+        } else {
+          // result = abilityPrice?.forMuddetliPercentage;
+          result = abilityPrice?.forGizirPercentage;
+        }
         break;
       case "foreignLanguage":
         result = languageSkills.find(
@@ -104,9 +112,20 @@ const CalculatingModal = () => {
         )?.salary;
         break;
       case "scientificDegree":
-        result = scientificDegrees.find(
+        const degreePrice = scientificDegrees.find(
           (x) => x.id === parseInt(e.target.value)
-        )?.for5to10Salary;
+        );
+        if (serviceYears > 5 && serviceYears < 10) {
+          result = degreePrice?.for5to10Salary;
+        } else if (serviceYears > 10 && serviceYears < 15) {
+          result = degreePrice?.for10to15Salary;
+        } else if (serviceYears > 15 && serviceYears < 20) {
+          result = degreePrice?.for15to20Salary;
+        } else if (serviceYears > 20) {
+          result = degreePrice?.for20Salary;
+        } else {
+          result = degreePrice?.forEveryoneSalary;
+        }
         break;
       case "rank":
         result = ranks.find((x) => x.id === parseInt(e.target.value))?.salary;
@@ -260,7 +279,7 @@ const CalculatingModal = () => {
       financialAid = info.financialAid || positionSalary;
     }
     if (info.isVacationGiven) {
-      vacation = info.vacation || positionSalary;
+      vacation = info.vacation || 2 * positionSalary;
       vacationDSMF = info.vacationDSMF || (vacation * info.discountDsmf) / 100;
     }
     if (info.isExitAidGiven) {
@@ -318,6 +337,12 @@ const CalculatingModal = () => {
         (info.discountTaxPercentage * totalGivens) / 100
       : info.tax;
 
+    const rentPrice = !info.isRentHand
+      ? selectedOptions.rent === undefined
+        ? info.rentPrice
+        : selectedOptions.rent * info.rentQat * (1 + info.familyCount * 0.5)
+      : info.rentPrice;
+
     const totalTakens =
       info.alimony + info.extra211100 + info.fails + tax + dsmf + injurance;
     setTotalTaken(totalTakens);
@@ -329,7 +354,7 @@ const CalculatingModal = () => {
         totalDiscount -
         totalTakens -
         (vacationDSMF + exitAidDSMF + bpmdsmf) +
-        info.rentPrice +
+        rentPrice +
         food +
         vacation +
         exitAid +
@@ -340,13 +365,13 @@ const CalculatingModal = () => {
 
   const toast = new Toastify();
 
-  useEffect(() => {
-    setInfo({
-      ...info,
-      kirayePrice:
-        (rentPrice + info.familyCount * 0.5 * rentPrice) * (info.kirayeQat + 1),
-    });
-  }, [info.familyCount, info.kirayeQat, rentPrice]);
+  // useEffect(() => {
+  //   setInfo({
+  //     ...info,
+  //     kirayePrice:
+  //       (rentPrice + info.familyCount * 0.5 * rentPrice) * (info.kirayeQat + 1),
+  //   });
+  // }, [info.familyCount, info.kirayeQat, rentPrice]);
 
   // Calculate service years till 1st of current month
   useEffect(() => {
@@ -733,13 +758,31 @@ const CalculatingModal = () => {
 
                     <div className="d-flex  align-items-center justify-content-between my-1">
                       <label>Kibertəhlük. əlav.</label>
+                        <input
+                        type="number"
+                        className="form-control date-input"
+                        min={0}
+                        name="cyberSecurityPrice"
+                        value={info.cyberSecurityPercentage}
+                        onChange={handlePercentage}
+                        max={100}
+                      />
+                      %
                       <input
+                        type="number"
+                        className="form-control w-75 me-0"
+                        disabled={!info.discoveryByHand}
+                        // onChange={handleInput}
+                        name="cyberSecurityPrice"
+                        value={info.cyberSecurityPrice}
+                      />
+                      {/* <input
                         type="number"
                         className="form-control w-100 me-0"
                         onChange={handleInput}
                         name="cyberSecurityPrice"
                         value={info.cyberSecurityPrice}
-                      />
+                      /> */}
                     </div>
 
                     <div className="d-flex  align-items-center justify-content-between my-1">
@@ -1106,24 +1149,26 @@ const CalculatingModal = () => {
                         <label className="normal-label">Qat</label>
                         <input
                           type="number"
-                          disabled={!info.rentByHand}
+                          disabled={!info.isRentHand}
                           name="rentPrice"
                           onChange={handleInput}
                           value={
-                            !info.rentByHand
+                            !info.isRentHand
                               ? selectedOptions.rent === undefined
                                 ? info.rentPrice
-                                : selectedOptions.rent
+                                : selectedOptions.rent *
+                                  info.rentQat *
+                                  (1 + info.familyCount * 0.5)
                               : info.rentPrice
                           }
                           className="form-control date-input"
                         />
                         <input
                           type="checkbox"
-                          checked={info.rentByHand}
-                          value={info.rentByHand}
+                          checked={info.isRentHand}
+                          value={info.isRentHand}
                           onChange={handleCheckbox}
-                          name="rentByHand"
+                          name="isRentHand"
                         />
                         <label className="normal-label">əl ilə</label>
                       </div>

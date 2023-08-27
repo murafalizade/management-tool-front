@@ -6,9 +6,8 @@ namespace WebApplication1.Models
     {
         public string Name { get; set; }
         public double Salary { get; set; }
-        public int? RankId { get; set; }
         public int DepartmentId { get; set; }
-        public Rank Rank { get; set; }
+        public string RankName { get; set; }
         public Department Department { get; set; }
 
         public ICollection<EmployeeSalaryRecord> EmployeeSalaryRecords { get; set; }

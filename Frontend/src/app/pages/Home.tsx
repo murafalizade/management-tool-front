@@ -19,6 +19,7 @@ import EmployeeService from "../api/employeeService";
 import Loading from "../components/layouts/Loading";
 import { SalaryRecordData } from "../types/SalaryRecordData";
 import Toastify from "../utility/Toastify";
+import Helper from "../utility/Helper";
 
 function Home() {
   const state = useSelector((state: RootState) => state.showModal);
@@ -62,9 +63,9 @@ function Home() {
         for (const key in curr) {
           if (typeof curr[key] === "number") {
             if (acc[key]) {
-              acc[key] += Math.floor(curr[key]);
+              acc[key] += curr[key];
             } else {
-              acc[key] = Math.floor(curr[key]);
+              acc[key] =curr[key];
             }
           } else if (key === "fullName") {
             if (acc[key]) {
@@ -258,7 +259,7 @@ function Home() {
               <td>{totalValue.fullName}</td>
               <td colSpan={4}></td>
               {totalSalaryRecordHeaders.map((column: any) => (
-                <td>{totalValue[column.accessor] ?? 0}</td>
+                <td>{Helper.FormatNumber(totalValue[column.accessor])}</td>
               ))}
             </tr>
           </tfoot>

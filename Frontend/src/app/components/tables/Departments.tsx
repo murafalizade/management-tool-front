@@ -284,7 +284,7 @@ export default function Departments() {
                 field: "name",
               },
 
-              { title: "Hərbi rütbə", field: "rank" },
+              { title: "Hərbi rütbə", field: "rankName" },
               {
                 title: "Ayadək",
                 field: "till_month",

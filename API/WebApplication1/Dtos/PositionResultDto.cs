@@ -4,6 +4,7 @@ namespace WebApplication1.Dtos
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string RankName  { get; set;}
         public decimal Salary { get; set; }
         public DepartmentBasicDto Department { get; set; }
     }

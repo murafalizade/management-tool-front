@@ -65,14 +65,19 @@ namespace WebApplication1.Dtos
         public bool IsVacationGiven { get; set; }
         public double VacationDSMF { get; set; }
         public bool IsExitAidGiven { get; set; }
+        public int CyberSecurityPercentage { get; set; } = 0;
+
         public double BPM { get; set; }
         public double BPMDSMF { get; set; }
         public int BPMQat { get; set; }
+        public bool IsBPMGiven { get; set; }
 
         public bool IsRankSalaryHand { get; set; }
         public bool IsPositionSalaryHand { get; set; }
         public bool IsLanguagePriceHand { get; set; }
         public bool IsPayerHand { get; set; }
         public bool IsQatHand { get; set; }
+        public bool IsRentHand { get; set; } 
+
     }
 }

@@ -24,9 +24,14 @@ class Toastify {
     };
 
     if (action) {
-      this._swall.fire(successOptions).then(() => action());
+      this._swall.fire(successOptions).then(() => {
+        action();
+        window.location.reload();
+      });
     } else {
-      this._swall.fire(successOptions);
+      this._swall.fire(successOptions).then(() => {
+        window.location.reload();
+      });
     }
   }
 

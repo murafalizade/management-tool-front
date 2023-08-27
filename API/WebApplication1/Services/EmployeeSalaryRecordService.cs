@@ -109,9 +109,14 @@ namespace WebApplication1.Services
                 employee.HealthInsurance = 0;
             }
 
-            if(!employee.IsQatHand)
+            if (!employee.IsQatHand)
             {
                 employee.PTMoney = 0;
+            }
+
+            if (!employee.IsRentHand)
+            {
+                employee.RentPrice = 0;
             }
 
             await _employeeSalaryRecordRepository.UpdateEmployee(_mapper.Map<EmployeeSalaryRecord>(employee));
@@ -287,7 +292,6 @@ namespace WebApplication1.Services
             worksheet.Cells[1, 44].Value = "Yol xərci";
             worksheet.Cells[1, 45].Value = "Yük pulu";
             worksheet.Cells[1, 46].Value = "Çıxış müav.";
-            worksheet.Cells[1, 47].Value = "BPM faiz";
             worksheet.Cells[1, 48].Value = "BPM";
             worksheet.Cells[1, 49].Value = "DSMF ümumi";
             worksheet.Cells[1, 50].Value = "Cəmi";
@@ -311,9 +315,9 @@ namespace WebApplication1.Services
                 worksheet.Cells[row, 5].Value = item.FullName;
                 worksheet.Cells[row, 6].Value = "gün";
                 worksheet.Cells[row, 7].Value = "ay";
-                worksheet.Cells[row, 8].Value = "il";
-                worksheet.Cells[row, 9].Value = "Xİ%";
-                worksheet.Cells[row, 10].Value = "Xİ";
+                worksheet.Cells[row, 8].Value = DateTime.Now.Year - item.EmployeeStartDate.Year;
+                worksheet.Cells[row, 9].Value = item.XIMoney;
+                worksheet.Cells[row, 10].Value = item.PTMoney;
                 worksheet.Cells[row, 11].Value = item.RankSalary;
                 worksheet.Cells[row, 12].Value = item.PositionSalary;
                 worksheet.Cells[row, 13].Value = item.XIPercent;
@@ -350,8 +354,7 @@ namespace WebApplication1.Services
                 worksheet.Cells[row, 44].Value = item.TripExpense;
                 worksheet.Cells[row, 45].Value = item.YukPulu;
                 worksheet.Cells[row, 46].Value = item.ExitAid;
-                worksheet.Cells[row, 47].Value = "BPM faiz";
-                worksheet.Cells[row, 48].Value = "BPM";
+                worksheet.Cells[row, 48].Value = item.BPM;
                 worksheet.Cells[row, 49].Value = item.TotalDSMF;
                 worksheet.Cells[row, 50].Value = item.TotalSalary;
                 worksheet.Cells[row, 51].Value = item.Comment;

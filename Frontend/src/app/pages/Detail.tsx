@@ -37,6 +37,7 @@ const Detail = () => {
     const totals = salaryRecord.reduce((acc: any, curr: any) => {
       for (const key in curr) {
         if (typeof curr[key] !== "string") {
+          console.log(key,curr[key]);
           if (acc[key]) {
             acc[key] += curr[key];
           } else {
@@ -141,7 +142,7 @@ const Detail = () => {
             <tr>
               <td colSpan={10}></td>
               {totalSalaryRecordHeaders.map((column: any) => (
-                <td>{totalValue[column.accessor] ?? 0}</td>
+                <td>{totalValue[column.accessor]}</td>
               ))}
             </tr>
           </tfoot>
