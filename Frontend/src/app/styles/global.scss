@@ -142,6 +142,10 @@ body.inverse {
     }
   }
 
+  .opacity-0{
+    opacity: 0 !important;
+  }
+
   table {
     color: $darkModeTextColor !important;
     background-color: $darkModeBackgroundColor !important;

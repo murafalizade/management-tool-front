@@ -326,7 +326,7 @@ namespace WebApplication1.Services
                 worksheet.Cells[row, 16].Value = item.Representing;
                 worksheet.Cells[row, 17].Value = item.Confidentiality;
                 worksheet.Cells[row, 18].Value = item.Harmfulness;
-                worksheet.Cells[row, 19].Value = item.CyberSecurityPrice;
+                worksheet.Cells[row, 19].Value = item.CyberSecurity;
                 worksheet.Cells[row, 20].Value = item.ForeignLanguagePrice;
                 worksheet.Cells[row, 21].Value = item.ExploretionPrice;
                 worksheet.Cells[row, 22].Value = item.ScientificDegreePrice;

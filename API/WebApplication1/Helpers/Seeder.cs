@@ -37,7 +37,7 @@ namespace WebApplication1.Helpers
                         Email = firstUser["Email"].ToString(),
                         Password = firstUser["Password"].ToString(),
                     };
-                    await authService.Register(authInputDto.Email, authInputDto.Password);
+                    await authService.Register(authInputDto.Email, authInputDto.Password, authInputDto.FirstName, authInputDto.LastName);
                     Console.WriteLine("Admin user created");
                 }
 

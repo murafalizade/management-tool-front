@@ -9,6 +9,7 @@ import { MONTHS } from "../../constants/months";
 import moment from "moment";
 import Toastify from "../../utility/Toastify";
 import OperationService from "../../api/operationService";
+import Helper from "../../utility/Helper";
 
 const CalculatingModal = () => {
   const state = useSelector((state: RootState) => state.showModal);
@@ -315,7 +316,7 @@ const CalculatingModal = () => {
       foreignLanguageSalary +
       info.exploretionPrice +
       scientificDegreeSalary +
-      info.cyberSecurityPrice +
+      info.cyberSecurity +
       honorTitleSalary +
       info.extraMoney +
       info.extraMoney2 +
@@ -762,20 +763,15 @@ const CalculatingModal = () => {
                         type="number"
                         className="form-control date-input"
                         min={0}
-                        name="cyberSecurityPrice"
+                        name="cyberSecurity"
                         value={info.cyberSecurityPercentage}
                         onChange={handlePercentage}
                         max={100}
                       />
                       %
-                      <input
-                        type="number"
-                        className="form-control w-75 me-0"
-                        disabled={!info.discoveryByHand}
-                        // onChange={handleInput}
-                        name="cyberSecurityPrice"
-                        value={info.cyberSecurityPrice}
-                      />
+                      <label className="normal-label">
+                        {info.cyberSecurity}
+                      </label>
                       {/* <input
                         type="number"
                         className="form-control w-100 me-0"
@@ -1057,14 +1053,14 @@ const CalculatingModal = () => {
 
                       <div className="d-flex  align-items-center justify-content-between my-1">
                         <label>Cəmi tutulur:</label>
-                        <b>{totalTaken}</b>
+                        <b>{Helper.FormatNumber(totalTaken)}</b>
                       </div>
                     </div>
 
                     <div className="section">
                       <div className="d-flex  align-items-center justify-content-between my-1">
                         <label>Veriləcək məbləğ:</label>
-                        <b>{totalGiven - totalTaken + totalDiscount}</b>
+                        <b>{Helper.FormatNumber(totalGiven - totalTaken + totalDiscount)}</b>
                       </div>
                     </div>
                   </div>
@@ -1199,7 +1195,7 @@ const CalculatingModal = () => {
                               type="number"
                               onChange={handleInput}
                               disabled
-                              className="form-control border-0  w-100"
+                              className="form-control border-0 opacity-0  w-100"
                             />
                             <input
                               type="number"
@@ -1423,12 +1419,12 @@ const CalculatingModal = () => {
                     <div className="d-flex justify-content-between">
                       <div className="section w-75 d-flex justify-content-between">
                         <label>DSMF Cəmi:</label>
-                        <b>{totalDSMF}</b>
+                        <b>{Helper.FormatNumber(totalDSMF)}</b>
                       </div>
 
                       <div className="section w-75 d-flex justify-content-between ms-2">
                         <label>Cəmi verilir:</label>
-                        <b>{total}</b>
+                        <b>{Helper.FormatNumber(total)}</b>
                       </div>
                     </div>
                   </div>

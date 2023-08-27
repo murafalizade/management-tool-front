@@ -8,6 +8,9 @@ using WebApplication1.Data;
 using WebApplication1.Services;
 using WebApplication1.Models;
 using WebApplication1.Dtos;
+using Microsoft.Extensions.Configuration;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace WebApplication1.Controllers
 {
@@ -20,17 +23,21 @@ namespace WebApplication1.Controllers
 
         private readonly ILogger<AuthController> _logger;
 
-        public AuthController(ILogger<AuthController> logger, IAuthService authService)
+        private readonly IConfiguration _configuration;
+
+
+        public AuthController(ILogger<AuthController> logger, IAuthService authService, IConfiguration configuration)
         {
             _logger = logger;
             _authService = authService;
+            _configuration = configuration;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] AuthInputDto obj)
         {
             _logger.LogInformation("Registering user");
-            ErrorHandelerDto req = await _authService.Register(obj.Email, obj.Password);
+            ErrorHandelerDto req = await _authService.Register(obj.Email, obj.Password, obj.FirstName, obj.LastName);
             if (req.isError == true)
             {
                 switch (req.StatusCode)
@@ -71,7 +78,35 @@ namespace WebApplication1.Controllers
             return Ok(req.data);
         }
 
-        [HttpPut]
+        [HttpGet]
+public async Task<IActionResult> GetUser()
+{
+    string authorizationHeader = Request.Headers["Authorization"];
+
+    if (string.IsNullOrEmpty(authorizationHeader) || !authorizationHeader.StartsWith("Bearer "))
+    {
+        return BadRequest("Invalid or missing Bearer token in the Authorization header.");
+    }
+
+    string jwtToken = authorizationHeader.Substring("Bearer ".Length);
+
+    JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+    JwtSecurityToken jwtSecurityToken = tokenHandler.ReadJwtToken(jwtToken);
+
+    // Extracting the "id" claim from the token's payload
+    Claim idClaim = jwtSecurityToken.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier);
+
+    Console.WriteLine($"JWT Token: {jwtToken}, ID Claim Value: {idClaim}");
+
+    var res = await _authService.GetUser(Int16.Parse(idClaim.Value));
+    if (res.data == null)
+    {
+        return BadRequest(res.data);
+    }
+    return Ok(res.data);
+}
+
+        [HttpPut("change-password")]
         public async Task<IActionResult> UpdateUser([FromBody] UserUpdateDto user)
         {
             ErrorHandelerDto req = await _authService.UpdateUser(user);

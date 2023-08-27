@@ -38,7 +38,7 @@ namespace WebApplication1.Dtos
     public int RepresentingPercentage { get; set; }
     public double Confidentiality { get; set; }
     public int ConfidentialityPercentage { get; set; }
-    public double CyberSecurityPrice { get; set; }
+    public double CyberSecurity { get; set; }
     public double Harmfulness { get; set; }
     public int HarmfulnessPercentage { get; set; }
     public double ForeignLanguagePrice { get; set; }

@@ -20,7 +20,6 @@ namespace WebApplication1.Dtos
         public bool IsEternalQat { get; set; } = false;
         public string AccountNumber { get; set; }
         public double AbilityPrice { get; set; } = 0;
-        public double CyberSecurityPrice { get; set; }
         public double ForeignLanguagePrice { get; set; } = 0;
         public double ScientificDegreePrice { get; set; } = 0;
         public double HonorTitlePrice { get; set; } = 0;
@@ -65,6 +64,7 @@ namespace WebApplication1.Dtos
         public bool IsVacationGiven { get; set; }
         public double VacationDSMF { get; set; }
         public bool IsExitAidGiven { get; set; }
+        public double CyberSecurity { get; set; } = 0;
         public int CyberSecurityPercentage { get; set; } = 0;
 
         public double BPM { get; set; }

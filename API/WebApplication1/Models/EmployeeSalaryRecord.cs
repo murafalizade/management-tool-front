@@ -257,7 +257,7 @@ namespace WebApplication1.Models
         }
         public int CyberSecurityPercentage { get; set; } = 0;
         double _cyberSecurityPrice = 0;
-        public double CyberSecurityPrice
+        public double CyberSecurity
         {
             get
             {
@@ -346,7 +346,7 @@ namespace WebApplication1.Models
             get
             {
                 return XIMoney + pTMoney + _rankSalary + _positionSalary + _abilityPrice + Representing + Confidentiality + Harmfulness +
-                 _foreignLanguagePrice + CyberSecurityPrice + ExploretionPrice + _scientificDegreePrice + _honorTitlePrice + ExtraMoney +
+                 _foreignLanguagePrice + CyberSecurity + ExploretionPrice + _scientificDegreePrice + _honorTitlePrice + ExtraMoney +
                  ExtraMoney2;
             }
         }

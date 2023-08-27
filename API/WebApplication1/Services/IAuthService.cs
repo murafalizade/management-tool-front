@@ -6,8 +6,9 @@ namespace WebApplication1.Services
 {
     public interface IAuthService
     {
-        Task<ErrorHandelerDto> Register(string email, string password);
+        Task<ErrorHandelerDto> Register(string email, string password, string firstName, string lastName);
         Task<ErrorHandelerDto> Login(string email, string password);
+        Task<ErrorHandelerDto> GetUser(int id);
         Task<bool> UserExists(string email);
         Task<ErrorHandelerDto> UpdateUser(UserUpdateDto user);
     }

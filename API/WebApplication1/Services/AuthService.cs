@@ -52,7 +52,7 @@ namespace WebApplication1.Services
             return error;
         }
 
-        public async Task<ErrorHandelerDto> Register(string email, string password)
+        public async Task<ErrorHandelerDto> Register(string email, string password, string firstName, string lastName)
         {
             User currentUser = await _userRepository.GetUserByEmail(email);
             if (currentUser != null)
@@ -65,6 +65,8 @@ namespace WebApplication1.Services
             }
             User user = new User();
             user.Email = email;
+            user.FirstName = firstName;
+            user.LastName = lastName;
             CreatePasswordHash(password, out byte[] passwordSalt, out byte[] passwordHash);
             user.PasswordSalt = passwordSalt;
             user.PasswordHash = passwordHash;
@@ -149,6 +151,26 @@ namespace WebApplication1.Services
             error.data = "Şifrə dəyişdirildi";
 
             return error;
+        }
+
+        public async Task<ErrorHandelerDto> GetUser(int id)
+        {
+            try
+            {
+                var user  = await _userRepository.GetUserById(id);
+                return new ErrorHandelerDto
+                {
+                    data = user,
+                    StatusCode = 200
+                };
+            }
+            catch (Exception)
+            {
+                return new ErrorHandelerDto {
+                    data = null,
+                    StatusCode = 500
+                };
+            }
         }
     }
 }
