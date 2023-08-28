@@ -14,6 +14,15 @@ namespace WebApplication1.Repositories
             _dbContext = dbContext;
         }
 
+        public async Task<ScientificDegree> Add(ScientificDegree degree)
+        {
+
+                await _dbContext.ScientificDegrees.AddAsync(degree);
+           await _dbContext.SaveChangesAsync();
+
+                return degree;
+        }
+
         public async Task Delete(int id)
         {
             _dbContext.ScientificDegrees.Remove(await _dbContext.ScientificDegrees.FindAsync(id));

@@ -37,5 +37,12 @@ namespace WebApplication1.Controllers
             var result = await _elmiDereceService.UpdateScientificDegree(elmiDerece);
             return StatusCode(result.StatusCode, result.data);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddElmiDerece([FromBody] ScientificDegree elmiDerece)
+        {
+            var result = await _elmiDereceService.AddScientificDegree(elmiDerece);
+            return StatusCode(result.StatusCode, result.data);
+        }
     }
 }

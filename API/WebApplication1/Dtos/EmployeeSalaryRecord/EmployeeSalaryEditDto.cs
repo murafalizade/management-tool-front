@@ -64,7 +64,7 @@ namespace WebApplication1.Dtos
         public bool IsVacationGiven { get; set; }
         public double VacationDSMF { get; set; }
         public bool IsExitAidGiven { get; set; }
-        public double CyberSecurity { get; set; } = 0;
+        public double CyberSecurity { get; set; }
         public int CyberSecurityPercentage { get; set; } = 0;
 
         public double BPM { get; set; }

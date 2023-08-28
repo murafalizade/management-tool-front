@@ -250,9 +250,6 @@ namespace WebApplication1.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("CyberSecurity")
-                        .HasColumnType("float");
-
                     b.Property<int>("CyberSecurityPercentage")
                         .HasColumnType("int");
 

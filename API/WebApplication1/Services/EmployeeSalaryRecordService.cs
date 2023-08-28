@@ -308,8 +308,8 @@ namespace WebApplication1.Services
             int row = 2;
             foreach (EmployeeSalaryResultDto item in data)
             {
-                worksheet.Cells[row, 1].Value = item.EmployeePositionDepartmentAdminstrationName;
-                worksheet.Cells[row, 2].Value = item.EmployeePositionDepartmentName;
+                worksheet.Cells[row, 1].Value = item.PositionDepartmentAdminstrationName;
+                worksheet.Cells[row, 2].Value = item.PositionDepartmentName;
                 worksheet.Cells[row, 3].Value = item.PositionName;
                 worksheet.Cells[row, 4].Value = item.RankName;
                 worksheet.Cells[row, 5].Value = item.FullName;

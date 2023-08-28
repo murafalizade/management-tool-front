@@ -37,5 +37,13 @@ namespace WebApplication1.Controllers
             return StatusCode(result.StatusCode, result.data);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddXariciDil([FromBody] ForeignLanguage meharet)
+        {
+            var result = await _xariciDilService.AddXariciDil(meharet);
+            return Ok(result);
+        }
+
+
     }
 }

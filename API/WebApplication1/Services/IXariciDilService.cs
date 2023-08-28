@@ -7,6 +7,7 @@ namespace WebApplication1.Services
     public interface IXariciDilService
     {
         Task<ErrorHandelerDto> GetXariciDil();
+        Task<ForeignLanguage> AddXariciDil(ForeignLanguage xariciDil);
         Task<ErrorHandelerDto> UpdateXariciDil(ForeignLanguage xariciDil);
         Task<ErrorHandelerDto> DeleteXariciDil(int id);
     }

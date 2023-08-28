@@ -12,5 +12,6 @@ namespace WebApplication1.Services
         Task<ErrorHandelerDto> AddDiscount(Discount discount);
         Task<ErrorHandelerDto> GetDiscounts(int year = 0, int month = 0);
         Task<ErrorHandelerDto> UpdateDiscount(Discount discount);
+        Task<ErrorHandelerDto> GetAllDiscounts();
     }
 }

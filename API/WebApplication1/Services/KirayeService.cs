@@ -14,6 +14,16 @@ namespace WebApplication1.Services
             _kirayeRepository = kirayeRepository;
         }
 
+        public async Task<ErrorHandelerDto> AddKiraye(Rent kiraye)
+        {
+            await _kirayeRepository.Add(kiraye);
+            return new ErrorHandelerDto
+            {
+                StatusCode = 200,
+                data = null
+            };
+        }
+
         public async Task<ErrorHandelerDto> DeleteKiraye(int id)
         {
             await _kirayeRepository.Delete(id);

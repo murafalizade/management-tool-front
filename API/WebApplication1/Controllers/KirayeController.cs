@@ -34,5 +34,12 @@ namespace WebApplication1.Controllers{
             var result = await _kirayeService.UpdateKiraye(kiraye);
             return StatusCode(result.StatusCode, result.data);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddKiraye([FromBody] Rent kiraye)
+        {
+            var result = await _kirayeService.AddKiraye(kiraye);
+            return StatusCode(result.StatusCode, result.data);
+        }
     }
 }

@@ -250,7 +250,7 @@ namespace WebApplication1.Repositories
             existingEmployee.Comment = employee.Comment;
             existingEmployee.RankSalary = employee.RankSalary;
             existingEmployee.PositionSalary = employee.PositionSalary;
-            existingEmployee.CyberSecurity = employee.CyberSecurity;
+            // existingEmployee.CyberSecurity = employee.CyberSecurity;
             existingEmployee.HonorTitlePrice = employee.HonorTitlePrice;
             existingEmployee.BusinessTrip = employee.BusinessTrip;
             existingEmployee.TripExpense = employee.TripExpense;

@@ -13,6 +13,14 @@ namespace WebApplication1.Repositories{
             _dbContext = dbContext;
         }
 
+        public async Task<ForeignLanguage> Add(ForeignLanguage foreignLanguage)
+        {
+           await _dbContext.ForeignLanguages.AddAsync(foreignLanguage);
+           await _dbContext.SaveChangesAsync();
+
+           return foreignLanguage;
+        }
+
         public async Task Delete(int id)
         {
             ForeignLanguage foreignLanguage = await _dbContext.ForeignLanguages.FindAsync(id);

@@ -14,6 +14,16 @@ namespace WebApplication1.Services
             _meharetRepistory = MehIMeharetRepistory;
         }
 
+        public async Task<ErrorHandelerDto> AddMeharet(Ability meharet)
+        {
+           await _meharetRepistory.Add(meharet);
+            return new ErrorHandelerDto
+            {
+                StatusCode = 200,
+                data = null
+            };
+        }
+
         public async Task<ErrorHandelerDto> DeleteMeharet(int id)
         {
             await _meharetRepistory.Delete(id);

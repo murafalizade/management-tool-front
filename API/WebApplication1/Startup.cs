@@ -65,7 +65,7 @@ namespace WebApplication1
         options.AddPolicy("AllowLocalhost3000",
             builder =>
             {
-                builder.WithOrigins("http://localhost:3000")
+                builder.WithOrigins("*")
                        .AllowAnyHeader()
                        .AllowAnyMethod();
             });

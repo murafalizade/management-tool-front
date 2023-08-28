@@ -7,6 +7,7 @@ namespace WebApplication1.Repositories
     public interface IElmiDereceRepository
     {
        Task<List<ScientificDegree>> GetElmiDereces();
+       Task<ScientificDegree> Add(ScientificDegree degree);
         Task Update(ScientificDegree degree);
         Task Delete(int id);
     }

@@ -11,6 +11,7 @@ namespace WebApplication1.Dtos
         public DateTime RecordDate { get; set; } = DateTime.Now;
         public double ExtraMoney { get; set; } = 0;
         public double ExtraMoney2 { get; set; } = 0;
+        public double CyberSecurity {get;set;} =0;
         public double Representing { get; set; } = 0;
         public double AbilityPrice { get; set; } = 0;
         public double Confidentiality { get; set; } = 0;

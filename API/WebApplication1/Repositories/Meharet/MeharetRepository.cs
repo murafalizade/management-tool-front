@@ -14,6 +14,14 @@ namespace WebApplication1.Repositories
             _dbContext = dbContext;
         }
 
+        public async Task<Ability> Add(Ability ability)
+        {
+            await _dbContext.Abilities.AddAsync(ability);
+           await _dbContext.SaveChangesAsync();
+
+            return ability;
+        }
+
         public async Task Delete(int id)
         {
             _dbContext.Abilities.Remove(await _dbContext.Abilities.FindAsync(id));

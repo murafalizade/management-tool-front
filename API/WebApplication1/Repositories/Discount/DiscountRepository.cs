@@ -17,12 +17,17 @@ namespace WebApplication1.Repositories
             _context = context;
         }
 
+
         public async Task AddDiscount(Discount discount)
         {
             await _context.Discounts.AddAsync(discount);
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<Discount>> GetAllDiscounts()
+        {
+            return await _context.Discounts.ToListAsync();
+        }
 
         public async Task<Discount> GetDiscountByDate(int? year, int? month)
         {

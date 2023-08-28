@@ -37,5 +37,12 @@ namespace WebApplication1.Controllers
             return StatusCode(result.StatusCode, result.data);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddFexriAd([FromBody] HonorTitle fexriAd)
+        {
+            var result = await _FexrIFexriAdService.AddFexriAd(fexriAd);
+            return StatusCode(result.StatusCode, result.data);
+        }
+
     }
 }

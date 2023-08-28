@@ -25,6 +25,13 @@ namespace WebApplication1.Controllers
             return Ok(await _discountService.GetDiscounts(year, month));
         }
 
+        // Get api/discounts
+        [HttpGet("all")]
+        public async Task<ActionResult> GetAllDiscounts()
+        {
+            return Ok(await _discountService.GetAllDiscounts());
+        }
+
         // POST: api/Discount
         [HttpPost]
         public async Task<ActionResult> PostDiscount(Discount discount)

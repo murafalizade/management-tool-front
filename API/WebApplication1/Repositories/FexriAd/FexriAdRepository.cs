@@ -13,6 +13,14 @@ namespace WebApplication1.Repositories{
             _dbContext = dbContext;
         }
 
+        public async Task<HonorTitle> Add(HonorTitle honorTitle)
+        {
+            await _dbContext.HonorTitles.AddAsync(honorTitle);
+           await _dbContext.SaveChangesAsync();
+
+            return honorTitle;
+        }
+
         public async Task Delete(int id)
         {
             HonorTitle honorTitle = await _dbContext.HonorTitles.FindAsync(id);

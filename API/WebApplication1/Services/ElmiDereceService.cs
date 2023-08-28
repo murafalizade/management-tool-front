@@ -14,6 +14,15 @@ namespace WebApplication1.Services
             _elmiDereceRepository = elmiDereceRepository;
         }
 
+        public async Task<ErrorHandelerDto> AddScientificDegree(ScientificDegree scientificDegree)
+        {
+            await _elmiDereceRepository.Add(scientificDegree);
+            return new ErrorHandelerDto{
+                StatusCode = 200,
+                data = null
+              };
+        }
+
         public async Task<ErrorHandelerDto> DeleteScientificDegree(int id)
         {
            await _elmiDereceRepository.Delete(id);

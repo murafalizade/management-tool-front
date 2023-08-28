@@ -256,16 +256,11 @@ namespace WebApplication1.Models
             }
         }
         public int CyberSecurityPercentage { get; set; } = 0;
-        double _cyberSecurityPrice = 0;
         public double CyberSecurity
         {
             get
             {
-                return _cyberSecurityPrice;
-            }
-            set
-            {
-                _cyberSecurityPrice = _positionSalary * CyberSecurityPercentage / 100;
+                return _positionSalary * CyberSecurityPercentage / 100;
             }
         }
         public double ExploretionPrice { get; set; } = 0;

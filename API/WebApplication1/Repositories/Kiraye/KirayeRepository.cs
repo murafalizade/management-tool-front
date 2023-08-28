@@ -14,6 +14,14 @@ namespace WebApplication1.Repositories
             _dbContext = dbContext;
         }
 
+        public async Task<Rent> Add(Rent kiraye)
+        {
+           await _dbContext.Rents.AddAsync(kiraye);
+           await _dbContext.SaveChangesAsync();
+
+              return kiraye;
+        }
+
         public async Task Delete(int id)
         {
             _dbContext.Rents.Remove(await _dbContext.Rents.FindAsync(id));

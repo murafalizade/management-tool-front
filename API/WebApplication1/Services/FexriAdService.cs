@@ -14,6 +14,17 @@ namespace WebApplication1.Services
             _FexriAIFexriAdRepository = FexriAIFexriAdRepository;
         }
 
+        public async Task<ErrorHandelerDto> AddFexriAd(HonorTitle honorTitle)
+        {
+            await _FexriAIFexriAdRepository.Add(honorTitle);
+            return new ErrorHandelerDto
+            {
+                StatusCode = 200,
+                data = null
+            };
+            
+        }
+
         public async Task<ErrorHandelerDto> Delete(int id)
         {
             await _FexriAIFexriAdRepository.Delete(id);

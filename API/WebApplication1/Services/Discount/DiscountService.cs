@@ -26,6 +26,12 @@ namespace WebApplication1.Services
                 return new ErrorHandelerDto { StatusCode = 500, data = ex.Message };
             }
         }
+
+        public async Task<ErrorHandelerDto> GetAllDiscounts()
+        {
+            return new ErrorHandelerDto { data = await _discountRepository.GetAllDiscounts(), StatusCode = 200 };
+        }
+
         public async Task<ErrorHandelerDto> GetDiscounts(int year = 0, int month = 0)
         {
             year = year == 0 ? DateTime.Now.Year : year;

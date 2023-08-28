@@ -37,6 +37,13 @@ namespace WebApplication1.Controllers
             var result = await _meharetService.UpdateMeharet(meharet);
             return StatusCode(result.StatusCode, result.data);
         }
+
+        [HttpPost]
+        public async Task<IActionResult>  AddMeharet([FromBody] Ability meharet)
+        {
+            var result = await _meharetService.AddMeharet(meharet);
+            return StatusCode(result.StatusCode, result.data);
+        }
         
     }
 }

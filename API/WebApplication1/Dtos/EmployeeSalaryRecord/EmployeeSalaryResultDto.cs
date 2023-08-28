@@ -27,9 +27,11 @@ namespace WebApplication1.Dtos
     public int RankId { get; set; }
     public string RankName { get; set; }
     public double PositionSalary { get; set; }
-    public string EmployeePositionDepartmentName { get; set; }
+    public int PositionDepartmentId { get; set; }
+    public string PositionDepartmentName { get; set; }
     public DateTime EmployeePositionStartDate { get; set; }
-    public string EmployeePositionDepartmentAdminstrationName { get; set; }
+    public string PositionDepartmentAdminstrationName { get; set; }
+    public int PositionDepartmentAdminstrationId { get; set; }
     public string FullName { get; set; }
     public DateTime RecordDate { get; set; }
     public double RankSalary { get; set; }

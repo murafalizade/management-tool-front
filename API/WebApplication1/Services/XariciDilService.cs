@@ -14,6 +14,12 @@ namespace WebApplication1.Services
             _XariciDilRepository = IXariciDilRepository;
         }
 
+        public async Task<ForeignLanguage> AddXariciDil(ForeignLanguage xariciDil)
+        {
+            await _XariciDilRepository.Add(xariciDil);
+            return xariciDil;
+        }
+
         public async Task<ErrorHandelerDto> DeleteXariciDil(int id)
         {
             await _XariciDilRepository.Delete(id);
