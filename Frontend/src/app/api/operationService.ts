@@ -157,6 +157,10 @@ export default class OperationService {
     return await fetch.get(`/api/discount?month=${month}&year=${year}`);
   }
 
+  static async getDiscounts(): Promise<any> {
+    return await fetch.get(`/api/discount/all`);
+  }
+
   static async getExcel(): Promise<any> {
     return await fetch.get(`/api/adminstration/export-excel`, {
       responseType: "blob",

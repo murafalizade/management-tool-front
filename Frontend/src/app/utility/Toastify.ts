@@ -26,11 +26,11 @@ class Toastify {
     if (action) {
       this._swall.fire(successOptions).then(() => {
         action();
-        // window.location.reload();
+        window.location.reload();
       });
     } else {
       this._swall.fire(successOptions).then(() => {
-        // window.location.reload();
+        window.location.reload();
       });
     }
   }

@@ -90,9 +90,9 @@ const Login = () => {
               <i className="fa fa-refresh fa-spin mx-2"></i>
             )}
           </Button>
-          <small>
+          {/* <small>
             Şifrəni unutmusunuz? <a href="/">Şifrəni yeniləyin</a>
-          </small>
+          </small> */}
         </Form>
       </div>
     </div>

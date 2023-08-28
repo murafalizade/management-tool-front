@@ -13,6 +13,7 @@ const Profile = () => {
   const [isForeignLanguages, setIsForeignLanguages] = useState<boolean>(false);
   const [isRanks, setIsRanks] = useState<boolean>(false);
   const [isRents, setIsRents] = useState<boolean>(false);
+  const [isDiscount, setIsDiscount] = useState<boolean>(false);
   const [rowsOfScientificDegrees, setRowsOfScientificDegrees] = useState<any>(
     []
   );
@@ -21,8 +22,10 @@ const Profile = () => {
   const [rowsOfForeignLanguages, setRowsOfForeignLanguages] = useState<any>([]);
   const [rowsOfRanks, setRowsOfRanks] = useState<any>([]);
   const [rowsOfRents, setRowsOfRents] = useState<any>([]);
+  const [rowsOfDiscounts, setRowsOfDiscounts] = useState<any>([]);
   const [newEdit, setNewEdit] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<any>(null);
+
   const scientificDegreesColumns = [
     { title: "Seç", field: "select" },
     { title: "№", field: "id" },
@@ -30,7 +33,8 @@ const Profile = () => {
     { title: "5-10 illik təcrübə əlavəsi", field: "for5to10Salary" },
     { title: "10-15 illik təcrübə əlavəsi", field: "for10to15Salary" },
     { title: "15-20 illik təcrübə əlavəsi", field: "for15to20Salary" },
-    { title: "Müddətsiz", field: "for20Salary" },
+    { title:"20 illik və ya daha çox təcrübə əlavəsi", field: "for20Salary" },
+    { title: "Pedoqoji fəaliyyətlə məşğul olmayan əlavə", field: "forEveryoneSalary" },
   ];
   const honorTitlesColumns = [
     { title: "Seç", field: "select" },
@@ -64,8 +68,26 @@ const Profile = () => {
     { title: "№", field: "id" },
     { title: "Ad", field: "name" },
     // { title: "Qısa adı", field: "shortName" },
-    { title: "Pul əlavəsi", field: "salary" },
+    { title: "Pul əlavəsi", field: "price" },
   ];
+  const discounts = [
+    { title: "Seç", field: "select" },
+    { title: "№", field: "id" },
+    { title: "Gəlir vergisi %", field: "taxPercentage" },
+    { title: "DSMF %", field: "dsmf" },
+    { title: "Tibbi sığorta %", field: "healthInjurance" },
+    { title: "Ərzaq əvəzi kompen-si (AZN)", field: "food" },
+    { title: "Müharibə veteranı müavinatı (AZN)", field: "veteran" },
+    { title: "1 və 2 qrup əlil (AZN)", field: "disability" },
+    { title: "Şəhid (AZN)", field: "martyr" },
+    { title: "Qaçqın (AZN)", field: "refugee" },
+    { title: "Çernobıl (AZN)", field: "chernobyl" },
+    { title: "Himayədar (AZN)", field: "owner" },
+    { title: "Səhra pulu (AZN)", field: "desert" },
+    { title: "Müharibə vet. vergidən azad (AZN)", field: "veteranTaxDiscount" },
+    { title: "Minimal əmək haqqı (AZN)", field: "minWage" },
+
+  ]
   const newRowOfScientificDegrees = {
     id: -(Math.abs(rowsOfScientificDegrees.length) + 1),
     name: "",
@@ -131,12 +153,18 @@ const Profile = () => {
       const res = await OperationService.getKiraye();
       setRowsOfRents(res);
     };
+    const getDiscounts = async () => {
+      const res = await OperationService.getDiscounts();
+      console.log(res.data);
+      setRowsOfDiscounts(res.data);
+    };
     getElmiDerece();
     getFexriAd();
     getMeharet();
     getXariciDil();
     getRanks();
     getKiraye();
+    getDiscounts();
   }, []);
 
   // Delete a row from a table
@@ -528,10 +556,24 @@ const Profile = () => {
               >
                 Kirayələr
               </button>
+              <button
+                className={`btn ${isDiscount ? "clicked-btn" : "unclicked-btn"}`}
+                onClick={() => {
+                  setIsScientificDegrees(false);
+                  setIsHonorTitles(false);
+                  setIsAbilities(false);
+                  setIsForeignLanguages(false);
+                  setIsRanks(false);
+                  setIsRents(false);
+                  setIsDiscount(true);
+                }}
+              >
+                Güzəştlər
+              </button>
             </div>
           </div>
           <div className="mt-4">
-            <div>
+            <div style={{overflowX:"auto"}}>
               {isScientificDegrees && (
                 <TableLayout
                   isEditable={true}
@@ -602,6 +644,18 @@ const Profile = () => {
                   delete={deleteRow}
                   change={changeRow}
                   columns={rentsColumns}
+                ></TableLayout>
+              )}
+              {isDiscount && (
+                <TableLayout
+                  isEditable={true}
+                  data={rowsOfDiscounts}
+                  add={addRow}
+                  select={selectRow}
+                  save={saveRow}
+                  delete={deleteRow}
+                  change={changeRow}
+                  columns={discounts}
                 ></TableLayout>
               )}
             </div>
