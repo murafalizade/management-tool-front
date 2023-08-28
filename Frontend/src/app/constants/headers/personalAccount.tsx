@@ -274,6 +274,6 @@ export const personalAccountHeaders: Column<SalaryRecordData>[] = [
   },
   {
     Header: "V2F_ID",
-    accessor: "employeePositionId",
+    accessor: "positionId",
   },
 ];

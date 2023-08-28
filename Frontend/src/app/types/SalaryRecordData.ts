@@ -49,7 +49,7 @@ export type SalaryRecordData = {
   kesfMezun: number;
   kesfXeste: number;
   rentPrice: number;
-  employeePositionId: number;
+  positionId: number;
   maddiYardim: number;
   ezamiyyet: number;
   sehra: number;
@@ -63,7 +63,7 @@ export type SalaryRecordData = {
   accountNumber: number;
   totalSalary: number;
   isMatry: boolean;
-  kirayeName: string;
+  rentName: string;
   desertPrice: number;
   bpmPercentage: number;
   financialAid: number;

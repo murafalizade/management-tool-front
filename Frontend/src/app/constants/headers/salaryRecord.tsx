@@ -227,10 +227,10 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
     Header: "Çıxış müav.",
     accessor: "exitAid",
   },
-  {
-    Header: "BPM faiz",
-    accessor: "bPMPercentage",
-  },
+  // {
+  //   Header: "BPM faiz",
+  //   accessor: "bPMPercentage",
+  // },
   {
     Header: "BPM",
     accessor: "bpm",
@@ -255,7 +255,7 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
   },
   {
     Header: "Kirayə komp. verilir",
-    accessor: "kirayeName",
+    accessor: "rentName",
   },
   {
     Header: "Hesab nömrəsi",
@@ -263,7 +263,8 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
   },
   {
     Header: "Məh. %",
-    accessor: "employeeMeharetName",
+    accessor: (row: SalaryRecordData) =>
+      (row.abilityPrice * 100) / row.positionSalary,
   },
   {
     Header: "HA_ID",
@@ -273,7 +274,7 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
   },
   {
     Header: "V2F_ID",
-    accessor: "employeePositionId",
+    accessor: "positionId",
   },
 ];
 
@@ -427,10 +428,10 @@ const totalSalaryRecordHeaders = [
     Header: "Çıxış",
     accessor: "exitAid",
   },
-  {
-    Header: " ",
-    accessor: "empty",
-  },
+  // {
+  //   Header: " ",
+  //   accessor: "empty",
+  // },
   {
     Header: "BPM",
     accessor: "bpm",
