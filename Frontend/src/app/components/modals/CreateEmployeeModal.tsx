@@ -13,6 +13,7 @@ interface IEmployee {
   birthDate: string;
   fin: string;
   injuranceNo: string;
+  phone:string;
 }
 
 export default function CreateEmployeeModal() {
@@ -30,11 +31,16 @@ export default function CreateEmployeeModal() {
     birthDate: "",
     fin: "",
     injuranceNo: "",
+    phone:""
   });
 
   // handle change event of input
   const handleInputChange = (event: any) => {
-    setEmployee({ ...employee, [event.target.id]: event.target.value });
+    let {id,value} = event.target;
+    if(id === "fin"){
+      value = value.toString().toUpperCase();
+    }
+    setEmployee({ ...employee, [id]: value });
   };
 
   // handle click event of the button
@@ -45,6 +51,10 @@ export default function CreateEmployeeModal() {
     if (employee.fin.length !== 7) {
       toast.error("FİN 7 rəqəmli olmalıdır!");
       return;
+    }
+
+    if(Number.isInteger(employee.fin[0])){
+      toast.error("FİN kodun ilk simbolu rəqəm olmalıdır!");
     }
 
     // Check field existence
@@ -126,6 +136,24 @@ export default function CreateEmployeeModal() {
                 type="text"
                 id="fatherName"
                 value={employee.fatherName}
+                onChange={handleInputChange}
+                required
+                className="form-control"
+              />
+            </div>
+          </div>
+
+          <div className="row g-3 my-2 align-items-center">
+            <div className="col-4">
+              <label htmlFor="fatherName" className="col-form-label">
+                Əlaqə Nömrəsi
+              </label>
+            </div>
+            <div className="col-8">
+              <input
+                type="tel"
+                id="phone"
+                value={employee.phone}
                 onChange={handleInputChange}
                 required
                 className="form-control"

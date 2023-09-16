@@ -54,7 +54,7 @@ body {
 }
 
 main {
-  max-height: 100vh;
+  min-height: 100vh;
   overflow-y: hidden;
   overflow-x: hidden;
 }
@@ -94,7 +94,8 @@ main {
 $darkModeBackgroundColor: #1e1f23;
 // $darkModeTextColor: #757776;
 $darkModeTextColor: rgb(221, 215, 215);
-$darkModePrimaryColor: #0ad673;
+$darkModePrimaryColor: #5a5a5a5a;
+$darkModeButtonColor: #5a5a5a5a;
 $darkModeNavbarColor: black;
 
 /* Default styles (light mode) */
@@ -134,7 +135,7 @@ body.inverse {
   }
 
   .btn-primary {
-    background-color: $darkModePrimaryColor;
+    background-color: $darkModeButtonColor;
     border: none;
     color: #ffffff;
   }
@@ -223,3 +224,47 @@ body.inverse {
 .z-index-highest {
   z-index: 2 !important;
 }
+
+
+// .container {
+//   max-width: 800px;
+//   margin: 0 auto;
+//   padding: 20px;
+// }
+
+// .resizeable-table {
+//   position: relative;
+//   border: 1px solid #ccc;
+//   overflow: hidden;
+//   width: 100%;
+// }
+
+// .resizeable-table table {
+//   width: 100%;
+//   border-collapse: collapse;
+// }
+
+// .resizeable-table th,
+// .resizeable-table td {
+//   border: 1px solid #ccc;
+//   padding: 8px;
+//   text-align: center;
+// }
+
+// .resizeable-table .resize-handle {
+//   position: absolute;
+//   bottom: 0;
+//   right: 0;
+//   width: 10px;
+//   height: 10px;
+//   background-color: #ddd;
+//   cursor: nwse-resize;
+// }
+
+// .resizeable-table.dragging {
+//   user-select: none;
+// }
+
+// .resizeable-table.dragging .resize-handle {
+//   background-color: #aaa;
+// }

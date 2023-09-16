@@ -202,7 +202,6 @@ const CalculatingModal = () => {
     // Get Adminstrator
     const adminstrator = await OperationService.getAdminstration();
     setAdminstrators(adminstrator.data);
-    // console.log(adminstrator.data);
 
     // Get Language skills
     const languageSkills = await OperationService.getXariciDil();
@@ -215,7 +214,6 @@ const CalculatingModal = () => {
     // Get Positions
     const position = await OperationService.getPosition();
     setPositions(position);
-    console.log(position);
 
     // Get Abilities
     const abilities = await OperationService.getMeharet();
@@ -406,7 +404,7 @@ const CalculatingModal = () => {
       window.location.reload()
     );
   };
-
+  
   return (
     <>
       {state.show === 0 ? null : (
@@ -446,13 +444,40 @@ const CalculatingModal = () => {
                       name="position"
                       onChange={handleSelectInput}
                     >
-                      <option value={0}>{info.positionName}</option>
-                      {info.positionDepartmentId == undefined
+                      {!info.positionDepartmentId &&
+                      !info.positionDepartmentAdminstrationId
+                        ? positions
+                            .filter(
+                              (position) =>
+                                position.departmentId === organizations[0].id
+                            )
+                            .map((x: any) => (
+                              <option value={x.id}>{x.name}</option>
+                            ))
+                        : positions
+                            .filter(
+                              (position) =>
+                                position.departmentId !== organizations[0].id &&
+                                position.departmentId ===
+                                  info.positionDepartmentId
+                            )
+                            .map((x: any) => (
+                              <option value={x.id}>{x.name}</option>
+                            ))}{" "}
+                      ??
+                      {!info.positionDepartmentId &&
+                      info.positionDepartmentAdminstrationId
                         ? positions
                             .filter(
                               (position) =>
                                 position.departmentId ===
-                                ([organizations.filter((org)=>org.adminstrationId==info.positionDepartmentAdminstrationId)][0].map((y:any)=>(y.id))[0])
+                                [
+                                  organizations.filter(
+                                    (org) =>
+                                      org.adminstrationId ==
+                                      info.positionDepartmentAdminstrationId
+                                  ),
+                                ][0].map((y: any) => y.id)[0]
                             )
                             .map((x: any) => (
                               <option value={x.id}>{x.name}</option>
@@ -461,8 +486,15 @@ const CalculatingModal = () => {
                             .filter(
                               (position) =>
                                 position.departmentId !==
-                                info.positionDepartmentAdminstrationId &&
-                                position.departmentId === info.positionDepartmentId
+                                  [
+                                    organizations.filter(
+                                      (org) =>
+                                        org.adminstrationId ==
+                                        info.positionDepartmentAdminstrationId
+                                    ),
+                                  ][0].map((y: any) => y.id)[0] &&
+                                position.departmentId ===
+                                  info.positionDepartmentId
                             )
                             .map((x: any) => (
                               <option value={x.id}>{x.name}</option>
@@ -479,7 +511,7 @@ const CalculatingModal = () => {
                       name="positionDepartment"
                       onChange={handleSelectInput}
                     >
-                      {info.adminstrationId == undefined
+                      {!info.positionDepartmentAdminstrationId
                         ? organizations
                             .filter(
                               (organization) =>

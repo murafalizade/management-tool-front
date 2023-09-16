@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 
 interface Props<T> {
@@ -53,6 +53,42 @@ const TableLayout = (props: Props<any>) => {
     if (props.save) props.save();
   };
 
+  const [resizing, setResizing] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [startWidth, setStartWidth] = useState(0);
+
+  const handleMouseDown = (e:any, index:number) => {
+    setResizing(true);
+    setStartX(e.clientX);
+    if(document.getElementById(`column-${index}`)){
+      setStartWidth(50);
+    }
+    
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+  };
+
+  const handleMouseMove = (e:any) => {
+    if (resizing) {
+      const offset = e.clientX - startX;
+      const newWidth = startWidth + offset;
+      const columnElement = document.getElementById(`column-1`);
+      
+      if (columnElement !== null) {
+        columnElement.style.width = newWidth + "px";
+      }
+    }
+  };
+  
+
+  const handleMouseUp = () => {
+    setResizing(false);
+
+    document.removeEventListener("mousemove", handleMouseMove);
+    document.removeEventListener("mouseup", handleMouseUp);
+  };
+
+
   return (
     <div>
       {props.isEditable ? (
@@ -79,6 +115,9 @@ const TableLayout = (props: Props<any>) => {
           </Button>
         </div>
       ) : null}
+      <div
+              className={`resizeable-table ${resizing ? "dragging" : ""}`}
+              >
       <Table className="my-2 bg-white" bordered>
         <thead>
           <tr className="text-center">
@@ -92,6 +131,7 @@ const TableLayout = (props: Props<any>) => {
             <tr>
               {props.columns.map((column) => (
                 <td
+                onMouseDown={(e) => handleMouseDown(e, 1)}
                   className={column.field === "id" ? "small-td" : ""}
                   style={
                     selectedOrganization?.id === d.id
@@ -99,8 +139,7 @@ const TableLayout = (props: Props<any>) => {
                       : {}
                   }
                 >
-                  {!props.isEditable ? 
-                   (
+                  {!props.isEditable ? (
                     column.field === "id" ? (
                       index + 1
                     ) : column.field === "select" ? (
@@ -147,6 +186,7 @@ const TableLayout = (props: Props<any>) => {
           ))}
         </tbody>
       </Table>
+        </div>
     </div>
   );
 };

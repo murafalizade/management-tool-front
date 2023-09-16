@@ -13,6 +13,7 @@ export type EmployeeData = {
   fexriAdName: string;
   fin: string;
   rankId: number;
+  phone:string;
   elmiDereceId:number;
   meharetId: number;
   rank: {

@@ -129,6 +129,10 @@ export default class OperationService {
     return await fetch.put(`/api/kiraye`, data);
   }
 
+  static async UpdateDiscount(id:number, data: any): Promise<any> {
+    return await fetch.put(`/api/discount/${id}`, data);
+  }
+
   static async AddScientificDegree(data: any): Promise<any> {
     return await fetch.post(`/api/ElmiDerece`, data);
   }
@@ -151,6 +155,10 @@ export default class OperationService {
 
   static async AddRent(data: any): Promise<any> {
     return await fetch.post(`/api/kiraye`, data);
+  }
+
+  static async AddDiscount(data: any): Promise<any> {
+    return await fetch.post(`/api/discount`, data);
   }
 
   static async getDiscount(month?: number, year?: number): Promise<any> {

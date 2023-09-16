@@ -10,6 +10,7 @@ namespace WebApplication1.Models
         public string FatherName{ get; set; }
         public string LastName { get; set; }
         public string Fin { get; set; }
+        public string Phone {get; set;}
         public string InjuranceNo { get; set; }
         public DateTime BirthDate { get; set; }
         public DateTime StartDate { get; set; }

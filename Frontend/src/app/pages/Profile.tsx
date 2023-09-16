@@ -33,8 +33,11 @@ const Profile = () => {
     { title: "5-10 illik təcrübə əlavəsi", field: "for5to10Salary" },
     { title: "10-15 illik təcrübə əlavəsi", field: "for10to15Salary" },
     { title: "15-20 illik təcrübə əlavəsi", field: "for15to20Salary" },
-    { title:"20 illik və ya daha çox təcrübə əlavəsi", field: "for20Salary" },
-    { title: "Pedoqoji fəaliyyətlə məşğul olmayan əlavə", field: "forEveryoneSalary" },
+    { title: "20 illik və ya daha çox təcrübə əlavəsi", field: "for20Salary" },
+    {
+      title: "Pedoqoji fəaliyyətlə məşğul olmayan əlavə",
+      field: "forEveryoneSalary",
+    },
   ];
   const honorTitlesColumns = [
     { title: "Seç", field: "select" },
@@ -86,8 +89,7 @@ const Profile = () => {
     { title: "Səhra pulu (AZN)", field: "desert" },
     { title: "Müharibə vet. vergidən azad (AZN)", field: "veteranTaxDiscount" },
     { title: "Minimal əmək haqqı (AZN)", field: "minWage" },
-
-  ]
+  ];
   const newRowOfScientificDegrees = {
     id: -(Math.abs(rowsOfScientificDegrees.length) + 1),
     name: "",
@@ -124,6 +126,22 @@ const Profile = () => {
     name: "",
     // shortName: "",
     salary: 0,
+  };
+  const newRowOfDiscounts = {
+    id: -(Math.abs(rowsOfRanks.length) + 1),
+    taxPercentage: 0,
+    dsmf: 0,
+    healthInjurance: 0,
+    food: 0,
+    veteran: 0,
+    disability: 0,
+    martyr: 0,
+    refugee: 0,
+    chernobyl: 0,
+    owner: 0,
+    desert: 0,
+    veteranTaxDiscount: 0,
+    minWage: 0,
   };
   const toast = new Toastify();
 
@@ -185,6 +203,8 @@ const Profile = () => {
         ? rowsOfForeignLanguages
         : isRanks
         ? rowsOfRanks
+        : isDiscount
+        ? rowsOfDiscounts
         : rowsOfRents;
       const updatedRows = rowsOfTable.filter((row: any) => row.id !== id);
       if (result.isConfirmed) {
@@ -221,6 +241,8 @@ const Profile = () => {
       ? newRowOfForeignLanguages
       : isRanks
       ? newRowOfRanks
+      : isDiscount
+      ? newRowOfDiscounts
       : newRowOfRents;
 
     isScientificDegrees &&
@@ -231,6 +253,7 @@ const Profile = () => {
       setRowsOfForeignLanguages([...rowsOfForeignLanguages, newRow]);
     isRanks && setRowsOfRanks([...rowsOfRanks, newRow]);
     isRents && setRowsOfRents([...rowsOfRents, newRow]);
+    isDiscount && setRowsOfDiscounts([...rowsOfDiscounts, newRow]);
   };
 
   // Select a row of a table
@@ -246,6 +269,8 @@ const Profile = () => {
       ? await OperationService.getXariciDil()
       : isRanks
       ? await OperationService.getRanks()
+      : isDiscount
+      ? await OperationService.getDiscounts()
       : await OperationService.getKiraye();
     setSelectedRow(selectedRow);
   };
@@ -262,6 +287,8 @@ const Profile = () => {
       ? rowsOfForeignLanguages
       : isRanks
       ? rowsOfRanks
+      : isDiscount
+      ?rowsOfDiscounts
       : rowsOfRents;
     try {
       rowsOfTable.map(async (row: any) => {
@@ -277,6 +304,8 @@ const Profile = () => {
             ? await OperationService.AddForeignLanguage(row)
             : isRanks
             ? await OperationService.AddRank(row)
+            :isDiscount
+            ? await OperationService.AddDiscount(row)
             : await OperationService.AddRent(row);
         } else {
           const res = isScientificDegrees
@@ -289,6 +318,8 @@ const Profile = () => {
             ? await OperationService.UpdateForeignLanguage(row)
             : isRanks
             ? await OperationService.UpdateRank(row.id, row)
+            :isDiscount
+            ?await OperationService.UpdateDiscount(row.id, row)
             : await OperationService.UpdateRent(row);
         }
       });
@@ -310,6 +341,8 @@ const Profile = () => {
       ? rowsOfForeignLanguages
       : isRanks
       ? rowsOfRanks
+      :isDiscount
+      ?rowsOfDiscounts
       : rowsOfRents;
     const newRows = rowsOfTable.map((row: any) => {
       if (row.id === id) {
@@ -327,6 +360,7 @@ const Profile = () => {
     isForeignLanguages && setRowsOfForeignLanguages(newRows);
     isRanks && setRowsOfRanks(newRows);
     isRents && setRowsOfRents(newRows);
+    isDiscount && setRowsOfDiscounts(newRows);
   };
 
   // Change Password
@@ -390,7 +424,9 @@ const Profile = () => {
           </div>
           {isShowBtn && (
             <div className="my-3">
-              <p><b>Email: </b>admin@gmail.com</p>
+              <p>
+                <b>Email: </b>admin@gmail.com
+              </p>
             </div>
           )}
           <div>
@@ -470,6 +506,7 @@ const Profile = () => {
                   setIsAbilities(false);
                   setIsForeignLanguages(false);
                   setIsRanks(false);
+                  setIsDiscount(false);
                   setIsRents(false);
                 }}
               >
@@ -488,6 +525,7 @@ const Profile = () => {
                   setIsForeignLanguages(false);
                   setIsRanks(false);
                   setIsRents(false);
+                  setIsDiscount(false);
                 }}
               >
                 Fəxri ad
@@ -505,6 +543,7 @@ const Profile = () => {
                   setIsForeignLanguages(false);
                   setIsRanks(false);
                   setIsRents(false);
+                  setIsDiscount(false);
                 }}
               >
                 Məharətlilik
@@ -522,6 +561,7 @@ const Profile = () => {
                   setIsForeignLanguages(true);
                   setIsRanks(false);
                   setIsRents(false);
+                  setIsDiscount(false);
                 }}
               >
                 Xarici dil
@@ -537,6 +577,7 @@ const Profile = () => {
                   setIsForeignLanguages(false);
                   setIsRanks(true);
                   setIsRents(false);
+                  setIsDiscount(false);
                 }}
               >
                 Hərbi rütbələr
@@ -552,12 +593,15 @@ const Profile = () => {
                   setIsForeignLanguages(false);
                   setIsRanks(false);
                   setIsRents(true);
+                  setIsDiscount(false);
                 }}
               >
                 Kirayələr
               </button>
               <button
-                className={`btn ${isDiscount ? "clicked-btn" : "unclicked-btn"}`}
+                className={`btn ${
+                  isDiscount ? "clicked-btn" : "unclicked-btn"
+                }`}
                 onClick={() => {
                   setIsScientificDegrees(false);
                   setIsHonorTitles(false);
@@ -573,7 +617,7 @@ const Profile = () => {
             </div>
           </div>
           <div className="mt-4">
-            <div style={{overflowX:"auto"}}>
+            <div style={{ overflowX: "auto" }}>
               {isScientificDegrees && (
                 <TableLayout
                   isEditable={true}
@@ -653,7 +697,6 @@ const Profile = () => {
                   add={addRow}
                   select={selectRow}
                   save={saveRow}
-                  delete={deleteRow}
                   change={changeRow}
                   columns={discounts}
                 ></TableLayout>

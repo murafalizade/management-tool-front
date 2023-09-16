@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
@@ -30,7 +31,7 @@ namespace WebApplication1.Repositories
 
         public async Task<List<Ability>> GetMeharets()
         {
-            return await _dbContext.Abilities.ToListAsync();
+            return await _dbContext.Abilities.OrderBy(x=>x.Name).ToListAsync();
         }
 
         public async Task Update(Ability ability)

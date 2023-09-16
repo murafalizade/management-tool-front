@@ -16,5 +16,6 @@ namespace WebApplication1.Dtos
         public DateTime EnteranceDate { get; set; }
         public string EnteranceCommand { get; set; }
         public string CommandNo { get; set; }
+        public string Phone { get; set; }
     }
 }

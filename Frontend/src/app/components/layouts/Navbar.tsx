@@ -394,7 +394,7 @@ function Layout() {
               id="basic-nav-dropdown"
             >
               <NavDropdown.Item href="#">Icmal cədvəli</NavDropdown.Item>
-              <NavDropdown.Item href="#">Statistik məlumatlar</NavDropdown.Item>
+              <NavDropdown.Item href="/statistics">Statistik məlumatlar</NavDropdown.Item>
               <NavDropdown.Item href="#">6.MX saylı forma</NavDropdown.Item>
               <NavDropdown.Item href={`/table?filter=maddiyardimalmayanlar`}>
                 Maddi yardım almayanlar

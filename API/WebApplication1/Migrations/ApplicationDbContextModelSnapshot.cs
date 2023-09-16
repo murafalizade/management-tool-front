@@ -196,6 +196,9 @@ namespace WebApplication1.Migrations
                     b.Property<DateTime>("MeharetDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 

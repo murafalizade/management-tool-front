@@ -162,19 +162,7 @@ namespace WebApplication1.Models
                 }
             }
         }
-        private DateTime _recordDate = DateTime.Now;
-
-        public DateTime RecordDate
-        {
-            get
-            {
-                return _recordDate;
-            }
-            set
-            {
-                _recordDate = new DateTime(_recordDate.Year, _recordDate.Month, 1).AddMonths(1);
-            }
-        }
+        public DateTime RecordDate {get;set;} = DateTime.Now;
 
         private double _abilityPrice = 0;
         public double AbilityPrice

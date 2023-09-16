@@ -59,7 +59,7 @@ namespace WebApplication1.Dtos
     public double RentPrice { get; set; }
     public int FamilyCount { get; set; }
     public int RentQat { get; set; }
-    public string KirayeName { get; set; }
+    public string RentName { get; set; }
     public double HealthInsurance { get; set; }
     public double Extra211100 { get; set; }
     public double Food { get; set; }

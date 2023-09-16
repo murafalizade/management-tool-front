@@ -166,7 +166,7 @@ function Create() {
         <Button className="mx-2">B3 forma</Button>
       </div>
 
-      <div style={{ overflow: "scroll" }}>
+      <div style={{ overflowX: "scroll" }}>
         <Table className="employee-table" bordered hover {...getTableProps()}>
           <thead>
             <tr className="text-center" style={{ backgroundColor: "#f4f4f4" }}>
@@ -188,7 +188,9 @@ function Create() {
               <th rowSpan={2} className="table_header">
                 FIN
               </th>
-
+              <th rowSpan={2} className="table_header">
+                Əlaqə nömrəsi
+              </th>
               <th colSpan={2} className="table_header">
                 Təyin olunma
               </th>
@@ -250,6 +252,7 @@ function Create() {
                       employee === selectedColumn ? "selected" : ""
                     }`}
                     name={"lastName"}
+                    placeholder="Daxil edin"
                     onChange={handleInputChange}
                     value={employee.lastName}
                   />
@@ -262,6 +265,7 @@ function Create() {
                     }`}
                     name={"firstName"}
                     onChange={handleInputChange}
+                    placeholder="Daxil edin"
                     value={employee.firstName}
                   />
                 </td>
@@ -272,6 +276,7 @@ function Create() {
                       employee === selectedColumn ? "selected" : ""
                     }`}
                     name={"fatherName"}
+                    placeholder="Daxil edin"
                     onChange={handleInputChange}
                     value={employee.fatherName}
                   />
@@ -284,6 +289,7 @@ function Create() {
                     }`}
                     name={"injuranceNo"}
                     onChange={handleInputChange}
+                    placeholder="Daxil edin"
                     value={employee.injuranceNo}
                   />
                 </td>
@@ -293,6 +299,7 @@ function Create() {
                       employee === selectedColumn ? "selected" : ""
                     }`}
                     type="date"
+                    placeholder="Daxil edin"
                     name="birthDate"
                     onChange={handleInputChange}
                     value={moment(new Date(employee.birthDate)).format(
@@ -308,6 +315,7 @@ function Create() {
                     }`}
                     name={"fin"}
                     maxLength={7}
+                    placeholder="Daxil edin"
                     minLength={7}
                     onChange={handleInputChange}
                     value={employee.fin}
@@ -319,7 +327,20 @@ function Create() {
                     className={`table_input form-control ${
                       employee === selectedColumn ? "selected" : ""
                     }`}
+                    name={"phone"}
+                    onChange={handleInputChange}
+                    placeholder="Daxil edin"
+                    value={employee.phone}
+                  />
+                </td>
+
+                <td>
+                  <input
+                    className={`table_input form-control ${
+                      employee === selectedColumn ? "selected" : ""
+                    }`}
                     type="date"
+                    placeholder="Daxil edin"
                     name={"startDate"}
                     onChange={handleInputChange}
                     value={moment(new Date(employee.startDate)).format(
@@ -334,6 +355,7 @@ function Create() {
                       employee === selectedColumn ? "selected" : ""
                     }`}
                     name={"commandNo"}
+                    placeholder="Daxil edin"
                     onChange={handleInputChange}
                     value={employee.commandNo}
                   />
@@ -346,6 +368,7 @@ function Create() {
                     }`}
                     type="date"
                     name={"enteranceDate"}
+                    placeholder="Daxil edin"
                     onChange={handleInputChange}
                     value={moment(new Date(employee.enteranceDate)).format(
                       "YYYY-MM-DD"
@@ -353,16 +376,17 @@ function Create() {
                   />
                 </td>
 
-                {/* <td>
+                <td>
                   <input
                     className={`table_input form-control ${
                       employee === selectedColumn ? "selected" : ""
                     }`}
                     name={"enteranceCommand"}
+                    placeholder="Daxil edin"
                     onChange={handleInputChange}
                     value={employee.enteranceCommand}
                   />
-                </td> */}
+                </td>
 
                 {/* <td>
                   <select

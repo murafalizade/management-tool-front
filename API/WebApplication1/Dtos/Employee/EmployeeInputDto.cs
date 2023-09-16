@@ -10,5 +10,7 @@ namespace WebApplication1.Dtos{
         public string InjuranceNo { get; set; }
         public DateTime BirthDate { get; set; }
         public DateTime StartDate { get; set; } = DateTime.Now;
+        public DateTime EnteranceDate { get; set; } = DateTime.Now;
+        public string Phone { get; set; }
     }
 }
