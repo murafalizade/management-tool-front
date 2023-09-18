@@ -53,6 +53,11 @@ export default function CreateEmployeeModal() {
       return;
     }
 
+    if (/\d/.test(employee.fin[0]) === false) {
+      toast.error("FİN rəqəmlə başlamalıdır!");
+      return;
+    }
+
     if(Number.isInteger(employee.fin[0])){
       toast.error("FİN kodun ilk simbolu rəqəm olmalıdır!");
     }
