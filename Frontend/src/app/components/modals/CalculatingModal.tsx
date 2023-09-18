@@ -704,7 +704,7 @@ const CalculatingModal = () => {
                         value={info.abilityId}
                         className="form-control text-center date-input w-25 mx-2"
                       >
-                        {abilities.map((x: any) => (
+                        {abilities.sort((a, b) => a.name.localeCompare(b.name)).map((x: any) => (
                           <option value={x.id}>{x.name}</option>
                         ))}
                       </select>
