@@ -173,7 +173,6 @@ const Profile = () => {
     };
     const getDiscounts = async () => {
       const res = await OperationService.getDiscounts();
-      console.log(res.data);
       setRowsOfDiscounts(res.data);
     };
     getElmiDerece();
@@ -400,7 +399,6 @@ const Profile = () => {
       toast.error("Xahiş olunur bütün xanaları doldurun!");
       return;
     }
-    console.log(updatedUser);
     try {
       const res = await OperationService.update(updatedUser);
       toast.success("Şifrə yeniləndi");

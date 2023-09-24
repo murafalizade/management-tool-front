@@ -26,7 +26,6 @@ const Compensation = () => {
     try {
       const res = await operationService.getDiscount(filter.month, filter.year);
       setDiscount(res.data);
-      console.log(res);
     } catch (error) {
       toast.error();
     }
@@ -36,7 +35,6 @@ const Compensation = () => {
     getDiscount();
   }, []);
 
-  console.log(filter);
 
   return (
     <div>

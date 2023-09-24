@@ -1,0 +1,11 @@
+th,td,tr{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.resize{
+    th{
+        cursor: col-resize;
+    }
+    cursor: col-resize;
+}

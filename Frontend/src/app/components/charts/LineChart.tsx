@@ -42,7 +42,7 @@ export const data = {
   labels: labels.map((label) => label.name),
   datasets: [
     {
-      label: 'Dataset 1',
+      label: 'Ümumi məbləğ',
       data: [1000, 1200, 800, 1500, 1100],
       borderColor: 'rgb(255, 99, 132)',
       backgroundColor: 'rgba(255, 99, 132, 0.5)',

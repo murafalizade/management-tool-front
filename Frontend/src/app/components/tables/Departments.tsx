@@ -308,7 +308,6 @@ export default function Departments() {
                 title: "İl",
                 field: "startDate",
                 value: (x) => {
-                  console.log(x);
                   const startDate = moment(x?.startDate);
                   let recordDate = moment(new Date());
                   const duration = moment.duration(recordDate.diff(startDate));

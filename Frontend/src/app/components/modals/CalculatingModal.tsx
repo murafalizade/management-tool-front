@@ -396,7 +396,6 @@ const CalculatingModal = () => {
 
   // update record
   const updateRecord = async () => {
-    console.log(info);
     await EmployeeService.updateEmployeeSalaryRecord(info);
     dispatch(hideModal());
 

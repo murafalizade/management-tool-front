@@ -5,7 +5,7 @@ import { Pie } from 'react-chartjs-2';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export const data = {
-  labels: ['Bakı', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+  labels: ['Bakı', 'Gəncə, Naxçıvan, Sumqayıt, Xırdalan şəhərləri və Abşeron rayonunda', 'Başqa şəhər və rayon mərkəzlərində', 'Digər yaşayış məntəqələrində', 'Verilmir'],
   datasets: [
     {
       label: 'Kirayə qalanların şəhər üzrə sayı',

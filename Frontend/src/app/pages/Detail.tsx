@@ -37,7 +37,6 @@ const Detail = () => {
     const totals = salaryRecord.reduce((acc: any, curr: any) => {
       for (const key in curr) {
         if (typeof curr[key] !== "string") {
-          console.log(key,curr[key]);
           if (acc[key]) {
             acc[key] += curr[key];
           } else {
@@ -51,10 +50,61 @@ const Detail = () => {
     setTotalValue(totals);
   }, [salaryRecord]);
 
+
+  // Handle resizing
+  const [resizing, setResizing] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [startWidth, setStartWidth] = useState<any>(0);
+  const [tableIndex, setTableIndex] = useState<any>(0);
+  const [headers, setHeaders] = useState(personalAccountHeaders);
+  
+  const handleMouseUp = () => {
+    setResizing(false);
+    setStartWidth(null);
+    setTableIndex(null);
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
+  };
+
+  const handleMouseDown = (e: React.MouseEvent, column:string) => {
+    e.preventDefault();
+    setResizing(true);
+    setStartX(e.clientX);
+    const columnElement = headers.find(x=> x.Header === column);
+    if (columnElement !== null && typeof columnElement?.width === 'number') {
+      setStartWidth(columnElement.width);
+    }
+    setTableIndex(column);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (resizing && tableIndex !== null) {
+      const offset = e.clientX - startX;
+      const newWidth = startWidth + offset;
+
+      const updatedHeaders = [...headers];
+      const columnElement = updatedHeaders.find(x=> x.Header === tableIndex);
+      if (columnElement !== null && columnElement !== undefined) {
+        columnElement.width = newWidth;
+        setHeaders(updatedHeaders);
+      }
+    }
+    if (!resizing) {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    }
+  }
+    
+
+
+
   const tableInstance = useTable({
-    columns: personalAccountHeaders,
+    columns: headers,
     data: salaryRecord,
   });
+
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     tableInstance;

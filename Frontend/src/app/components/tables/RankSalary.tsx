@@ -7,7 +7,6 @@ const RankSalary = () => {
   const [organization, setOrganization] = useState<any[]>([]);
   const getRankData = async () => {
     const response = await OperationService.getRanks();
-    console.log(response);
     setOrganization(response);
   };
 

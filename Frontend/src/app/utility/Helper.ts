@@ -3,7 +3,6 @@ export default class Helper{
         if (value == null) {
             return "0";
         }
-        console.log(value);
         let number = Number(value);
         return number.toFixed(2);
     }
