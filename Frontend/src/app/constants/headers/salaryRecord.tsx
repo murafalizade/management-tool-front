@@ -13,10 +13,14 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
   {
     Header: "idarə",
     accessor: "positionDepartmentAdminstrationName",
+    width:245
+
   },
   {
     Header: "Şöbə, bölmə",
     accessor: "positionDepartmentName",
+        width:245
+
   },
   {
     Header: "Vəzifə",
@@ -29,6 +33,8 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
   {
     Header: "S.A.A.",
     accessor: "fullName",
+        width:245
+
   },
   {
     Header: "Uzun müddətli Xİ",
