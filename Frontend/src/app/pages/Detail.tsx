@@ -50,14 +50,12 @@ const Detail = () => {
     setTotalValue(totals);
   }, [salaryRecord]);
 
-
   // Handle resizing
   const [resizing, setResizing] = useState(false);
   const [startX, setStartX] = useState(0);
   const [startWidth, setStartWidth] = useState<any>(0);
   const [tableIndex, setTableIndex] = useState<any>(0);
   const [headers, setHeaders] = useState(personalAccountHeaders);
-  
   const handleMouseUp = () => {
     setResizing(false);
     setStartWidth(null);
@@ -66,11 +64,11 @@ const Detail = () => {
     document.removeEventListener('mouseup', handleMouseUp);
   };
 
-  const handleMouseDown = (e: React.MouseEvent, column:string) => {
+  const handleMouseDown = (e: React.MouseEvent, column: string) => {
     e.preventDefault();
     setResizing(true);
     setStartX(e.clientX);
-    const columnElement = headers.find(x=> x.Header === column);
+    const columnElement = headers.find(x => x.Header === column);
     if (columnElement !== null && typeof columnElement?.width === 'number') {
       setStartWidth(columnElement.width);
     }
@@ -85,7 +83,7 @@ const Detail = () => {
       const newWidth = startWidth + offset;
 
       const updatedHeaders = [...headers];
-      const columnElement = updatedHeaders.find(x=> x.Header === tableIndex);
+      const columnElement = updatedHeaders.find(x => x.Header === tableIndex);
       if (columnElement !== null && columnElement !== undefined) {
         columnElement.width = newWidth;
         setHeaders(updatedHeaders);
@@ -96,9 +94,6 @@ const Detail = () => {
       document.removeEventListener('mouseup', handleMouseUp);
     }
   }
-    
-
-
 
   const tableInstance = useTable({
     columns: headers,
@@ -146,7 +141,7 @@ const Detail = () => {
             {headerGroups.map((headerGroup: any) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column: any) => (
-                  <th className="text-center" {...column.getHeaderProps()}>
+                  <th className="text-center" {...column.getHeaderProps()} onMouseDown={(e) => handleMouseDown(e, column.Header)}>
                     {column.render("Header")}
                   </th>
                 ))}
@@ -170,13 +165,23 @@ const Detail = () => {
                       return (
                         <React.Fragment key={i}>
                           <td {...cell.getCellProps()}>
-                            {new Date(row.values.date).toLocaleDateString()}
+                            <div
+                              style={{ width: `${cell.column.width}px`, minWidth: "100%" }}
+                            >
+                              {new Date(row.values.date).toLocaleDateString()}
+                            </div>
                           </td>
                         </React.Fragment>
                       );
                     } else {
                       return (
-                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                        <td {...cell.getCellProps()}>
+                          <div
+                            style={{ width: `${cell.column.width}px`, minWidth: "100%" }}
+                          >
+                            {cell.render("Cell")}
+                          </div>
+                        </td>
                       );
                     }
                   })}
