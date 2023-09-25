@@ -268,3 +268,14 @@ body.inverse {
 // .resizeable-table.dragging .resize-handle {
 //   background-color: #aaa;
 // }
+.resize{
+    cursor: col-resize;
+}
+
+.table, td, tr, th{
+    user-select: none;
+}
+
+// .table-info{
+//     text-overflow: ellipsis;
+// }
