@@ -216,6 +216,10 @@ const Profile = () => {
             (await OperationService.deleteXariciDilById(id));
           isRanks && (await OperationService.deleteRanksById(id));
           isRents && (await OperationService.deleteKirayeById(id));
+          if (isDiscount) {
+            toast.info("Güzəşt silinə bilməz");
+            return;
+          }
           toast.success("Sətir silindi");
         }
         isScientificDegrees && setRowsOfScientificDegrees(updatedRows);
@@ -287,7 +291,7 @@ const Profile = () => {
       : isRanks
       ? rowsOfRanks
       : isDiscount
-      ?rowsOfDiscounts
+      ? rowsOfDiscounts
       : rowsOfRents;
     try {
       rowsOfTable.map(async (row: any) => {
@@ -303,7 +307,7 @@ const Profile = () => {
             ? await OperationService.AddForeignLanguage(row)
             : isRanks
             ? await OperationService.AddRank(row)
-            :isDiscount
+            : isDiscount
             ? await OperationService.AddDiscount(row)
             : await OperationService.AddRent(row);
         } else {
@@ -317,8 +321,8 @@ const Profile = () => {
             ? await OperationService.UpdateForeignLanguage(row)
             : isRanks
             ? await OperationService.UpdateRank(row.id, row)
-            :isDiscount
-            ?await OperationService.UpdateDiscount(row.id, row)
+            : isDiscount
+            ? await OperationService.UpdateDiscount(row.id, row)
             : await OperationService.UpdateRent(row);
         }
       });
@@ -340,8 +344,8 @@ const Profile = () => {
       ? rowsOfForeignLanguages
       : isRanks
       ? rowsOfRanks
-      :isDiscount
-      ?rowsOfDiscounts
+      : isDiscount
+      ? rowsOfDiscounts
       : rowsOfRents;
     const newRows = rowsOfTable.map((row: any) => {
       if (row.id === id) {

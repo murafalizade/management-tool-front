@@ -84,6 +84,7 @@ namespace WebApplication1.Repositories
                 .Include(x => x.HonorTitle)
                 .Include(x => x.Discount)
                 .Include(x => x.Rent)
+                .Include(x=>x.Rank)
                 .Include(x => x.Position)
                     .ThenInclude(x => x.Department)
                         .ThenInclude(x => x.Adminstration).
