@@ -15,6 +15,8 @@ namespace WebApplication1.Services
         Task<ErrorHandelerDto> AddEmployeeForNextMonth();
         Task<ErrorHandelerDto> CalculateSalary();
         Task<byte[]> ExportExcel(string search, int month, int year);
+        Task<byte[]> ExportDistribution(string search, int month, int year);
+        Task<byte[]> ExportReestr(string search, int month, int year);
         Task<ErrorHandelerDto> AddKirayeQat(int kirayeQat);
         Task<ErrorHandelerDto> AddFoodQat(int foodQat);
         Task<ErrorHandelerDto> AddVeteranQat(int veteranQat);

@@ -230,7 +230,6 @@ namespace WebApplication1.Models
             {
                 if (value == 0 & ForeignLanguage != null)
                 {
-                    Console.WriteLine("Foreign Language Salary is not null");
                     _foreignLanguagePrice = _positionSalary * ForeignLanguage.Percentage / 100;
                 }
                 else
@@ -259,7 +258,6 @@ namespace WebApplication1.Models
             {
                 if (ScientificDegree != null)
                 {
-                    Console.WriteLine("Scientific Degree Salary is not null");
                     int workExperience = DateTime.Now.Year - Employee.StartDate.Year;
 
                     if (workExperience >= 5 && workExperience <= 10)

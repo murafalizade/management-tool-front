@@ -17,6 +17,7 @@ import Toastify from "../../utility/Toastify";
 import ChangePositionEmployeeModal from "../modals/ChangePositionEmployeeModal";
 import DeleteEmployeeModal from "../modals/DeleteEmployeeModal";
 import Rents from "../tables/Rents";
+import OperationService from "../../api/operationService";
 
 function Layout() {
   const [showFileDropdown, setShowFileDropdown] = useState<boolean>(false);
@@ -116,6 +117,47 @@ function Layout() {
       toast.error(err.response.data.message);
     }
   };
+
+  const exportDistribution = async (slug:string) => {
+    try{
+      const response = await OperationService.getExcelDistribution(9,2023, slug);
+      const url = URL.createObjectURL(response);
+  
+      const link = document.createElement("a");
+      link.href = url;
+      link.download =  `${slug}-paylanma.xlsx`;
+      document.body.appendChild(link);
+  
+      link.click();
+  
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+    catch(err: any){
+      toast.error(err.response.data.message);
+    }
+  }
+
+  const exportReestr = async (slug:string) => {
+    try{
+      
+      const response =await OperationService.getExcelReestr(9,2023,slug);
+    const url = URL.createObjectURL(response);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${slug}-reestr.xlsx`;
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    }
+    catch(err: any){
+      toast.error(err.response.data.message);
+    }
+  }
 
   const chooseRow = (row: string) => {
     if (row === selectedRow) return setSelectedRow("");
@@ -373,10 +415,10 @@ function Layout() {
             >
               {FILTER_TABLE.map((item, index) => (
                 <NavDropdown key={item.id} title={item.name} drop="end">
-                  <NavDropdown.Item href={`/table?filter=${item.slug}`}>
+                  <NavDropdown.Item onClick={()=> exportReestr(item.slug)}>
                     Reestr
                   </NavDropdown.Item>
-                  <NavDropdown.Item href={`/table?filter=${item.slug}`}>
+                  <NavDropdown.Item onClick={()=> exportDistribution(item.slug)}>
                     Paylanma cədvəli
                   </NavDropdown.Item>
                 </NavDropdown>

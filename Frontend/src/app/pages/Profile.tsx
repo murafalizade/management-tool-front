@@ -694,6 +694,7 @@ const Profile = () => {
               )}
               {isDiscount && (
                 <TableLayout
+                  className="text-nowrap"
                   isEditable={true}
                   data={rowsOfDiscounts}
                   add={addRow}

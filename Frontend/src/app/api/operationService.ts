@@ -178,4 +178,24 @@ export default class OperationService {
       },
     });
   }
+
+  static async getExcelDistribution(month:number, year:number, search:string): Promise<any> {
+    return await fetch.get(`/api/employee/salary/record/distribution?month=${month}&year=${year}&search=${search}`, {
+      responseType: "blob",
+      headers: {
+        "Content-Type":
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      },
+    });
+  }
+
+  static async getExcelReestr(month:number, year:number, search:string): Promise<any> {
+    return await fetch.get(`/api/employee/salary/record/reestr?month=${month}&year=${year}&search=${search}`, {
+      responseType: "blob",
+      headers: {
+        "Content-Type":
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      },
+    });
+  }
 }

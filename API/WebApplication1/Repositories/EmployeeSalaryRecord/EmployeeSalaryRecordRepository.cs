@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
+using WebApplication1.Dtos.EmployeeSalaryRecord;
 using WebApplication1.Models;
 using WebApplication1.Repositories;
 
@@ -71,7 +72,7 @@ namespace WebApplication1.Repositories
                 return;
             }
 
-            recordsToUpdate.ForEach(record => { record.RentPrice = kirayeQat * record.RentPrice / record.RentQat; record.RentQat = kirayeQat;});
+            recordsToUpdate.ForEach(record => { record.RentPrice = kirayeQat * record.RentPrice / record.RentQat; record.RentQat = kirayeQat; });
             await _context.SaveChangesAsync();
         }
 
@@ -84,7 +85,7 @@ namespace WebApplication1.Repositories
                 .Include(x => x.HonorTitle)
                 .Include(x => x.Discount)
                 .Include(x => x.Rent)
-                .Include(x=>x.Rank)
+                .Include(x => x.Rank)
                 .Include(x => x.Position)
                     .ThenInclude(x => x.Department)
                         .ThenInclude(x => x.Adminstration).
@@ -162,7 +163,8 @@ namespace WebApplication1.Repositories
                     { "elmi", x => x.ScientificDegreePrice > 0 },
                     { "cixis", x => x.ForeignLanguagePrice > 0 },
                     { "elave", x => x.ExtraGivenMoney > 0 },
-                    { "elaveGvti", x => x.ExtraMoney2 > 0 }
+                    { "elaveGvti", x => x.ExtraMoney2 > 0 },
+                    {"esas", x=> true}
                 };
 
             if (!string.IsNullOrEmpty(search) && searchOptions.ContainsKey(search))
@@ -219,16 +221,6 @@ namespace WebApplication1.Repositories
                         .ThenInclude(x => x.Adminstration).
             FirstOrDefaultAsync(x => x.Id == employee.Id);
 
-            Console.WriteLine(employee.Food);
-
-            // Update the properties of the existingEmployee object with the values from the employee parameter.
-            // existingEmployee.EmployeeId = employee.EmployeeId;
-            // existingEmployee.PositionId = employee.PositionId;
-            // existingEmployee.AbilityId = employee.AbilityId;
-            // existingEmployee.ForeignLanguageId = employee.ForeignLanguageId;
-            // existingEmployee.ScientificDegreeId = employee.ScientificDegreeId;
-            // existingEmployee.HonorTitleId = employee.HonorTitleId;
-            // existingEmployee.RentId = employee.RentId;
             existingEmployee.IsBPMGiven = employee.IsBPMGiven;
             existingEmployee.IsVacationGiven = employee.IsVacationGiven;
             existingEmployee.IsExitAidGiven = employee.IsExitAidGiven;
@@ -313,6 +305,121 @@ namespace WebApplication1.Repositories
 
             recordsToUpdate.ForEach(record => { record.VeteranQat = veteranQat; });
             await _context.SaveChangesAsync();
+        }
+
+        public Task<List<EmployeeReestrDto>> GetEmployeeReestr(string search, int month, int year)
+        {
+            var query = _context.EmployeeSalaryRecords
+                .Include(x => x.Employee)
+                .Include(x => x.Ability)
+                .Include(x => x.ScientificDegree)
+                .Include(x => x.HonorTitle)
+                .Include(x => x.Discount)
+                .Include(x => x.Rent)
+                .Include(x => x.Rank)
+                .Include(x => x.Position)
+                    .ThenInclude(x => x.Department)
+                        .ThenInclude(x => x.Adminstration)
+                .Where(x => x.RecordDate.Year == year && x.RecordDate.Month == month);
+            var searchOptions = new Dictionary<string, Expression<Func<EmployeeSalaryRecord, bool>>>
+                {
+                    { "aliment", x => x.Alimony > 0 },
+                    { "extra211100", x => x.Extra211100 > 0 },
+                    { "fexri", x => x.HonorTitlePrice > 0 },
+                    { "kesfiyyat", x => x.ExploretionPrice > 0 },
+                    {"mexficilik", x=> x.Confidentiality >0},
+                    { "kesfMezun", x => x.KesfMezun > 0 },
+                    { "kesfXeste", x => x.KesfXeste > 0 },
+                    { "food", x => x.Food > 0 },
+                    { "yukPulu", x => x.YukPulu > 0 },
+                    { "cixisMuv", x => x.ExitAid > 0 },
+                    { "bpm", x => x.BPM > 0 },
+                    {"erzaq", x=> x.FoodGiven==true},
+                    {"texris", x=> x.ExitAid >0},
+                    { "mezuniyyet", x => x.Vacation > 0 },
+                    {"ezamiyyet", x=>x.BusinessTrip > 0},
+                    { "kesir", x => x.Fails > 0 },
+                    { "zererli", x => x.Harmfulness > 0 },
+                    { "meharetlilik", x => x.AbilityPrice > 0 },
+                    { "temsilcilik", x => x.Representing > 0 },
+                    { "yol", x => x.TripExpense > 0 },
+                    {  "yuk", x=> x.YukPulu >0},
+                    { "kiraye", x => x.RentPrice > 0 },
+                    { "maddi", x => x.FinancialAid > 0 },
+                    {"daimi", x => x.IsEternalQat == true && x.PTQat !=0},
+                    {"2qat", x=> x.PTQat != 0},
+                    {"maddiyardimalmayanlar", x=> x.FinancialAid == 0},
+                    {"mezuniyyetalmayanlar", x => x.Vacation == 0},
+                    {"muharibe", x=> x.IsVeteran==true},
+                    {"elil",x=>x.IsDisabled == true},
+                    {"qachqin",x=>x.IsRefugee == true},
+                    {"sehid",x=>x.IsMatry == true},
+                    {"himayeder",x=> x.IsOwner == true},
+                    {"cernobil",x=>x.IsChernobyl == true},
+                    { "sahra", x => x.DesertPrice > 0 },
+                    { "elmi", x => x.ScientificDegreePrice > 0 },
+                    { "cixis", x => x.ForeignLanguagePrice > 0 },
+                    { "elave", x => x.ExtraGivenMoney > 0 },
+                    { "elaveGvti", x => x.ExtraMoney2 > 0 },
+                    {"esas", x=> true}
+                };
+            var searchValue = new Dictionary<string, Expression<Func<EmployeeSalaryRecord, double>>>
+                {
+                    { "aliment", x => x.Alimony },
+                    { "extra211100", x => x.Extra211100 },
+                    { "fexri", x => x.HonorTitlePrice },
+                    { "kesfiyyat", x => x.ExploretionPrice },
+                    {"mexficilik", x=> x.Confidentiality},
+                    { "kesfMezun", x => x.KesfMezun },
+                    { "kesfXeste", x => x.KesfXeste },
+                    { "food", x => x.Food },
+                    { "yukPulu", x => x.YukPulu },
+                    { "cixisMuv", x => x.ExitAid },
+                    { "bpm", x => x.BPM },
+                    {"erzaq", x=> x.Food},
+                    {"texris", x=> x.ExitAid},
+                    { "mezuniyyet", x => x.Vacation },
+                    {"ezamiyyet", x=>x.BusinessTrip},
+                    { "kesir", x => x.Fails },
+                    { "zererli", x => x.Harmfulness },
+                    { "meharetlilik", x => x.AbilityPrice },
+                    { "temsilcilik", x => x.Representing },
+                    { "yol", x => x.TripExpense },
+                    {  "yuk", x=> x.YukPulu},
+                    { "kiraye", x => x.RentPrice },
+                    { "maddi", x => x.FinancialAid },
+                    {"daimi", x => x.XIMoney},
+                    {"2qat", x=> x.PTQat},
+                    {"maddiyardimalmayanlar", x=> x.FinancialAid},
+                    {"mezuniyyetalmayanlar", x => x.Vacation},
+                    {"muharibe", x=> x.Discount.Veteran},
+                    {"elil",x=> x.Discount.Disability},
+                    {"qachqin",x=> x.Discount.Refugee},
+                    {"sehid",x=> x.Discount.Martyr},
+                    {"himayeder",x=> x.Discount.Owner},
+                    {"cernobil",x=> x.Discount.Chernobyl},
+                    { "sahra", x => x.DesertPrice },
+                    { "elmi", x => x.ScientificDegreePrice },
+                    { "cixis", x => x.ForeignLanguagePrice },
+                    { "elave", x => x.ExtraGivenMoney },
+                    { "elaveGvti", x => x.ExtraMoney2 },
+                    {"esas", x=> x.PositionSalary + x.RankSalary}
+                };
+
+            if (!string.IsNullOrEmpty(search) && searchOptions.ContainsKey(search))
+            {
+                query = query.Where(searchOptions[search]);
+            }
+
+            // Use AutoMapper to project the results to your DTO
+            var resultDtos =  query.Select(record => new EmployeeReestrDto
+            {
+                FullName = record.FullName,
+                Comment = record.AccountNumber,
+                Salary = searchValue[search].Compile().Invoke(record)
+            }).ToListAsync();
+
+            return resultDtos;
         }
     }
 }

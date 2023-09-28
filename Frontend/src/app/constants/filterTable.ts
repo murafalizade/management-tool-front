@@ -27,7 +27,7 @@ export const FILTER_TABLE = [
   {
     id: 6,
     name: "Səhra pulu",
-    slug: "sehra",
+    slug: "sahra",
   },
   {
     id: 7,

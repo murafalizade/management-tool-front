@@ -371,19 +371,11 @@ const CalculatingModal = () => {
 
   const toast = new Toastify();
 
-  // useEffect(() => {
-  //   setInfo({
-  //     ...info,
-  //     kirayePrice:
-  //       (rentPrice + info.familyCount * 0.5 * rentPrice) * (info.kirayeQat + 1),
-  //   });
-  // }, [info.familyCount, info.kirayeQat, rentPrice]);
-
   // Calculate service years till 1st of current month
   useEffect(() => {
-    const startDate = moment(info?.employeeStartDate);
-    let endDate = moment(info?.recordDate);
-    endDate.set("date", 1);
+    let startDate = moment(info?.recordDate);
+    const endDate = moment(new Date());
+    // endDate.set("date", 1);
     const duration = moment.duration(endDate.diff(startDate));
     const years = duration.years();
     const months = duration.months();

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using OfficeOpenXml;
 using WebApplication1.Dtos;
+using WebApplication1.Dtos.EmployeeSalaryRecord;
 using WebApplication1.Models;
 using WebApplication1.Repositories;
 
@@ -373,6 +374,70 @@ namespace WebApplication1.Services
             // Convert the Excel package to a byte array
             byte[] fileBytes = package.GetAsByteArray();
             return fileBytes;
+        }
+        public async Task<byte[]> ExportDistribution(string search, int month, int year){
+            // export excel
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            List<EmployeeSalaryResultDto> data = _mapper.Map<List<EmployeeSalaryResultDto>>(await _employeeSalaryRecordRepository.GetEmployees(search, month, year));
+            using var package = new ExcelPackage();
+            var worksheet = package.Workbook.Worksheets.Add("Sheet1");
+            worksheet.Cells[1, 1].Value = "Sırası";
+            worksheet.Cells[1, 2].Value = "Rütbəsi";
+            worksheet.Cells[1, 3].Value = "Adı, Soyadı";
+            worksheet.Cells[1, 4].Value = "Hesablanıb";
+            worksheet.Cells[1, 5].Value = "Cəmi";
+            worksheet.Cells[1, 6].Value = "Tutulur";
+            worksheet.Cells[1, 7].Value = "Veriləcək məbləğ";
+
+            // Fill data rows
+            int row = 2;
+            int j = 0;
+            foreach (EmployeeSalaryResultDto item in data)
+            {
+                j++;
+                worksheet.Cells[row, 1].Value = item.Id;
+                worksheet.Cells[row, 2].Value = item.RankName;
+                worksheet.Cells[row, 3].Value = item.FullName;
+                worksheet.Cells[row, 4].Value = item.TotalSalary;
+                worksheet.Cells[row, 5].Value = item.TotalSalary;
+                worksheet.Cells[row, 6].Value = item.TotalDiscount;
+                worksheet.Cells[row, 7].Value = item.TotalGiven;
+                row++;
+            }
+
+            // Convert the Excel package to a byte array
+            byte[] fileBytes = package.GetAsByteArray();
+            return fileBytes;
+        
+        }
+        public async Task<byte[]> ExportReestr(string search, int month, int year){
+            // export excel
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            List<EmployeeReestrDto> data = await _employeeSalaryRecordRepository.GetEmployeeReestr(search, month, year);
+            using var package = new ExcelPackage();
+            var worksheet = package.Workbook.Worksheets.Add("Sheet1");
+            worksheet.Cells[1, 1].Value = "Sırası";
+            worksheet.Cells[1, 2].Value = "Soyadı, Adı, Atasının adı";
+            worksheet.Cells[1, 3].Value = "XKH №";
+            worksheet.Cells[1, 4].Value = "Məbləğ";
+
+            // Fill data rows
+            int row = 2;
+            int j = 0;
+            foreach (EmployeeReestrDto item in data)
+            {
+                j++;
+                worksheet.Cells[row, 1].Value = j;
+                worksheet.Cells[row, 2].Value = item.FullName;
+                worksheet.Cells[row, 3].Value = item.Comment;
+                worksheet.Cells[row, 4].Value = item.Salary;
+                row++;
+            }
+
+            // Convert the Excel package to a byte array
+            byte[] fileBytes = package.GetAsByteArray();
+            return fileBytes;
+        
         }
 
         public async Task<ErrorHandelerDto> AddKirayeQat(int kirayeQat)

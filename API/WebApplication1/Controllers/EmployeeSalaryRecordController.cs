@@ -116,7 +116,18 @@ namespace WebApplication1.Controllers
             return File(await _employeeSalaryRecordService.ExportExcel(search, month, year), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "EmployeeSalaryRecord.xlsx");
         }
 
+        [HttpGet("distribution")]
+        public async Task<IActionResult> ExportDistribution([FromQuery] int month, [FromQuery] int year, [FromQuery] string search)
+        {
+            return File(await _employeeSalaryRecordService.ExportDistribution(search, month, year), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "EmployeeSalaryDistribution.xlsx");
+        }
 
+        [HttpGet("reestr")]
+        public async Task<IActionResult> ExportReestr([FromQuery] int month, [FromQuery] int year, [FromQuery] string search)
+        {
+            return File(await _employeeSalaryRecordService.ExportReestr(search, month, year), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "EmployeeSalaryReestr.xlsx");
+        }
+        
         [HttpPost("kiraye")]
         public async Task<IActionResult> AddKirayeQat([FromQuery] int kirayeQat)
         {

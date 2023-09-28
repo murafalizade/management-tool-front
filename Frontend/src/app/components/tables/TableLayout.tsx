@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 
-interface Props<T> {
+interface Props<T> extends React.HTMLAttributes<HTMLDivElement> {
   data: T[];
   columns: {
     title: string;
@@ -120,7 +120,7 @@ const TableLayout = (props: Props<any>) => {
               >
       <Table className="my-2 bg-white" bordered>
         <thead>
-          <tr className="text-center">
+          <tr className={`text-center ${props.className}`}>
             {props.columns.map((column) => (
               <th>{column.title}</th>
             ))}
@@ -133,11 +133,6 @@ const TableLayout = (props: Props<any>) => {
                 <td
                 onMouseDown={(e) => handleMouseDown(e, 1)}
                   className={column.field === "id" ? "small-td" : ""}
-                  style={
-                    selectedOrganization?.id === d.id
-                      ? { backgroundColor: "#e6e6e6" }
-                      : {}
-                  }
                 >
                   {!props.isEditable ? (
                     column.field === "id" ? (
@@ -161,11 +156,6 @@ const TableLayout = (props: Props<any>) => {
                     />
                   ) : (
                     <input
-                      style={
-                        selectedOrganization?.id === d.id
-                          ? { backgroundColor: "#e6e6e6" }
-                          : {}
-                      }
                       type={column.field === "Seç" ? "checkbox" : "text"}
                       name={column.field as string}
                       onChange={(e) => changeOrganization(e, d.id)}
