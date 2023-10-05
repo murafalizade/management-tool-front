@@ -380,7 +380,7 @@ const CalculatingModal = () => {
 
   // Calculate service years till 1st of current month
   useEffect(() => {
-    let startDate = moment(info?.recordDate);
+    let startDate = moment(info?.employeeStartDate);
     const endDate = moment(new Date());
     // endDate.set("date", 1);
     const duration = moment.duration(endDate.diff(startDate));

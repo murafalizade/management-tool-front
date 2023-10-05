@@ -200,7 +200,6 @@ namespace WebApplication1.Repositories
             employee.Rent = rent;
             employee.Rank = rank;
             employee.ForeignLanguage = foreginLanguage;
-
             await _context.SaveChangesAsync();
         }
 

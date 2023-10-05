@@ -39,7 +39,7 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
       {
         Header: "gün",
         accessor: (row: any) => {
-          const startDate = moment(row?.recordDate);
+          const startDate = moment(row?.employeeStartDate);
           let recordDate = moment(new Date());
           const duration = moment.duration(recordDate.diff(startDate));
           return duration.days();
@@ -48,7 +48,7 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
       {
         Header: "ay",
         accessor: (row: any) => {
-          const startDate = moment(row?.recordDate);
+          const startDate = moment(row?.employeeStartDate);
           let recordDate = moment(new Date());
           const duration = moment.duration(recordDate.diff(startDate));
           return duration.months();
@@ -57,7 +57,7 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
       {
         Header: "il",
         accessor: (row: any) => {
-          const startDate = moment(row?.recordDate);
+          const startDate = moment(row?.employeeStartDate);
           let recordDate = moment(new Date());
           const duration = moment.duration(recordDate.diff(startDate));
           return duration.years();
