@@ -1282,8 +1282,9 @@ const CalculatingModal = () => {
                           </div>
                           {aid.financialAidMonth !== 0 ? (
                             <>
-                              <label>Maddi yardim</label>
-                              <span>{aid.financialAidMonth} ay köçb.</span>
+                              <label className="w-100">Maddi yardim
+                              <span className="ms-2">{aid.financialAidMonth} ay köçb.</span>
+                              </label>
                             </>
                           ) : (
                             <div className="d-flex justify-content-between">
@@ -1312,8 +1313,9 @@ const CalculatingModal = () => {
 
                           {aid.vacationMonth !== 0 ? (
                             <>
-                              <label>Məzuniyyət</label>
-                              <span>{aid.vacationMonth} ay köçb.</span>
+                              <label className="w-100">Məzuniyyət
+                              <span className="ms-3">{aid.vacationMonth} ay köçb.</span>
+                              </label>
                             </>
                           ) : (
                             <div className="d-flex my-2 justify-content-between">
@@ -1343,8 +1345,9 @@ const CalculatingModal = () => {
                           )}
                           {aid.kesfMezunMonth !== 0 ? (
                             <>
-                              <label>Kəşf. məzun.</label>
-                              <span>{aid.kesfMezunMonth} ay köçb.</span>
+                              <label className="w-100">Kəşf. məzun.
+                              <span className="ms-2">{aid.kesfMezunMonth} ay köçb.</span>
+                              </label>
                             </>
                           ) : (
                             <div className="d-flex my-2 justify-content-between">
@@ -1376,13 +1379,13 @@ const CalculatingModal = () => {
 
                           {aid.bpmMonth !== 0 ? (
                             <>
-                              <label>BPM</label>
-                              <span>{aid.bpmdMonth} ay köçb.</span>
+                              <label className="w-100">BPM
+                              <span className="ms-2">{aid.bpmdMonth} ay köçb.</span>
+                              </label>
                             </>
                           ) : (
                             <div className="d-flex my-2 justify-content-between">
                               <label>BPM</label>
-
                               <input
                                 type="number"
                                 disabled={!info.isBPMGiven}
@@ -1409,8 +1412,9 @@ const CalculatingModal = () => {
 
                           {aid.cixisMuvMonth !== 0 ? (
                             <>
-                              <label>Çıxış müavinatı</label>
-                              <span>{aid.cixisMuvMonth} ay köçb.</span>
+                              <label className="w-100">Çıxış müavinatı
+                              <span className="ms-2">{aid.cixisMuvMonth} ay köçb.</span>
+                              </label>
                             </>
                           ) : (
                             <div className="d-flex my-2 justify-content-between">
