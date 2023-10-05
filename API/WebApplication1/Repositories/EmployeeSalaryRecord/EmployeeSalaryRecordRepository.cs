@@ -421,5 +421,56 @@ namespace WebApplication1.Repositories
 
             return resultDtos;
         }
+
+        public async Task<EmployeeAidStatusDto> GetAidStatus(int recordId){
+            
+            EmployeeSalaryRecord currentRecord = await _context.EmployeeSalaryRecords
+                .Include(x => x.Employee)
+                .FirstOrDefaultAsync(x => x.Id == recordId);
+
+            EmployeeSalaryRecord financialEmployeeSalary = await _context.EmployeeSalaryRecords
+                .Include(x => x.Employee)
+                .FirstOrDefaultAsync(x => x.EmployeeId == currentRecord.EmployeeId && x.RecordDate.Year == DateTime.Now.Year && x.FinancialAid > 0);
+
+
+            EmployeeSalaryRecord vacationEmployeeSalary = await _context.EmployeeSalaryRecords
+                .Include(x => x.Employee)
+                .FirstOrDefaultAsync(x => x.EmployeeId == currentRecord.EmployeeId && x.RecordDate.Year == DateTime.Now.Year && x.Vacation > 0);
+
+            EmployeeSalaryRecord kesfMezunEmployeeSalary = await _context.EmployeeSalaryRecords
+                .Include(x => x.Employee)
+                .FirstOrDefaultAsync(x => x.EmployeeId == currentRecord.EmployeeId && x.RecordDate.Year == DateTime.Now.Year && x.KesfMezun > 0);
+
+
+            EmployeeSalaryRecord exitEmployeeSalary = await _context.EmployeeSalaryRecords
+                .Include(x => x.Employee)
+                .FirstOrDefaultAsync(x => x.EmployeeId == currentRecord.EmployeeId && x.RecordDate.Year == DateTime.Now.Year && x.ExitAid > 0);
+
+            EmployeeSalaryRecord BPMEmployeeSalary = await _context.EmployeeSalaryRecords
+                .Include(x => x.Employee)
+                .FirstOrDefaultAsync(x => x.EmployeeId == currentRecord.EmployeeId && x.RecordDate.Year == DateTime.Now.Year && x.BPM > 0);
+
+
+                EmployeeAidStatusDto aidStatus = new();
+                if(financialEmployeeSalary != null){
+                    aidStatus.FinancialAidMonth = currentRecord.RecordDate.Month - financialEmployeeSalary.RecordDate.Month;
+                }
+
+                if(vacationEmployeeSalary != null){
+                    aidStatus.VacationMonth = currentRecord.RecordDate.Month - vacationEmployeeSalary.RecordDate.Month;
+
+                }
+                if(kesfMezunEmployeeSalary != null){
+                    aidStatus.KesfMezunMonth = currentRecord.RecordDate.Month - kesfMezunEmployeeSalary.RecordDate.Month;
+                }
+                if(BPMEmployeeSalary != null){
+                    aidStatus.BPMMonth = currentRecord.RecordDate.Month - BPMEmployeeSalary.RecordDate.Month;
+                }
+                if(exitEmployeeSalary != null){ 
+                   aidStatus.CixisMuvMonth = DateTime.Now.Month - currentRecord.RecordDate.Month;
+                }
+            
+               return aidStatus;
+        }
     }
 }

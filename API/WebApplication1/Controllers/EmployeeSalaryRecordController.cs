@@ -171,5 +171,16 @@ namespace WebApplication1.Controllers
             }
             return BadRequest(obj.data);
         }
+        [HttpGet("aid")]
+        public async Task<IActionResult> GetAidStatus([FromQuery] int recordId)
+        {
+            ErrorHandelerDto obj = await _employeeSalaryRecordService.GetAidStatus(recordId);
+            if ((bool)!obj.isError)
+            {
+                return Ok(obj.data);
+            }
+            return BadRequest(obj.data);
+        }
+
     }
 }

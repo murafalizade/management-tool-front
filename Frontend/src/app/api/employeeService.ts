@@ -78,6 +78,10 @@ export default class EmployeeService {
     return await fetch.post(`/api/employee/salary/record/bpm?bpmQat=${qat}`);
   }
 
+  static async getAidStatus(recordId: number): Promise<any> {
+    return await fetch.get(`/api/employee/salary/record/aid?recordId=${recordId}`);
+  }
+
   static async exportEmployeeSalaryRecord(
     month: number,
     year: number,

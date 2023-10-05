@@ -50,6 +50,7 @@ const CalculatingModal = () => {
   const [organizations, setOrganizations] = useState<any[]>([]);
   const [abilities, setAbilities] = useState<any[]>([]);
   const [total, setTotal] = useState<number>(0);
+  const [aid, setAid] = useState<any>({});
 
   const [selectedOptions, setSelectedOptions] = useState<any>({});
 
@@ -218,6 +219,12 @@ const CalculatingModal = () => {
     // Get Abilities
     const abilities = await OperationService.getMeharet();
     setAbilities(abilities);
+
+    // Get aid status
+    const aidStatus = await EmployeeService.getAidStatus(state.show);
+    setAid(aidStatus);
+
+    console.log(aidStatus);
   };
 
   const getRent = async () => {
@@ -395,7 +402,7 @@ const CalculatingModal = () => {
       window.location.reload()
     );
   };
-  
+
   return (
     <>
       {state.show === 0 ? null : (
@@ -695,9 +702,11 @@ const CalculatingModal = () => {
                         value={info.abilityId}
                         className="form-control text-center date-input w-25 mx-2"
                       >
-                        {abilities.sort((a, b) => a.name.localeCompare(b.name)).map((x: any) => (
-                          <option value={x.id}>{x.name}</option>
-                        ))}
+                        {abilities
+                          .sort((a, b) => a.name.localeCompare(b.name))
+                          .map((x: any) => (
+                            <option value={x.id}>{x.name}</option>
+                          ))}
                       </select>
                       <label className="normal-label">
                         {selectedOptions.ability === undefined
@@ -1146,7 +1155,11 @@ const CalculatingModal = () => {
                     <div className="section">
                       <div className="d-flex  align-items-center justify-content-between my-1">
                         <label>Veriləcək məbləğ:</label>
-                        <b>{Helper.FormatNumber(totalGiven - totalTaken + totalDiscount)}</b>
+                        <b>
+                          {Helper.FormatNumber(
+                            totalGiven - totalTaken + totalDiscount
+                          )}
+                        </b>
                       </div>
                     </div>
                   </div>
@@ -1267,132 +1280,173 @@ const CalculatingModal = () => {
                             <label className="mx-2">DSMF</label>
                             <label className="">Verilir</label>
                           </div>
-                          <div className="d-flex justify-content-between">
-                            <label>Maddi yardim</label>
-                            <input
-                              type="number"
-                              value={info.financialAid}
-                              onChange={handleInput}
-                              name="financialAid"
-                              disabled={!info.isFinancialAidGiven}
-                              className="form-control w-100"
-                            />
-                            <input
-                              type="number"
-                              onChange={handleInput}
-                              disabled
-                              className="form-control border-0 opacity-0  w-100"
-                            />
-                            <input
-                              type="number"
-                              value={info.financialAid}
-                              className="form-control w-100"
-                            />
-                          </div>
+                          {aid.financialAidMonth !== 0 ? (
+                            <>
+                              <label>Maddi yardim</label>
+                              <span>{aid.financialAidMonth} ay köçb.</span>
+                            </>
+                          ) : (
+                            <div className="d-flex justify-content-between">
+                              <label>Maddi yardim</label>
+                              <input
+                                type="number"
+                                value={info.financialAid}
+                                onChange={handleInput}
+                                name="financialAid"
+                                disabled={!info.isFinancialAidGiven}
+                                className="form-control w-100"
+                              />
+                              <input
+                                type="number"
+                                onChange={handleInput}
+                                disabled
+                                className="form-control border-0 opacity-0  w-100"
+                              />
+                              <input
+                                type="number"
+                                value={info.financialAid}
+                                className="form-control w-100"
+                              />
+                            </div>
+                          )}
 
-                          <div className="d-flex my-2 justify-content-between">
-                            <label>Məzuniyyət</label>
-                            <input
-                              type="number"
-                              value={info.vacation}
-                              onChange={handleInput}
-                              disabled={!info.isVacationGiven}
-                              name="vacation"
-                              className="form-control w-100"
-                            />
-                            <input
-                              value={info.vacationDSMF}
-                              type="number"
-                              name="vacationDSMF"
-                              onChange={handleInput}
-                              disabled={!info.isVacationGiven}
-                              className="form-control w-100"
-                            />
-                            <input
-                              type="number"
-                              value={info.vacation - info.vacationDSMF}
-                              className="form-control w-100"
-                            />
-                          </div>
+                          {aid.vacationMonth !== 0 ? (
+                            <>
+                              <label>Məzuniyyət</label>
+                              <span>{aid.vacationMonth} ay köçb.</span>
+                            </>
+                          ) : (
+                            <div className="d-flex my-2 justify-content-between">
+                              <label>Məzuniyyət</label>
+                              <input
+                                type="number"
+                                value={info.vacation}
+                                onChange={handleInput}
+                                disabled={!info.isVacationGiven}
+                                name="vacation"
+                                className="form-control w-100"
+                              />
+                              <input
+                                value={info.vacationDSMF}
+                                type="number"
+                                name="vacationDSMF"
+                                onChange={handleInput}
+                                disabled={!info.isVacationGiven}
+                                className="form-control w-100"
+                              />
+                              <input
+                                type="number"
+                                value={info.vacation - info.vacationDSMF}
+                                className="form-control w-100"
+                              />
+                            </div>
+                          )}
+                          {aid.kesfMezunMonth !== 0 ? (
+                            <>
+                              <label>Kəşf. məzun.</label>
+                              <span>{aid.kesfMezunMonth} ay köçb.</span>
+                            </>
+                          ) : (
+                            <div className="d-flex my-2 justify-content-between">
+                              <label>Kəşf. məzun.</label>
+                              <input
+                                type="number"
+                                value={info.kesfMezun}
+                                onChange={handleInput}
+                                name="kesfMezun"
+                                className="form-control w-100"
+                              />
+                              <input
+                                type="number"
+                                value={
+                                  (info.discountDsmf * info.kesfMezun) / 100
+                                }
+                                className="form-control w-100"
+                              />
+                              <input
+                                value={
+                                  info.kesfMezun -
+                                  (info.discountDsmf * info.kesfMezun) / 100
+                                }
+                                type="number"
+                                className="form-control w-100"
+                              />
+                            </div>
+                          )}
 
-                          <div className="d-flex my-2 justify-content-between">
-                            <label>Kəşf. məzun.</label>
-                            <input
-                              type="number"
-                              value={info.kesfMezun}
-                              onChange={handleInput}
-                              name="kesfMezun"
-                              className="form-control w-100"
-                            />
-                            <input
-                              type="number"
-                              value={(info.discountDsmf * info.kesfMezun) / 100}
-                              className="form-control w-100"
-                            />
-                            <input
-                              value={
-                                info.kesfMezun -
-                                (info.discountDsmf * info.kesfMezun) / 100
-                              }
-                              type="number"
-                              className="form-control w-100"
-                            />
-                          </div>
+                          {aid.bpmMonth !== 0 ? (
+                            <>
+                              <label>BPM</label>
+                              <span>{aid.bpmdMonth} ay köçb.</span>
+                            </>
+                          ) : (
+                            <div className="d-flex my-2 justify-content-between">
+                              <label>BPM</label>
 
-                          <div className="d-flex my-2 justify-content-between">
-                            <label>BPM</label>
+                              <input
+                                type="number"
+                                disabled={!info.isBPMGiven}
+                                value={info.bpm}
+                                name="bpm"
+                                onChange={handleInput}
+                                className="form-control w-100"
+                              />
+                              <input
+                                type="number"
+                                value={info.bpmdsmf}
+                                disabled={!info.isBPMGiven}
+                                onChange={handleInput}
+                                name="bpmdsmf"
+                                className="form-control w-100"
+                              />
+                              <input
+                                type="number"
+                                value={info.bpm - info.bpmdsmf}
+                                className="form-control w-100"
+                              />
+                            </div>
+                          )}
 
-                            <input
-                              type="number"
-                              disabled={!info.isBPMGiven}
-                              value={info.bpm}
-                              name="bpm"
-                              onChange={handleInput}
-                              className="form-control w-100"
-                            />
-                            <input
-                              type="number"
-                              value={info.bpmdsmf}
-                              disabled={!info.isBPMGiven}
-                              onChange={handleInput}
-                              name="bpmdsmf"
-                              className="form-control w-100"
-                            />
-                            <input
-                              type="number"
-                              value={info.bpm - info.bpmdsmf}
-                              className="form-control w-100"
-                            />
-                          </div>
-
-                          <div className="d-flex my-2 justify-content-between">
-                            <label>Çıxış müavinatı</label>
-                            <input
-                              type="number"
-                              disabled={!info.isExitAidGiven}
-                              value={info.exitAid}
-                              onChange={handleInput}
-                              name="exitAid"
-                              className="form-control w-100"
-                            />
-                            <input
-                              type="number"
-                              disabled={!info.isExitAidGiven}
-                              value={info.exitAidDSMF}
-                              name="exitAidDSMF"
-                              className="form-control w-100"
-                            />
-                            <input
-                              value={info.exitAid - info.exitAidDSMF}
-                              type="number"
-                              className="form-control w-100"
-                            />
-                          </div>
+                          {aid.cixisMuvMonth !== 0 ? (
+                            <>
+                              <label>Çıxış müavinatı</label>
+                              <span>{aid.cixisMuvMonth} ay köçb.</span>
+                            </>
+                          ) : (
+                            <div className="d-flex my-2 justify-content-between">
+                              <label>Çıxış müavinatı</label>
+                              <input
+                                type="number"
+                                disabled={!info.isExitAidGiven}
+                                value={info.exitAid}
+                                onChange={handleInput}
+                                name="exitAid"
+                                className="form-control w-100"
+                              />
+                              <input
+                                type="number"
+                                disabled={!info.isExitAidGiven}
+                                value={info.exitAidDSMF}
+                                name="exitAidDSMF"
+                                className="form-control w-100"
+                              />
+                              <input
+                                value={info.exitAid - info.exitAidDSMF}
+                                type="number"
+                                className="form-control w-100"
+                              />
+                            </div>
+                          )}
                         </Col>
 
                         <Col md={1}>
                           <div className="d-flex ms-4 flex-column mt-3 justify-content-center align-items-center ">
-                            <label className="normal-label d-flex align-items-center z-index-highest my-2">
+                            <label
+                              style={{
+                                opacity: aid.financialAidMonth === 0 ? 1 : 0,
+                              }}
+                              className="normal-label d-flex align-items-center z-index-highest my-2"
+                            >
                               <label className="normal-label">Verilir</label>
                               <input
                                 type="checkbox"
@@ -1402,8 +1456,16 @@ const CalculatingModal = () => {
                                 onChange={handleCheckbox}
                               />
                             </label>
+
                             <label className="normal-label d-flex align-items-center z-index-highest my-2">
-                              <label className="normal-label">Verilir</label>
+                              <label
+                                style={{
+                                  opacity: aid.vacationMonth === 0 ? 1 : 0,
+                                }}
+                                className="normal-label d-flex align-items-center z-index-highest my-2"
+                              >
+                                Verilir
+                              </label>
                               <input
                                 type="checkbox"
                                 title="Verilmir"
@@ -1412,12 +1474,19 @@ const CalculatingModal = () => {
                                 onChange={handleCheckbox}
                               />
                             </label>
+
                             <label className="normal-label d-flex align-items-center z-index-highest my-2">
                               <label className="normal-label">Verilir</label>
                               <input type="checkbox" title="Verilmir" />
                             </label>
+
                             <label className="normal-label d-flex align-items-center z-index-highest my-2">
-                              <label className="normal-label">Verilir</label>
+                              <label
+                                style={{ opacity: aid.bpmMonth === 0 ? 1 : 0 }}
+                                className="normal-label"
+                              >
+                                Verilir
+                              </label>
                               <input
                                 type="checkbox"
                                 title="Verilmir"
@@ -1426,8 +1495,16 @@ const CalculatingModal = () => {
                                 onChange={handleCheckbox}
                               />
                             </label>
+
                             <label className="normal-label d-flex align-items-center z-index-highest my-2">
-                              <label className="normal-label">Verilir</label>
+                              <label
+                                style={{
+                                  opacity: aid.cixisMuvMonth === 0 ? 1 : 0,
+                                }}
+                                className="normal-label"
+                              >
+                                Verilir
+                              </label>
                               <input
                                 type="checkbox"
                                 title="Verilmir"
@@ -1438,6 +1515,7 @@ const CalculatingModal = () => {
                             </label>
                           </div>
                         </Col>
+
                         <Col className="p-0 mt-3" md={4}>
                           <div>
                             <label className="d-flex my-2 min-width-30">

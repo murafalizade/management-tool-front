@@ -140,6 +140,10 @@ namespace WebApplication1.Services
                 {
                     employee.RecordDate = employee.RecordDate.AddMonths(1);
                     employee.Id = 0;
+                    employee.IsFinancialAidGiven = false;
+                    employee.IsVacationGiven = false;
+                    employee.IsBPMGiven = false;
+
                     await _employeeSalaryRecordRepository.AddEmployee(employee);
                 }
 
@@ -375,7 +379,8 @@ namespace WebApplication1.Services
             byte[] fileBytes = package.GetAsByteArray();
             return fileBytes;
         }
-        public async Task<byte[]> ExportDistribution(string search, int month, int year){
+        public async Task<byte[]> ExportDistribution(string search, int month, int year)
+        {
             // export excel
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             List<EmployeeSalaryResultDto> data = _mapper.Map<List<EmployeeSalaryResultDto>>(await _employeeSalaryRecordRepository.GetEmployees(search, month, year));
@@ -408,9 +413,10 @@ namespace WebApplication1.Services
             // Convert the Excel package to a byte array
             byte[] fileBytes = package.GetAsByteArray();
             return fileBytes;
-        
+
         }
-        public async Task<byte[]> ExportReestr(string search, int month, int year){
+        public async Task<byte[]> ExportReestr(string search, int month, int year)
+        {
             // export excel
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             List<EmployeeReestrDto> data = await _employeeSalaryRecordRepository.GetEmployeeReestr(search, month, year);
@@ -437,7 +443,7 @@ namespace WebApplication1.Services
             // Convert the Excel package to a byte array
             byte[] fileBytes = package.GetAsByteArray();
             return fileBytes;
-        
+
         }
 
         public async Task<ErrorHandelerDto> AddKirayeQat(int kirayeQat)
@@ -485,6 +491,19 @@ namespace WebApplication1.Services
             {
                 await _employeeSalaryRecordRepository.AddBPMQat(bpmQat);
                 return new ErrorHandelerDto { isError = false, data = "Əməliyyat uğurla yerinə yetirildi" };
+            }
+            catch (Exception)
+            {
+                return new ErrorHandelerDto { isError = true, data = "U" };
+            }
+        }
+
+        public async Task<ErrorHandelerDto> GetAidStatus(int recordId)
+        {
+            try
+            {
+                var res = await _employeeSalaryRecordRepository.GetAidStatus(recordId);
+                return new ErrorHandelerDto { isError = false, data =  res };
             }
             catch (Exception)
             {

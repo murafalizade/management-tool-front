@@ -1,0 +1,18 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\API",
+    "\\API\\WebApplication1",
+    "\\API\\WebApplication1\\Models",
+    "\\Frontend",
+    "\\Frontend\\src",
+    "\\Frontend\\src\\app",
+    "\\Frontend\\src\\app\\api",
+    "\\Frontend\\src\\app\\components",
+    "\\Frontend\\src\\app\\components\\layouts",
+    "\\Frontend\\src\\app\\components\\modals",
+    "\\Frontend\\src\\app\\pages"
+  ],
+  "SelectedNode": "\\Frontend\\src\\app\\components\\modals\\CalculatingModal.tsx",
+  "PreviewInSolutionExplorer": false
+}

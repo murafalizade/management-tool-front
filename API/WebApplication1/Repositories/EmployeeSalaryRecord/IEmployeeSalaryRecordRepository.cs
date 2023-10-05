@@ -18,5 +18,6 @@ namespace WebApplication1.Repositories
         Task AddVeteranQat(int veteranQat);
         Task AddBPMQat (int bpmQat);
         Task<EmployeeSalaryRecord> GetLastEmployeeRecord();
+        Task<EmployeeAidStatusDto> GetAidStatus(int recordId);
     }
 }
