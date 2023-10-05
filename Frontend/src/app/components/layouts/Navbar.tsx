@@ -119,8 +119,11 @@ function Layout() {
   };
 
   const exportDistribution = async (slug:string) => {
-    try{
-      const response = await OperationService.getExcelDistribution(9,2023, slug);
+      try {
+          const now = new Date();
+          const year = now.getFullYear(); // Get the current year as a four-digit number (e.g., 2023)
+          const month = now.getMonth() + 1; // Get
+      const response = await OperationService.getExcelDistribution(month,year, slug);
       const url = URL.createObjectURL(response);
   
       const link = document.createElement("a");
@@ -140,8 +143,10 @@ function Layout() {
 
   const exportReestr = async (slug:string) => {
     try{
-      
-      const response =await OperationService.getExcelReestr(9,2023,slug);
+        const now = new Date();
+        const year = now.getFullYear(); // Get the current year as a four-digit number (e.g., 2023)
+        const month = now.getMonth() + 1; // Get
+      const response =await OperationService.getExcelReestr(month,year,slug);
     const url = URL.createObjectURL(response);
 
     const link = document.createElement("a");
