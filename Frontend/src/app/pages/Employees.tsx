@@ -163,10 +163,10 @@ function Create() {
         <Button onClick={() => deleteEmployee()} className="mx-2">
           <MdDelete /> Sil
         </Button>
-        <Button className="mx-2">B3 forma</Button>
+        <Button className="mx-2">B3 forma</Button> 
       </div>
 
-      <div style={{ overflowX: "scroll" }}>
+      <div className="employee-container">
         <Table className="employee-table" bordered hover {...getTableProps()}>
           <thead>
             <tr className="text-center" style={{ backgroundColor: "#f4f4f4" }}>

@@ -38,11 +38,17 @@ namespace WebApplication1.Repositories
             int yearInt = (int)year;
             int monthInt = (int)month;
             var targetDate = new DateTime(yearInt, monthInt, 1);
+            if(targetDate.Date.Month > monthInt || targetDate.Date.Year > yearInt)
+            {
+                return null;
+            }
+            var discount = await _context.Discounts
+                .Where(d => d.CreatedAt.Date.Month <= targetDate.Date.Month
+                            && d.CreatedAt.Date.Year <= targetDate.Date.Year)
+                .OrderByDescending(d => d.CreatedAt)
+                .FirstOrDefaultAsync();
 
-            var exactDiscount = await _context.Discounts
-                .FirstOrDefaultAsync(d => d.CreatedAt.Date <= targetDate.Date);
-
-            return exactDiscount;
+            return discount;
         }
 
         public async Task<Discount> GetDiscounts(int id)

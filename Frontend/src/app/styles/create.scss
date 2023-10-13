@@ -6,10 +6,12 @@
     font-size: 13px;
     margin-top: 10px;
     margin-bottom: 10px;
-    overflow-x: scroll;
 }
 
-
+.employee-container{
+    width: 100%;
+    overflow: scroll;
+}
 
 
 .table_input{

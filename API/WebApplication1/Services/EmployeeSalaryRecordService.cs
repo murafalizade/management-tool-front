@@ -385,17 +385,204 @@ namespace WebApplication1.Services
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             List<EmployeeSalaryResultDto> data = _mapper.Map<List<EmployeeSalaryResultDto>>(await _employeeSalaryRecordRepository.GetEmployees(search, month, year));
             using var package = new ExcelPackage();
+            
             var worksheet = package.Workbook.Worksheets.Add("Sheet1");
-            worksheet.Cells[1, 1].Value = "Sırası";
-            worksheet.Cells[1, 2].Value = "Rütbəsi";
-            worksheet.Cells[1, 3].Value = "Adı, Soyadı";
-            worksheet.Cells[1, 4].Value = "Hesablanıb";
-            worksheet.Cells[1, 5].Value = "Cəmi";
-            worksheet.Cells[1, 6].Value = "Tutulur";
-            worksheet.Cells[1, 7].Value = "Veriləcək məbləğ";
+
+            worksheet.Column(1).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            worksheet.Column(2).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            worksheet.Column(3).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            worksheet.Column(4).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            worksheet.Column(5).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            worksheet.Column(6).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            worksheet.Column(7).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            worksheet.Column(8).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            
+            worksheet.Column(2).Width = 30;
+            worksheet.Column(3).Width = 30;
+            worksheet.Column(4).Width = 30;
+            worksheet.Column(7).Width = 30;
+            worksheet.Column(8).Width = 20;
+
+
+            worksheet.Cells[3,1].Value = "P A Y L A M A   C Ə D V Ə L İ №";
+            worksheet.Cells[3, 1, 3, 8].Merge = true;
+            string distributionName = "";
+            switch(search){
+                 case "aliment":
+                distributionName = "Əlilliyin təminatı";
+                break;
+
+            case "extra211100":
+                distributionName = "Əlavə 211100";
+                break;
+
+            case "fexri":
+                distributionName = "Fəxri adın qiyməti";
+                break;
+
+            case "kesfiyyat":
+                distributionName = "Tədqiqatın qiyməti";
+                break;
+
+            case "mexficilik":
+                distributionName = "Məxfilik haqqı";
+                break;
+
+            case "kesfMezun":
+                distributionName = "Kəşf məzuniyyəti";
+                break;
+
+            case "kesfXeste":
+                distributionName = "Kəşf xəstəsi";
+                break;
+
+            case "food":
+                distributionName = "Yemək haqqı";
+                break;
+
+            case "yukPulu":
+                distributionName = "Yük pulu";
+                break;
+
+            case "cixisMuv":
+                distributionName = "Çıxış köməyi";
+                break;
+
+            case "bpm":
+                distributionName = "BPM";
+                break;
+
+            case "erzaq":
+                distributionName = "Ərzaq təminatı";
+                break;
+
+            case "texris":
+                distributionName = "Təxir təminatı";
+                break;
+
+            case "mezuniyyet":
+                distributionName = "Tətil haqqı";
+                break;
+
+            case "ezamiyyet":
+                distributionName = "Səfər təminatı";
+                break;
+
+            case "kesir":
+                distributionName = "Kəsir";
+                break;
+
+            case "zererli":
+                distributionName = "Zərərli";
+                break;
+
+            case "meharetlilik":
+                distributionName = "Bacarığın qiyməti";
+                break;
+
+            case "temsilcilik":
+                distributionName = "Təmsilçilik";
+                break;
+
+            case "yol":
+                distributionName = "Səyahət xərcləri";
+                break;
+
+            case "yuk":
+                distributionName = "Yük pulu";
+                break;
+
+            case "kiraye":
+                distributionName = "Kira məbləği";
+                break;
+
+            case "maddi":
+                distributionName = "Maddi yardım";
+                break;
+
+            case "daimi":
+                distributionName = "Daimi qat";
+                break;
+
+            case "qat":
+                distributionName = "Qat";
+                break;
+
+            case "maddiyardimalmayanlar":
+                distributionName = "Maddi yardım almayanlar";
+                break;
+
+            case "mezuniyyetalmayanlar":
+                distributionName = "Tətil haqqı almayanlar";
+                break;
+
+            case "muharibe":
+                distributionName = "Müharibə veteranı";
+                break;
+
+            case "elil":
+                distributionName = "Əlillik dərəcəsi";
+                break;
+
+            case "qachqin":
+                distributionName = "Qaçqın";
+                break;
+
+            case "sehid":
+                distributionName = "Şəhid";
+                break;
+
+            case "himayeder":
+                distributionName = "Himayədar";
+                break;
+
+            case "cernobil":
+                distributionName = "Çernobil";
+                break;
+
+            case "sahra":
+                distributionName = "Saxara qiyməti";
+                break;
+
+            case "elmi":
+                distributionName = "Elmi dərəcənin qiyməti";
+                break;
+
+            case "cixis":
+                distributionName = "Xarici dil təhsili";
+                break;
+            case "esas":
+                distributionName = "Əsas";
+                break;
+
+            default:
+                distributionName = ""; // Handle the default case
+                break;
+            }
+            worksheet.Cells[5,1].Value = distributionName + " görə pul kompensasiyası (ay, il) ödəniş üçün";
+            worksheet.Cells[5,1].Style.Font.Bold = true;
+            worksheet.Cells[5, 1, 5, 8].Merge = true;
+
+
+            worksheet.Cells[6,1].Value = "Müdafiə Nazirliyi hərbi qulluqçularına";
+            worksheet.Cells[6,1].Style.Font.Bold = true;
+            worksheet.Cells[6, 1, 6, 8].Merge = true;
+
+            worksheet.Cells[8,1].Value = "Əsas: MN-in əmirlərindən çıxarış";
+            worksheet.Cells[8, 1, 8, 8].Merge = true;
+
+
+            worksheet.Cells[10, 1].Value = "Sırası";
+            worksheet.Cells[10, 2].Value = "Rütbəsi";
+            worksheet.Cells[10, 3].Value = "Adı, Soyadı";
+            worksheet.Cells[10, 4].Value = "Hesablanıb";
+            worksheet.Cells[10, 5].Value = "Cəmi";
+            worksheet.Cells[10, 6].Value = "Tutulur";
+            worksheet.Cells[10, 7].Value = "Veriləcək məbləğ";
+            worksheet.Cells[10, 8].Value = "Alanın imzası";
 
             // Fill data rows
-            int row = 2;
+            int row = 11;
             int j = 0;
             foreach (EmployeeSalaryResultDto item in data)
             {
@@ -403,10 +590,10 @@ namespace WebApplication1.Services
                 worksheet.Cells[row, 1].Value = item.Id;
                 worksheet.Cells[row, 2].Value = item.RankName;
                 worksheet.Cells[row, 3].Value = item.FullName;
-                worksheet.Cells[row, 4].Value = item.TotalSalary;
-                worksheet.Cells[row, 5].Value = item.TotalSalary;
-                worksheet.Cells[row, 6].Value = item.TotalDiscount;
-                worksheet.Cells[row, 7].Value = item.TotalGiven;
+                worksheet.Cells[row, 4].Value = item.TotalIncome;
+                worksheet.Cells[row, 5].Value = item.TotalGiven;
+                worksheet.Cells[row, 6].Value = item.TotalTaken;
+                worksheet.Cells[row, 7].Value = item.TotalSalary;
                 row++;
             }
 
@@ -422,21 +609,49 @@ namespace WebApplication1.Services
             List<EmployeeReestrDto> data = await _employeeSalaryRecordRepository.GetEmployeeReestr(search, month, year);
             using var package = new ExcelPackage();
             var worksheet = package.Workbook.Worksheets.Add("Sheet1");
-            worksheet.Cells[1, 1].Value = "Sırası";
-            worksheet.Cells[1, 2].Value = "Soyadı, Adı, Atasının adı";
-            worksheet.Cells[1, 3].Value = "XKH №";
-            worksheet.Cells[1, 4].Value = "Məbləğ";
+            worksheet.Column(2).Width = 30;
+            worksheet.Column(3).Width = 30;
+
+            worksheet.Column(1).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            worksheet.Column(2).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            worksheet.Column(3).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            worksheet.Column(4).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+            worksheet.Cells[1, 1].Value = "A3191BA33342332432";
+            worksheet.Cells[1, 1].Style.Font.Bold = true;
+            worksheet.Cells[1, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+
+            worksheet.Cells[2, 1].Value = "DOVLET MUDAFIE NAZIRIYI E/H";
+            worksheet.Cells[2, 1].Style.Font.Bold = true;
+            worksheet.Cells[2, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+
+            worksheet.Cells[3, 1].Value = "VÖEN: 130162621";
+            worksheet.Cells[3, 1].Style.Font.Bold = true;
+            worksheet.Cells[3, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+
+            
+            worksheet.Cells[5, 1].Value = DateTime.Now.Year + "-cu ilin " + "___ ayı üçün pul təminatı";
+            worksheet.Cells[5, 1, 5, 4].Merge = true;
+
+            worksheet.Cells[6, 1].Value = "R E Y E S T R I";
+            worksheet.Cells[6, 1, 6, 4].Merge = true;
+            
+            worksheet.Cells[8, 1].Value = "Sıra №-si";
+            worksheet.Cells[8, 2].Value = "Soyadı, adı, atasının adı";
+            worksheet.Cells[8, 3].Value = "XKH №";
+            worksheet.Cells[8, 4].Value = "Məbləğ";
 
             // Fill data rows
-            int row = 2;
+            int row = 9;
             int j = 0;
             foreach (EmployeeReestrDto item in data)
             {
                 j++;
                 worksheet.Cells[row, 1].Value = j;
                 worksheet.Cells[row, 2].Value = item.FullName;
-                worksheet.Cells[row, 3].Value = item.Comment;
+                worksheet.Cells[row, 3].Value = item.AccountNumber;
                 worksheet.Cells[row, 4].Value = item.Salary;
+                worksheet.Cells[row, 4].Style.Numberformat.Format = "#,##0"; // Set the format
                 row++;
             }
 

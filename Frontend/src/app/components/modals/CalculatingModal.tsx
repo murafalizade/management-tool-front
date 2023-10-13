@@ -51,6 +51,7 @@ const CalculatingModal = () => {
   const [abilities, setAbilities] = useState<any[]>([]);
   const [total, setTotal] = useState<number>(0);
   const [aid, setAid] = useState<any>({});
+  const [allPositions, setAllPositions] = useState<any[]>([]);
 
   const [selectedOptions, setSelectedOptions] = useState<any>({});
 
@@ -175,6 +176,10 @@ const CalculatingModal = () => {
       state.show
     );
 
+    // Get aid status
+    const aidStatus = await EmployeeService.getAidStatus(state.show);
+    setAid(aidStatus);
+
     setTotalDiscount(record.totalDiscount);
 
     setInfo({
@@ -200,31 +205,30 @@ const CalculatingModal = () => {
     const honorTitle = await OperationService.getFexriAd();
     setHonorTitle(honorTitle);
 
-    // Get Adminstrator
-    const adminstrator = await OperationService.getAdminstration();
-    setAdminstrators(adminstrator.data);
+    // // Get Adminstrator
+    // const adminstrator = await OperationService.getAdminstration();
+    // setAdminstrators(adminstrator.data);
+
+    // Get all positions
+    const allPositions = await OperationService.getAdminstrationByAll();
+    setAllPositions(allPositions);
 
     // Get Language skills
     const languageSkills = await OperationService.getXariciDil();
     setLanguageSkills(languageSkills);
 
-    // Get Organizations
-    const organization = await OperationService.getOrganization();
-    setOrganizations(organization.data);
+    // // Get Organizations
+    // const organization = await OperationService.getOrganization();
+    // setOrganizations(organization.data);
 
-    // Get Positions
-    const position = await OperationService.getPosition();
-    setPositions(position);
+    // // Get Positions
+    // const position = await OperationService.getPosition();
+    // setPositions(position);
 
     // Get Abilities
     const abilities = await OperationService.getMeharet();
     setAbilities(abilities);
 
-    // Get aid status
-    const aidStatus = await EmployeeService.getAidStatus(state.show);
-    setAid(aidStatus);
-
-    console.log(aidStatus);
   };
 
   const getRent = async () => {
@@ -425,12 +429,15 @@ const CalculatingModal = () => {
                     İdarə:{" "}
                     <select
                       className="form-control w-50 ms-4"
-                      value={info.positionDepartmentAdminstrationId}
-                      name="positionDepartmentAdminstration"
+                      value={info.positionId}
+                      name="position"
                       onChange={handleSelectInput}
                     >
-                      {adminstrators.map((x: any) => (
-                        <option value={x.id}>{x.name}</option>
+                      <option value={""}>Seç</option>
+                      {allPositions.map((x: any) => (
+                        <option value={x.positionId}>
+                          {x.organizationName}
+                        </option>
                       ))}
                     </select>
                   </li>
@@ -442,61 +449,16 @@ const CalculatingModal = () => {
                       name="position"
                       onChange={handleSelectInput}
                     >
-                      {!info.positionDepartmentId &&
-                      !info.positionDepartmentAdminstrationId
-                        ? positions
-                            .filter(
-                              (position) =>
-                                position.departmentId === organizations[0].id
-                            )
-                            .map((x: any) => (
-                              <option value={x.id}>{x.name}</option>
-                            ))
-                        : positions
-                            .filter(
-                              (position) =>
-                                position.departmentId !== organizations[0].id &&
-                                position.departmentId ===
-                                  info.positionDepartmentId
-                            )
-                            .map((x: any) => (
-                              <option value={x.id}>{x.name}</option>
-                            ))}{" "}
-                      ??
-                      {!info.positionDepartmentId &&
-                      info.positionDepartmentAdminstrationId
-                        ? positions
-                            .filter(
-                              (position) =>
-                                position.departmentId ===
-                                [
-                                  organizations.filter(
-                                    (org) =>
-                                      org.adminstrationId ==
-                                      info.positionDepartmentAdminstrationId
-                                  ),
-                                ][0].map((y: any) => y.id)[0]
-                            )
-                            .map((x: any) => (
-                              <option value={x.id}>{x.name}</option>
-                            ))
-                        : positions
-                            .filter(
-                              (position) =>
-                                position.departmentId !==
-                                  [
-                                    organizations.filter(
-                                      (org) =>
-                                        org.adminstrationId ==
-                                        info.positionDepartmentAdminstrationId
-                                    ),
-                                  ][0].map((y: any) => y.id)[0] &&
-                                position.departmentId ===
-                                  info.positionDepartmentId
-                            )
-                            .map((x: any) => (
-                              <option value={x.id}>{x.name}</option>
-                            ))}
+                      <option value={""}>Seç</option>
+                      {allPositions
+                        .filter((x) =>
+                          info.positionId
+                            ? x.positionId === info.positionId
+                            : true
+                        )
+                        .map((x: any) => (
+                          <option value={x.positionId}>{x.positionName}</option>
+                        ))}
                     </select>
                   </li>
                 </div>
@@ -505,31 +467,14 @@ const CalculatingModal = () => {
                     Şöbə:
                     <select
                       className="form-control w-50 ms-3"
-                      value={info.positionDepartmentId}
-                      name="positionDepartment"
+                      value={info.positionId}
+                      name="position"
                       onChange={handleSelectInput}
                     >
-                      {!info.positionDepartmentAdminstrationId
-                        ? organizations
-                            .filter(
-                              (organization) =>
-                                organization.adminstrationId ===
-                                adminstrators[0].id
-                            )
-                            .map((x: any) => (
-                              <option value={x.id}>{x.name}</option>
-                            ))
-                        : organizations
-                            .filter(
-                              (organization) =>
-                                organization.adminstrationId !==
-                                  adminstrators[0].id &&
-                                organization.adminstrationId ===
-                                  info.positionDepartmentAdminstrationId
-                            )
-                            .map((x: any) => (
-                              <option value={x.id}>{x.name}</option>
-                            ))}
+                      <option value={""}>Seç</option>
+                      {allPositions.map((x: any) => (
+                        <option value={x.positionId}>{x.departmentName}</option>
+                      ))}
                     </select>
                   </li>
                 </div>
@@ -544,6 +489,7 @@ const CalculatingModal = () => {
                 name="rank"
                 onChange={handleSelectInput}
               >
+                <option value={""}>Seç</option>
                 {ranks.map((x) => (
                   <option key={x.id} value={x.id}>
                     {x.name}
@@ -702,7 +648,9 @@ const CalculatingModal = () => {
                         value={info.abilityId}
                         className="form-control text-center date-input w-25 mx-2"
                       >
+                        <option value={abilities.find(x=> x.name === "Verilmir")?.id}>Verilmir</option>
                         {abilities
+                          .filter((x) => x.name !== "Verilmir")
                           .sort((a, b) => a.name.localeCompare(b.name))
                           .map((x: any) => (
                             <option value={x.id}>{x.name}</option>
@@ -780,7 +728,11 @@ const CalculatingModal = () => {
                         value={info.foreignLanguageId}
                         className="form-control date-input w-100 mx-1"
                       >
-                        {languageSkills.map((x: any) => (
+                        <option value={languageSkills.find(x=> x.name === "Verilmir")?.id}>Verilmir</option>
+
+                        {languageSkills.
+                        filter((x) => x.name !== "Verilmir").
+                        map((x: any) => (
                           <option value={x.id}>{x.name}</option>
                         ))}
                       </select>
@@ -840,7 +792,10 @@ const CalculatingModal = () => {
                         value={info.scientificDegreeId}
                         className="form-control date-input w-100 mx-2"
                       >
-                        {scientificDegrees.map((x: any) => (
+                        <option value={scientificDegrees.find(x=> x.name === "Verilmir")?.id}>Verilmir</option>
+                        {scientificDegrees.
+                        filter((x) => x.name !== "Verilmir").
+                        map((x: any) => (
                           <option value={x.id}>{x.name}</option>
                         ))}
                       </select>
@@ -884,7 +839,10 @@ const CalculatingModal = () => {
                         value={info.honorTitleId}
                         className="form-control date-input w-100 mx-2"
                       >
-                        {honorTitle.map((x: any) => (
+                        <option value={honorTitle.find(x=> x.name === "Verilmir")?.id}>Verilmir</option>
+                        {honorTitle
+                        .filter((x) => x.name !== "Verilmir")
+                        .map((x: any) => (
                           <option value={x.id}>{x.name}</option>
                         ))}
                       </select>
@@ -1282,8 +1240,11 @@ const CalculatingModal = () => {
                           </div>
                           {aid.financialAidMonth !== 0 ? (
                             <>
-                              <label className="w-100">Maddi yardim
-                              <span className="ms-2">{aid.financialAidMonth} ay köçb.</span>
+                              <label className="w-100">
+                                Maddi yardim
+                                <span className="ms-2">
+                                  {aid.financialAidMonth} ay köçb.
+                                </span>
                               </label>
                             </>
                           ) : (
@@ -1313,8 +1274,11 @@ const CalculatingModal = () => {
 
                           {aid.vacationMonth !== 0 ? (
                             <>
-                              <label className="w-100">Məzuniyyət
-                              <span className="ms-3">{aid.vacationMonth} ay köçb.</span>
+                              <label className="w-100">
+                                Məzuniyyət
+                                <span className="ms-3">
+                                  {aid.vacationMonth} ay köçb.
+                                </span>
                               </label>
                             </>
                           ) : (
@@ -1345,8 +1309,11 @@ const CalculatingModal = () => {
                           )}
                           {aid.kesfMezunMonth !== 0 ? (
                             <>
-                              <label className="w-100">Kəşf. məzun.
-                              <span className="ms-2">{aid.kesfMezunMonth} ay köçb.</span>
+                              <label className="w-100">
+                                Kəşf. məzun.
+                                <span className="ms-2">
+                                  {aid.kesfMezunMonth} ay köçb.
+                                </span>
                               </label>
                             </>
                           ) : (
@@ -1379,8 +1346,11 @@ const CalculatingModal = () => {
 
                           {aid.bpmMonth !== 0 ? (
                             <>
-                              <label className="w-100">BPM
-                              <span className="ms-2">{aid.bpmdMonth} ay köçb.</span>
+                              <label className="w-100">
+                                BPM
+                                <span className="ms-2">
+                                  {aid.bpmdMonth} ay köçb.
+                                </span>
                               </label>
                             </>
                           ) : (
@@ -1412,8 +1382,11 @@ const CalculatingModal = () => {
 
                           {aid.cixisMuvMonth !== 0 ? (
                             <>
-                              <label className="w-100">Çıxış müavinatı
-                              <span className="ms-2">{aid.cixisMuvMonth} ay köçb.</span>
+                              <label className="w-100">
+                                Çıxış müavinatı
+                                <span className="ms-2">
+                                  {aid.cixisMuvMonth} ay köçb.
+                                </span>
                               </label>
                             </>
                           ) : (

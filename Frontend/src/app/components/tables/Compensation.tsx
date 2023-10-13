@@ -42,7 +42,7 @@ const Compensation = () => {
         <div className="d-flex h-75">
           <input
             type="number"
-            max="2023"
+            max={moment().format("YYYY")}
             name="year"
             onChange={handleChange}
             defaultValue={filter.year}
@@ -170,7 +170,7 @@ const Compensation = () => {
                   Çernobıl (AZN)
                 </p>
                 <input
-                  value={discount.chernobil}
+                  value={discount.chernobyl}
                   type="number"
                   className="form-control w-25 h-50"
                 />
@@ -181,7 +181,7 @@ const Compensation = () => {
                   Qaçqın (AZN)
                 </p>
                 <input
-                  value={discount?.qachqin}
+                  value={discount?.refugee}
                   type="number"
                   className="form-control w-25 h-50"
                 />

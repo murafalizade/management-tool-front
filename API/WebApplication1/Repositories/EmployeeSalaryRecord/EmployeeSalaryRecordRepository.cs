@@ -414,7 +414,7 @@ namespace WebApplication1.Repositories
             var resultDtos =  query.Select(record => new EmployeeReestrDto
             {
                 FullName = record.FullName,
-                Comment = record.AccountNumber,
+                AccountNumber = record.AccountNumber,
                 Salary = searchValue[search].Compile().Invoke(record)
             }).ToListAsync();
 

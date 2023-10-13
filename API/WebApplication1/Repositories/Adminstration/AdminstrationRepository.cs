@@ -40,7 +40,8 @@ namespace WebApplication1.Repositories
            OrganizationName = o.Name,
            DepartmentName = d.Name,
            PositionName = p.Name,
-           Salary = p.Salary
+           Salary = p.Salary,
+           PositionId = p.Id
        })))
        .ToList();
         }

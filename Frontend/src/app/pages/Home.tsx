@@ -88,8 +88,8 @@ function Home() {
 
   // Navigate to personal account when clicked
   const personalAccount = () => {
-    if (!selectedColumn) {
-      alert("Please select a row");
+    if (!selectedColumn || !selectedColumn.employeeId) {
+      toast.info("Hərbi qulluqçu seçilməyib!");
       return;
     }
     nav(`/employees/${selectedColumn.employeeId}`);
