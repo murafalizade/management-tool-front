@@ -172,11 +172,11 @@ namespace WebApplication1.Models
 
                 if (Ability != null && Position != null)
                 {
-                    if (Position.Name == "zabit")
+                    if (Rank.Name == "zabit")
                     {
                         _abilityPrice = _positionSalary * Ability.ForZabitPercentage / 100;
                     }
-                    else if (Position.Name != "esger")
+                    else if (Position.Name == "gizir")
                     {
                         _abilityPrice = _positionSalary * Ability.ForGizirPercentage / 100;
                     }
@@ -298,7 +298,6 @@ namespace WebApplication1.Models
             {
                 if (HonorTitle != null)
                 {
-                    Console.WriteLine("HonorTitlePrice is not null ");
                     _honorTitlePrice = HonorTitle.Salary;
                 }
                 else
