@@ -279,7 +279,7 @@ function Home() {
                         <React.Fragment key={i}>
                           <td {...cell.getCellProps()}>
                             <div
-                            style={{ width: `${cell.column.width}px`, minWidth:"100%" }}
+                            style={{ width: `${cell.column.width}px`, minWidth:"100%", wordBreak:"break-all", whiteSpace:"normal"  }}
                             />
                             {new Date(row.values.date).toLocaleDateString()}
                           </td>
@@ -289,7 +289,7 @@ function Home() {
                       return (
                         <td {...cell.getCellProps()}>
                           <div
-                            style={{ width: `${cell.column.width}px`, minWidth:"100%" }}
+                            style={{ width: `${cell.column.width}px`, minWidth:"100%", wordBreak:"break-all", whiteSpace:"normal"  }}
                           >
                             {cell.render("Cell")}
                           </div>
