@@ -178,7 +178,7 @@ const CalculatingModal = () => {
       ...record,
       permanentRankSalary: record.rankSalary,
       permanentPositionSalary: record.positionSalary,
-      isChanged:true
+      isChanged: true,
     });
 
     // Get rank list
@@ -230,9 +230,8 @@ const CalculatingModal = () => {
 
   useEffect(() => {
     if (state.show === 0) return;
-    getRecord()
+    getRecord();
     getRent();
-
   }, [state.show]);
 
   useEffect(() => {
@@ -241,9 +240,8 @@ const CalculatingModal = () => {
     calculate();
   }, [info.isChanged]);
 
-
   // Calculation all total salary and other stuffs
-  const calculate = () => { 
+  const calculate = () => {
     const food = info.foodGiven
       ? info?.food == 0
         ? info.discountFood
@@ -317,7 +315,7 @@ const CalculatingModal = () => {
       bpm,
       qat,
       bpmdsmf,
-      isChanged:false
+      isChanged: false,
     });
 
     setTotalAddition(info.rentPrice + food);
@@ -342,14 +340,17 @@ const CalculatingModal = () => {
     setTotalGiven(totalGivens);
 
     const dsmf = !info.isPayerHand
-      ? (info.discountDsmf* (rankSalary + positionSalary)) / 100.0
+      ? (info.discountDsmf * (rankSalary + positionSalary)) / 100.0
       : info.dsmf;
 
     const injurance = !info.isPayerHand
       ? (info.discountHealthInjurance * (rankSalary + positionSalary)) / 100.0
       : info.healthInsurance;
 
-      let taxAmount = rankSalary + positionSalary - info.discountMinWage ? rankSalary + positionSalary - info.discountMinWage : 0;
+    let taxAmount =
+      rankSalary + positionSalary - info.discountMinWage >= 0
+        ? rankSalary + positionSalary - info.discountMinWage
+        : 0;
     const tax = !info.isPayerHand
       ? // Add other calculation here VeteranTaxDiscount
         (info.discountTaxPercentage * taxAmount) / 100
@@ -402,10 +403,12 @@ const CalculatingModal = () => {
   const updateRecord = async () => {
     await EmployeeService.updateEmployeeSalaryRecord(info);
     dispatch(hideModal());
-    dispatch(showModal(0))
+    dispatch(showModal(0));
     toast.success("Əməliyyat uğurla yerinə yetirildi");
   };
 
+
+  console.log("position",selectedOptions.position, info.positionSalary,info.positionSalary);
   return (
     <>
       {state.show === 0 ? null : (
@@ -647,7 +650,13 @@ const CalculatingModal = () => {
                         value={info.abilityId}
                         className="form-control text-center date-input w-25 mx-2"
                       >
-                        <option value={abilities.find(x=> x.name === "Verilmir")?.id}>Verilmir</option>
+                        <option
+                          value={
+                            abilities.find((x) => x.name === "Verilmir")?.id
+                          }
+                        >
+                          Verilmir
+                        </option>
                         {abilities
                           .filter((x) => x.name !== "Verilmir")
                           .sort((a, b) => a.name.localeCompare(b.name))
@@ -727,13 +736,20 @@ const CalculatingModal = () => {
                         value={info.foreignLanguageId}
                         className="form-control date-input w-100 mx-1"
                       >
-                        <option value={languageSkills.find(x=> x.name === "Verilmir")?.id}>Verilmir</option>
+                        <option
+                          value={
+                            languageSkills.find((x) => x.name === "Verilmir")
+                              ?.id
+                          }
+                        >
+                          Verilmir
+                        </option>
 
-                        {languageSkills.
-                        filter((x) => x.name !== "Verilmir").
-                        map((x: any) => (
-                          <option value={x.id}>{x.name}</option>
-                        ))}
+                        {languageSkills
+                          .filter((x) => x.name !== "Verilmir")
+                          .map((x: any) => (
+                            <option value={x.id}>{x.name}</option>
+                          ))}
                       </select>
 
                       <input
@@ -791,12 +807,19 @@ const CalculatingModal = () => {
                         value={info.scientificDegreeId}
                         className="form-control date-input w-100 mx-2"
                       >
-                        <option value={scientificDegrees.find(x=> x.name === "Verilmir")?.id}>Verilmir</option>
-                        {scientificDegrees.
-                        filter((x) => x.name !== "Verilmir").
-                        map((x: any) => (
-                          <option value={x.id}>{x.name}</option>
-                        ))}
+                        <option
+                          value={
+                            scientificDegrees.find((x) => x.name === "Verilmir")
+                              ?.id
+                          }
+                        >
+                          Verilmir
+                        </option>
+                        {scientificDegrees
+                          .filter((x) => x.name !== "Verilmir")
+                          .map((x: any) => (
+                            <option value={x.id}>{x.name}</option>
+                          ))}
                       </select>
 
                       <label className="normal-label">
@@ -838,12 +861,18 @@ const CalculatingModal = () => {
                         value={info.honorTitleId}
                         className="form-control date-input w-100 mx-2"
                       >
-                        <option value={honorTitle.find(x=> x.name === "Verilmir")?.id}>Verilmir</option>
+                        <option
+                          value={
+                            honorTitle.find((x) => x.name === "Verilmir")?.id
+                          }
+                        >
+                          Verilmir
+                        </option>
                         {honorTitle
-                        .filter((x) => x.name !== "Verilmir")
-                        .map((x: any) => (
-                          <option value={x.id}>{x.name}</option>
-                        ))}
+                          .filter((x) => x.name !== "Verilmir")
+                          .map((x: any) => (
+                            <option value={x.id}>{x.name}</option>
+                          ))}
                       </select>
 
                       <label className="normal-label">

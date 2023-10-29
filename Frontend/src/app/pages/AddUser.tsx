@@ -70,7 +70,7 @@ const AddUser = () => {
     try {
       await OperationService.register(user);
       toast.success("İstifadəçi əlavə edildi!");
-
+      window.location.href = "/profile";
     } catch (error: any) {
       const err = error as AxiosError;
       toast.error((err.response?.data as string) || "Xəta baş verdi!");

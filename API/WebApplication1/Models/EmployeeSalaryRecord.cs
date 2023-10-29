@@ -80,8 +80,11 @@ namespace WebApplication1.Models
             }
             set
             {
+                Console.WriteLine("Employee");
+                Console.WriteLine(Employee.StartDate);
                 if (Employee != null)
                 {
+                    Console.WriteLine(Employee.StartDate);
                     int xIYears = DateTime.Now.Year - Employee.StartDate.Year;
                     if (xIYears <= 2 && xIYears >= 1)
                     {
