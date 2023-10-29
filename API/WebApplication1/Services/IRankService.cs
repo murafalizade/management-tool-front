@@ -13,5 +13,6 @@ namespace WebApplication1.Services
         Task<ErrorHandelerDto> UpdateRank(Rank rank);
         Task<ErrorHandelerDto> DeleteRank(int rankId);
         // Task<ErrorHandelerDto> SaveRank(List<RankBasicDto> Rank);
+        Task<ErrorHandelerDto> GetRankStatistics(int year);
     }
 }

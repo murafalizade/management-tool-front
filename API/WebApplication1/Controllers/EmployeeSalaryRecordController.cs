@@ -182,5 +182,15 @@ namespace WebApplication1.Controllers
             return BadRequest(obj.data);
         }
 
+        [HttpGet("statistics")]
+        public async Task<IActionResult> GetUniqueEmployeesStatistics([FromQuery] int year)
+        {
+            ErrorHandelerDto obj = await _employeeSalaryRecordService.GetUniqueEmployeesStatistics(year);
+            if ((bool)!obj.isError)
+            {
+                return Ok(obj.data);
+            }
+            return BadRequest(obj.data);
+        }
     }
 }

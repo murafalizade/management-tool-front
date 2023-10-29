@@ -24,6 +24,7 @@ namespace WebApplication1
             CreateMap<EmployeeSalaryRecord, EmployeeSalaryResultDto>().ReverseMap();
             CreateMap<EmployeeSalaryEditDto,EmployeeSalaryRecord>();
             CreateMap<Employee, EmployeeGetDto>();
+            CreateMap<Rank, RankDto>();
         }
 
     }

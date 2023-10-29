@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using WebApplication1.Dtos;
@@ -53,32 +54,6 @@ namespace WebApplication1.Services
             };
         }
 
-        // public async Task<ErrorHandelerDto> GetRankById(int rankId)
-        // {
-        //     if (rankId <= 0)
-        //     {
-        //         return new ErrorHandelerDto
-        //         {
-        //             StatusCode = 400,
-        //             data = "Rank Id is not valid"
-        //         };
-        //     }
-        //     var Rank = await _rankRepository.GetRankById(rankId);
-        //     if (Rank == null)
-        //     {
-        //         return new ErrorHandelerDto
-        //         {
-        //             StatusCode = 404,
-        //             data = "Rank not found"
-        //         };
-        //     }
-        //     return new ErrorHandelerDto
-        //     {
-        //         StatusCode = 200,
-        //         data = Rank
-        //     };
-        // }
-
         public async Task<ErrorHandelerDto> GetRanks()
         {
             return new ErrorHandelerDto
@@ -86,6 +61,36 @@ namespace WebApplication1.Services
                 StatusCode = 200,
                 data = await _rankRepository.GetRanks()
             };
+        }
+
+        public async Task<ErrorHandelerDto> GetRankStatistics(int year)
+        {
+            try{
+                List<RankDto> ranks = _mapper.Map<List<RankDto>>(await _rankRepository.GetRanksWithRecord());
+                
+                Dictionary<string, int> statistics = new Dictionary<string, int>();
+
+                foreach (RankDto rank in ranks)
+                {
+                    int count = 0;
+                    System.Console.WriteLine(rank.Name);
+                    count = rank.EmployeeSalaryRecords.Where(x=>x.RecordDate.Year == year).Count();
+                    statistics.Add(rank.Name, count);
+                }
+
+                return new ErrorHandelerDto
+                {
+                    StatusCode = 200,
+                    data = statistics
+                };
+            }
+            catch{
+                return new ErrorHandelerDto
+                {
+                    StatusCode = 400,
+                    data = "Error"
+                };
+            }
         }
 
         public async Task<ErrorHandelerDto> UpdateRank(Rank Rank)

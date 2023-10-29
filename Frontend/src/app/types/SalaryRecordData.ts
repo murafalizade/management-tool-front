@@ -71,5 +71,5 @@ export type SalaryRecordData = {
   tripExpense: number;
   desert: number;
   exitAid: number;
-
+  employeeFin:string;
 };

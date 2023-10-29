@@ -34,6 +34,10 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
     width: 245
   },
   {
+    Header: "FIN",
+    accessor: "employeeFin",
+  },
+  {
     Header: "Uzun müddətli Xİ",
     columns: [
       {

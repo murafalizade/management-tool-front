@@ -19,7 +19,7 @@ namespace WebApplication1.Models
         public double Owner { get; set; }
         public double Desert { get; set; }
         public double VeteranTaxDiscount { get; set; }
-        public double MinWage { get; set; }
+        public double MinWage { get; set; } = 0;
 
         public ICollection<EmployeeSalaryRecord> EmployeeSalaryRecords { get; set; }
     }

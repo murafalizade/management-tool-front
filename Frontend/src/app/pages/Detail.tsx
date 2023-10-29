@@ -113,7 +113,6 @@ const Detail = () => {
             className="mini-input form-control"
             placeholder="Total"
             min={2000}
-            defaultValue={new Date().getFullYear()}
             value={year}
             onChange={(e) => setYear(parseInt(e.target.value))}
           />
@@ -138,10 +137,10 @@ const Detail = () => {
         {/* <div style={{maxHeight:'43vh',width:"100%"}}> */}
         <Table className="main-table" bordered hover {...getTableProps()}>
           <thead>
-            {headerGroups.map((headerGroup: any) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column: any) => (
-                  <th className="text-center" {...column.getHeaderProps()} onMouseDown={(e) => handleMouseDown(e, column.Header)}>
+            {headerGroups.map((headerGroup: any, i: number) => (
+              <tr key={`HG-${i}`}  {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column: any, i: number) => (
+                  <th key={`H-${i}`} className="text-center" {...column.getHeaderProps()} onMouseDown={(e) => handleMouseDown(e, column.Header)}>
                     {column.render("Header")}
                   </th>
                 ))}
@@ -153,6 +152,7 @@ const Detail = () => {
               prepareRow(row);
               return (
                 <tr
+                  key={row.id}
                   style={{
                     cursor: "pointer",
                     userSelect: "none",
@@ -175,7 +175,7 @@ const Detail = () => {
                       );
                     } else {
                       return (
-                        <td {...cell.getCellProps()}>
+                        <td key={i} {...cell.getCellProps()}>
                           <div
                             style={{ width: `${cell.column.width}px`, minWidth: "100%" }}
                           >
@@ -196,8 +196,8 @@ const Detail = () => {
           >
             <tr>
               <td colSpan={10}></td>
-              {totalSalaryRecordHeaders.map((column: any) => (
-                <td>{totalValue[column.accessor]}</td>
+              {totalSalaryRecordHeaders.map((column: any, i: number) => (
+                <td key={i}>{totalValue[column.accessor]}</td>
               ))}
             </tr>
           </tfoot>

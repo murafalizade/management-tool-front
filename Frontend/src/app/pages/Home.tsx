@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import { useTable } from "react-table";
@@ -53,8 +53,10 @@ function Home() {
   };
 
   useEffect(() => {
-    getEmployees();
-  }, []);
+    if(!state.show){
+        getEmployees();
+    }
+  }, [state.show]);
 
   // calculate sum to each fields return object
   useEffect(() => {
@@ -160,9 +162,6 @@ function Home() {
     }
   }
     
-
-
-
   const tableInstance = useTable({
     columns: headers,
     data: salaryRecord,
@@ -212,7 +211,7 @@ function Home() {
         <div className="d-flex">
           <select className="form-control mx-2" onChange={handleFilter} name="filter">
             {FILTER_DATA.map((month: any, index: number) => (
-              <option className="fs-6" key={index} value={month.value}>
+              <option className="fs-6" key={`F-${index}`} value={month.value}>
                 {month.name}
               </option>
             ))}
@@ -246,10 +245,10 @@ function Home() {
           {...getTableProps()}
         >
           <thead>
-            {headerGroups.map((headerGroup: any) => (
-              <tr {...headerGroup.getHeaderGroupProps()}  className={`text-center ${!resizing || "resize"}`}>
-                {headerGroup.headers.map((column: any) => (
-                  <th className={`text-center`} 
+            {headerGroups.map((headerGroup: any,index:number) => (
+              <tr key={`HG-${index}`} {...headerGroup.getHeaderGroupProps()}  className={`text-center ${!resizing || "resize"}`}>
+                {headerGroup.headers.map((column: any,index:number) => (
+                  <th key={`HGH-${index}`} className={`text-center`} 
                     {...column.getHeaderProps()} onMouseDown={(e) => handleMouseDown(e,column.Header)}>
                     {column.render("Header")}
                   </th>
@@ -269,6 +268,7 @@ function Home() {
                       row.original === selectedColumn ? "#d8e4eb" : "inherit",
                   }}
                   {...row.getRowProps()}
+                  key={`R-${index}`}
                   onClick={() => handleRowClick(row)}
                   onDoubleClick={() => handleRowDoubleClick(row)}
                 >
@@ -276,7 +276,7 @@ function Home() {
                     if (cell.column.id === "date") {
                       // Define custom cell component for date column
                       return (
-                        <React.Fragment key={i}>
+                        <React.Fragment key={`RC-${i}`}>
                           <td {...cell.getCellProps()}>
                             <div
                             style={{ width: `${cell.column.width}px`, minWidth:"100%", wordBreak:"break-all", whiteSpace:"normal"  }}
@@ -289,6 +289,7 @@ function Home() {
                       return (
                         <td {...cell.getCellProps()}>
                           <div
+                            key={`RC-${i}`}
                             style={{ width: `${cell.column.width}px`, minWidth:"100%", wordBreak:"break-all", whiteSpace:"normal"  }}
                           >
                             {cell.render("Cell")}
@@ -306,19 +307,19 @@ function Home() {
             style={{ bottom: "0px" }}
           >
             <tr className="text-center">
-              <th colSpan={4}></th> <th>S.A.A</th>
-              <th colSpan={4}></th>
-              {""}
-              {totalSalaryRecordHeaders.map((column: any) => (
-                <th>{column.Header}</th>
+              <th colSpan={4}><span></span></th> 
+              <th>S.A.A</th>
+              <th colSpan={4}><span></span></th>
+              {totalSalaryRecordHeaders.map((column: any, i: number) => (
+                <th key={`TH-${i}`}>{column.Header}</th>
               ))}
             </tr>
             <tr>
               <td colSpan={4}></td>
               <td>{totalValue.fullName}</td>
               <td colSpan={4}></td>
-              {totalSalaryRecordHeaders.map((column: any) => (
-                <td>{Helper.FormatNumber(totalValue[column.accessor])}</td>
+              {totalSalaryRecordHeaders.map((column: any, index:number) => (
+                <td key={index}>{Helper.FormatNumber(totalValue[column.accessor])}</td>
               ))}
             </tr>
           </tfoot>

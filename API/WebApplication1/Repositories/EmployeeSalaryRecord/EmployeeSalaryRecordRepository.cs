@@ -411,7 +411,7 @@ namespace WebApplication1.Repositories
             }
 
             // Use AutoMapper to project the results to your DTO
-            var resultDtos =  query.Select(record => new EmployeeReestrDto
+            var resultDtos = query.Select(record => new EmployeeReestrDto
             {
                 FullName = record.FullName,
                 AccountNumber = record.AccountNumber,
@@ -421,8 +421,9 @@ namespace WebApplication1.Repositories
             return resultDtos;
         }
 
-        public async Task<EmployeeAidStatusDto> GetAidStatus(int recordId){
-            
+        public async Task<EmployeeAidStatusDto> GetAidStatus(int recordId)
+        {
+
             EmployeeSalaryRecord currentRecord = await _context.EmployeeSalaryRecords
                 .Include(x => x.Employee)
                 .FirstOrDefaultAsync(x => x.Id == recordId);
@@ -450,26 +451,54 @@ namespace WebApplication1.Repositories
                 .FirstOrDefaultAsync(x => x.EmployeeId == currentRecord.EmployeeId && x.RecordDate.Year == DateTime.Now.Year && x.BPM > 0);
 
 
-                EmployeeAidStatusDto aidStatus = new();
-                if(financialEmployeeSalary != null){
-                    aidStatus.FinancialAidMonth = currentRecord.RecordDate.Month - financialEmployeeSalary.RecordDate.Month;
-                }
+            EmployeeAidStatusDto aidStatus = new();
+            if (financialEmployeeSalary != null)
+            {
+                aidStatus.FinancialAidMonth = currentRecord.RecordDate.Month - financialEmployeeSalary.RecordDate.Month;
+            }
 
-                if(vacationEmployeeSalary != null){
-                    aidStatus.VacationMonth = currentRecord.RecordDate.Month - vacationEmployeeSalary.RecordDate.Month;
+            if (vacationEmployeeSalary != null)
+            {
+                aidStatus.VacationMonth = currentRecord.RecordDate.Month - vacationEmployeeSalary.RecordDate.Month;
 
-                }
-                if(kesfMezunEmployeeSalary != null){
-                    aidStatus.KesfMezunMonth = currentRecord.RecordDate.Month - kesfMezunEmployeeSalary.RecordDate.Month;
-                }
-                if(BPMEmployeeSalary != null){
-                    aidStatus.BPMMonth = currentRecord.RecordDate.Month - BPMEmployeeSalary.RecordDate.Month;
-                }
-                if(exitEmployeeSalary != null){ 
-                   aidStatus.CixisMuvMonth = DateTime.Now.Month - currentRecord.RecordDate.Month;
-                }
-            
-               return aidStatus;
+            }
+            if (kesfMezunEmployeeSalary != null)
+            {
+                aidStatus.KesfMezunMonth = currentRecord.RecordDate.Month - kesfMezunEmployeeSalary.RecordDate.Month;
+            }
+            if (BPMEmployeeSalary != null)
+            {
+                aidStatus.BPMMonth = currentRecord.RecordDate.Month - BPMEmployeeSalary.RecordDate.Month;
+            }
+            if (exitEmployeeSalary != null)
+            {
+                aidStatus.CixisMuvMonth = DateTime.Now.Month - currentRecord.RecordDate.Month;
+            }
+
+            return aidStatus;
+        }
+
+        public async Task<List<EmployeeSalaryRecord>> GetUniqueEmployees(int year, string search)
+        {
+            if (search == "maddiyardim")
+            {
+                return await _context.EmployeeSalaryRecords
+                .Where(x => x.RecordDate.Year == year && x.FinancialAid > 0)
+                .ToListAsync();
+            }
+
+            if (search == "mezuniyyet")
+            {
+                return await _context.EmployeeSalaryRecords
+                .Where(x => x.RecordDate.Year == year && x.Vacation > 0)
+                .ToListAsync();
+            }
+
+            return _context.EmployeeSalaryRecords
+                .AsEnumerable()
+                .Where(x => x.RecordDate.Year == year)
+                .GroupBy(x => x.EmployeeId)
+                .Select(group => group.First()).ToList();
         }
     }
 }

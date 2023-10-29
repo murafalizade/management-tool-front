@@ -37,7 +37,7 @@ namespace WebApplication1.Controllers
         public async Task<IActionResult> Register([FromBody] AuthInputDto obj)
         {
             _logger.LogInformation("Registering user");
-            ErrorHandelerDto req = await _authService.Register(obj.Email, obj.Password, obj.FirstName, obj.LastName);
+            ErrorHandelerDto req = await _authService.Register(obj.Email, obj.Password, obj.FirstName, obj.LastName, obj.Role);
             if (req.isError == true)
             {
                 switch (req.StatusCode)

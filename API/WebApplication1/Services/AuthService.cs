@@ -52,7 +52,7 @@ namespace WebApplication1.Services
             return error;
         }
 
-        public async Task<ErrorHandelerDto> Register(string email, string password, string firstName, string lastName)
+        public async Task<ErrorHandelerDto> Register(string email, string password, string firstName, string lastName,string role)
         {
             User currentUser = await _userRepository.GetUserByEmail(email);
             if (currentUser != null)
@@ -67,6 +67,7 @@ namespace WebApplication1.Services
             user.Email = email;
             user.FirstName = firstName;
             user.LastName = lastName;
+            user.Role = role; 
             CreatePasswordHash(password, out byte[] passwordSalt, out byte[] passwordHash);
             user.PasswordSalt = passwordSalt;
             user.PasswordHash = passwordHash;
@@ -81,7 +82,6 @@ namespace WebApplication1.Services
             };
             return errorHandelerDto;
         }
-
         public Task<bool> UserExists(string email)
         {
             throw new System.NotImplementedException();

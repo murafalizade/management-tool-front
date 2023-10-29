@@ -5,6 +5,10 @@ export default class OperationService {
     return await fetch.post(`/api/login`, data);
   }
 
+  static async register(data: any): Promise<any> {
+    return await fetch.post(`/api/register`, data);
+  }
+
   static async update(data: any): Promise<any> {
     return await fetch.put(`/api`, data);
   }
@@ -197,5 +201,13 @@ export default class OperationService {
           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     });
+  };
+
+  static async getRankStatistic(year:number): Promise<any> {
+    return await fetch.get(`/api/rank/statistics/${year}`);
+  }
+
+  static async getEmployeeStatistic(year:number): Promise<any> {
+    return await fetch.get(`/api/employee/salary/record/statistics?year=${year}`);
   }
 }

@@ -725,5 +725,25 @@ namespace WebApplication1.Services
                 return new ErrorHandelerDto { isError = true, data = "U" };
             }
         }
+
+        public async Task<ErrorHandelerDto> GetUniqueEmployeesStatistics(int year)
+        {
+            List<EmployeeSalaryRecord> vacations = await _employeeSalaryRecordRepository.GetUniqueEmployees(year, "mezuniyyet");
+            List<EmployeeSalaryRecord> financialAid = await _employeeSalaryRecordRepository.GetUniqueEmployees(year, "maddiyardim");
+
+            List<EmployeeSalaryRecord> all = await _employeeSalaryRecordRepository.GetUniqueEmployees(year, "");
+
+            return new ErrorHandelerDto
+            {
+                data = new
+                {
+                    vacations = vacations.Count,
+                    financialAid = financialAid.Count,
+                    all = all.Count
+                },
+                StatusCode = 200
+            };
+
+        }
     }
 }

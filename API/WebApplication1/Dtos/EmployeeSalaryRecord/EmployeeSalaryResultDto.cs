@@ -7,6 +7,7 @@ namespace WebApplication1.Dtos
   {
     public int Id { get; set; }
     public string RecordDateMonth { get; set; }
+    public string EmployeeFin { get; set; }
     public int EmployeeId { get; set; }
     public int? ForeignLanguageId { get; set; }
     public int? HonorTitleId { get; set; }
@@ -69,6 +70,8 @@ namespace WebApplication1.Dtos
     public double ExitAidDSMF { get; set; }
     public int DiscountChernobil { get; set; }
     public int DiscountDsmf { get; set; }
+    public int DiscountVeteranTaxDiscount { get; set; }
+    public int DiscountMinWage { get; set; }
     public int DiscountMartyr { get; set; }
     public int DiscountVeteran { get; set; }
     public int DiscountDisability { get; set; }
@@ -107,14 +110,13 @@ namespace WebApplication1.Dtos
     public int BPMQat { get; set; }
     public bool IsVacationGiven { get; set; }
     public bool IsBPMGiven { get; set; }
-        public int CyberSecurityPercentage { get; set; } = 0;
-
-    public bool IsRankSalaryHand { get; set; } = true;
-    public bool IsPositionSalaryHand { get; set; } = true;
-    public bool IsLanguagePriceHand { get; set; } = true;
-    public bool IsPayerHand { get; set; } = true;
-    public bool IsQatHand { get; set; } = true;
-    public bool IsRentHand { get; set; } = true;
+    public int CyberSecurityPercentage { get; set; } = 0;
+    public bool IsRankSalaryHand { get; set; } = false;
+    public bool IsPositionSalaryHand { get; set; } = false;
+    public bool IsLanguagePriceHand { get; set; } = false;
+    public bool IsPayerHand { get; set; } = false;
+    public bool IsQatHand { get; set; } = false;
+    public bool IsRentHand { get; set; } = false;
   
   }
 }

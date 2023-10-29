@@ -22,5 +22,6 @@ namespace WebApplication1.Services
         Task<ErrorHandelerDto> AddVeteranQat(int veteranQat);
         Task<ErrorHandelerDto> AddBPMQat(int bpmQat);
         Task<ErrorHandelerDto> GetAidStatus(int recordId);
+        Task<ErrorHandelerDto> GetUniqueEmployeesStatistics(int year);
     }
 }

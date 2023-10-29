@@ -166,8 +166,8 @@ function Create() {
         <Button className="mx-2">B3 forma</Button> 
       </div>
 
-      <div className="employee-container">
-        <Table className="employee-table" bordered hover {...getTableProps()}>
+      <div className="employee-container ">
+        <Table className="employee-table " bordered hover {...getTableProps()}>
           <thead>
             <tr className="text-center" style={{ backgroundColor: "#f4f4f4" }}>
               <th rowSpan={2} className="table_header">
@@ -236,6 +236,7 @@ function Create() {
           <tbody {...getTableBodyProps()}>
             {employees.map((employee: EmployeeData) => (
               <tr
+                key={employee.id}
                 className="text-center"
                 style={{
                   cursor: "pointer",

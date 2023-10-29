@@ -37,9 +37,9 @@ namespace WebApplication1.Services
 
                 };
             }
+            employee.StartDate = DateTime.Today.AddYears(-employee.WorkExperience);
             int id = await _employeeRepository.AddEmployee(_mapper.Map<Employee>(employee));
             Discount discount = await _discountRepository.GetDiscountByDate(0, 0);
-            Console.WriteLine("ID: "+discount.Id);
             RecordCreationDto x = new() { EmployeeId = id, Discount = discount };
             EmployeeSalaryRecord employeeSalaryRecord = _mapper.Map<EmployeeSalaryRecord>(x);
             await _employeeSalaryRecordRepository.AddEmployee(employeeSalaryRecord);

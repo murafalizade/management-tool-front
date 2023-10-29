@@ -12,5 +12,6 @@ namespace WebApplication1.Dtos{
         public DateTime StartDate { get; set; } = DateTime.Now;
         public DateTime EnteranceDate { get; set; } = DateTime.Now;
         public string Phone { get; set; }
+        public int WorkExperience {get;set;}
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
@@ -26,11 +27,19 @@ namespace WebApplication1.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        // public async Task<Rank> GetRankById(int RankId)
-        // {
-        //     return await {};
-        // }
+        public async Task<List<Rank>> GetRanksWithRecord()
+        {
+            List<Rank> ranks =  await _dbContext.Ranks.Include(x=> x.EmployeeSalaryRecords).ToListAsync();
+             ranks.ForEach(rank =>
+            {
+                rank.EmployeeSalaryRecords = rank.EmployeeSalaryRecords
+                    .GroupBy(esr => esr.EmployeeId)
+                    .Select(group => group.First())
+                    .ToList();
 
+            });
+            return ranks;
+        }
         public async Task<List<Rank>> GetRanks()
         {
             return await _dbContext.Ranks.ToListAsync();

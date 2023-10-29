@@ -4,6 +4,7 @@ import TableLayout from "../components/tables/TableLayout";
 import Toastify from "../utility/Toastify";
 import OperationService from "../api/operationService";
 import { AxiosError } from "axios";
+import Loading from "../components/layouts/Loading";
 
 const Profile = () => {
   const [isShowBtn, setIsShowBtn] = useState<boolean>(true);
@@ -25,6 +26,8 @@ const Profile = () => {
   const [rowsOfDiscounts, setRowsOfDiscounts] = useState<any>([]);
   const [newEdit, setNewEdit] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<any>(null);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const scientificDegreesColumns = [
     { title: "Seç", field: "select" },
@@ -144,44 +147,30 @@ const Profile = () => {
     minWage: 0,
   };
   const toast = new Toastify();
-
+  
   // Get table datas
+  const fetchAllData = async () =>{
+    setIsLoading(true);
+    const res = await OperationService.getElmiDerece();
+    setRowsOfScientificDegrees(res);
+    const res1 = await OperationService.getFexriAd();
+      setRowsOfHonorTitles(res1);
+      const res2 = await OperationService.getMeharet();
+      setRowsOfAbilities(res2);
+      const res3 = await OperationService.getXariciDil();
+      setRowsOfForeignLanguages(res3);
+      const res4 = await OperationService.getRanks();
+      setRowsOfRanks(res4);
+      const res5 = await OperationService.getKiraye();
+      setRowsOfRents(res5);
+      const res6 = await OperationService.getDiscounts();
+      setRowsOfDiscounts(res6.data);
+    setIsLoading(false);
+
+  }
+  
   useEffect(() => {
-    const getElmiDerece = async () => {
-      const res = await OperationService.getElmiDerece();
-      setRowsOfScientificDegrees(res);
-    };
-    const getFexriAd = async () => {
-      const res = await OperationService.getFexriAd();
-      setRowsOfHonorTitles(res);
-    };
-    const getMeharet = async () => {
-      const res = await OperationService.getMeharet();
-      setRowsOfAbilities(res);
-    };
-    const getXariciDil = async () => {
-      const res = await OperationService.getXariciDil();
-      setRowsOfForeignLanguages(res);
-    };
-    const getRanks = async () => {
-      const res = await OperationService.getRanks();
-      setRowsOfRanks(res);
-    };
-    const getKiraye = async () => {
-      const res = await OperationService.getKiraye();
-      setRowsOfRents(res);
-    };
-    const getDiscounts = async () => {
-      const res = await OperationService.getDiscounts();
-      setRowsOfDiscounts(res.data);
-    };
-    getElmiDerece();
-    getFexriAd();
-    getMeharet();
-    getXariciDil();
-    getRanks();
-    getKiraye();
-    getDiscounts();
+    fetchAllData();
   }, []);
 
   // Delete a row from a table
@@ -228,6 +217,7 @@ const Profile = () => {
         isForeignLanguages && setRowsOfForeignLanguages(updatedRows);
         isRanks && setRowsOfRanks(updatedRows);
         isRents && setRowsOfRents(updatedRows);
+        fetchAllData();
       }
     }, "Sətri silmək istəyirsinizmi?");
   };
@@ -275,7 +265,7 @@ const Profile = () => {
       : isDiscount
       ? await OperationService.getDiscounts()
       : await OperationService.getKiraye();
-    setSelectedRow(selectedRow);
+    setSelectedRow(res);
   };
 
   // Save rows of a table
@@ -294,10 +284,11 @@ const Profile = () => {
       ? rowsOfDiscounts
       : rowsOfRents;
     try {
+      let res = 0;
       rowsOfTable.map(async (row: any) => {
         if (row.id < 0) {
           row.id = 0;
-          const res = isScientificDegrees
+          res =  isScientificDegrees
             ? await OperationService.AddScientificDegree(row)
             : isHonorTitles
             ? await OperationService.AddHonorTitle(row)
@@ -311,7 +302,7 @@ const Profile = () => {
             ? await OperationService.AddDiscount(row)
             : await OperationService.AddRent(row);
         } else {
-          const res = isScientificDegrees
+          res = isScientificDegrees
             ? await OperationService.UpdateScientificDegree(row)
             : isHonorTitles
             ? await OperationService.UpdateHonorTitle(row)
@@ -326,6 +317,8 @@ const Profile = () => {
             : await OperationService.UpdateRent(row);
         }
       });
+      selectRow(res)
+      fetchAllData();
       toast.success();
     } catch (err) {
       toast.error();
@@ -442,6 +435,7 @@ const Profile = () => {
                 >
                   Şifrəni dəyişdir
                 </button>
+                <a href="/add-user" className="btn btn-danger ms-2">İstifadəçi əlavə et</a>
               </div>
             )}
             {!isShowBtn && (
@@ -495,218 +489,222 @@ const Profile = () => {
             )}
           </div>
         </div>
-        <div className="tabs-part mx-4">
-          <div className="d-flex">
-            <div>
-              <button
-                className={`btn ${
-                  isScientificDegrees ? "clicked-btn" : "unclicked-btn"
-                }`}
-                onClick={() => {
-                  setIsScientificDegrees(true);
-                  setIsHonorTitles(false);
-                  setIsAbilities(false);
-                  setIsForeignLanguages(false);
-                  setIsRanks(false);
-                  setIsDiscount(false);
-                  setIsRents(false);
-                }}
-              >
-                Elmi dərəcələr
-              </button>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <div className="tabs-part mx-4">
+            <div className="d-flex">
+              <div>
+                <button
+                  className={`btn ${
+                    isScientificDegrees ? "clicked-btn" : "unclicked-btn"
+                  }`}
+                  onClick={() => {
+                    setIsScientificDegrees(true);
+                    setIsHonorTitles(false);
+                    setIsAbilities(false);
+                    setIsForeignLanguages(false);
+                    setIsRanks(false);
+                    setIsDiscount(false);
+                    setIsRents(false);
+                  }}
+                >
+                  Elmi dərəcələr
+                </button>
+              </div>
+              <div>
+                <button
+                  className={`btn ${
+                    isHonorTitles ? "clicked-btn" : "unclicked-btn"
+                  }`}
+                  onClick={() => {
+                    setIsScientificDegrees(false);
+                    setIsHonorTitles(true);
+                    setIsAbilities(false);
+                    setIsForeignLanguages(false);
+                    setIsRanks(false);
+                    setIsRents(false);
+                    setIsDiscount(false);
+                  }}
+                >
+                  Fəxri ad
+                </button>
+              </div>
+              <div>
+                <button
+                  className={`btn ${
+                    isAbilities ? "clicked-btn" : "unclicked-btn"
+                  }`}
+                  onClick={() => {
+                    setIsScientificDegrees(false);
+                    setIsHonorTitles(false);
+                    setIsAbilities(true);
+                    setIsForeignLanguages(false);
+                    setIsRanks(false);
+                    setIsRents(false);
+                    setIsDiscount(false);
+                  }}
+                >
+                  Məharətlilik
+                </button>
+              </div>
+              <div>
+                <button
+                  className={`btn ${
+                    isForeignLanguages ? "clicked-btn" : "unclicked-btn"
+                  }`}
+                  onClick={() => {
+                    setIsScientificDegrees(false);
+                    setIsHonorTitles(false);
+                    setIsAbilities(false);
+                    setIsForeignLanguages(true);
+                    setIsRanks(false);
+                    setIsRents(false);
+                    setIsDiscount(false);
+                  }}
+                >
+                  Xarici dil
+                </button>
+              </div>
+              <div>
+                <button
+                  className={`btn ${isRanks ? "clicked-btn" : "unclicked-btn"}`}
+                  onClick={() => {
+                    setIsScientificDegrees(false);
+                    setIsHonorTitles(false);
+                    setIsAbilities(false);
+                    setIsForeignLanguages(false);
+                    setIsRanks(true);
+                    setIsRents(false);
+                    setIsDiscount(false);
+                  }}
+                >
+                  Hərbi rütbələr
+                </button>
+              </div>
+              <div>
+                <button
+                  className={`btn ${isRents ? "clicked-btn" : "unclicked-btn"}`}
+                  onClick={() => {
+                    setIsScientificDegrees(false);
+                    setIsHonorTitles(false);
+                    setIsAbilities(false);
+                    setIsForeignLanguages(false);
+                    setIsRanks(false);
+                    setIsRents(true);
+                    setIsDiscount(false);
+                  }}
+                >
+                  Kirayələr
+                </button>
+                <button
+                  className={`btn ${
+                    isDiscount ? "clicked-btn" : "unclicked-btn"
+                  }`}
+                  onClick={() => {
+                    setIsScientificDegrees(false);
+                    setIsHonorTitles(false);
+                    setIsAbilities(false);
+                    setIsForeignLanguages(false);
+                    setIsRanks(false);
+                    setIsRents(false);
+                    setIsDiscount(true);
+                  }}
+                >
+                  Güzəştlər
+                </button>
+              </div>
             </div>
-            <div>
-              <button
-                className={`btn ${
-                  isHonorTitles ? "clicked-btn" : "unclicked-btn"
-                }`}
-                onClick={() => {
-                  setIsScientificDegrees(false);
-                  setIsHonorTitles(true);
-                  setIsAbilities(false);
-                  setIsForeignLanguages(false);
-                  setIsRanks(false);
-                  setIsRents(false);
-                  setIsDiscount(false);
-                }}
-              >
-                Fəxri ad
-              </button>
-            </div>
-            <div>
-              <button
-                className={`btn ${
-                  isAbilities ? "clicked-btn" : "unclicked-btn"
-                }`}
-                onClick={() => {
-                  setIsScientificDegrees(false);
-                  setIsHonorTitles(false);
-                  setIsAbilities(true);
-                  setIsForeignLanguages(false);
-                  setIsRanks(false);
-                  setIsRents(false);
-                  setIsDiscount(false);
-                }}
-              >
-                Məharətlilik
-              </button>
-            </div>
-            <div>
-              <button
-                className={`btn ${
-                  isForeignLanguages ? "clicked-btn" : "unclicked-btn"
-                }`}
-                onClick={() => {
-                  setIsScientificDegrees(false);
-                  setIsHonorTitles(false);
-                  setIsAbilities(false);
-                  setIsForeignLanguages(true);
-                  setIsRanks(false);
-                  setIsRents(false);
-                  setIsDiscount(false);
-                }}
-              >
-                Xarici dil
-              </button>
-            </div>
-            <div>
-              <button
-                className={`btn ${isRanks ? "clicked-btn" : "unclicked-btn"}`}
-                onClick={() => {
-                  setIsScientificDegrees(false);
-                  setIsHonorTitles(false);
-                  setIsAbilities(false);
-                  setIsForeignLanguages(false);
-                  setIsRanks(true);
-                  setIsRents(false);
-                  setIsDiscount(false);
-                }}
-              >
-                Hərbi rütbələr
-              </button>
-            </div>
-            <div>
-              <button
-                className={`btn ${isRents ? "clicked-btn" : "unclicked-btn"}`}
-                onClick={() => {
-                  setIsScientificDegrees(false);
-                  setIsHonorTitles(false);
-                  setIsAbilities(false);
-                  setIsForeignLanguages(false);
-                  setIsRanks(false);
-                  setIsRents(true);
-                  setIsDiscount(false);
-                }}
-              >
-                Kirayələr
-              </button>
-              <button
-                className={`btn ${
-                  isDiscount ? "clicked-btn" : "unclicked-btn"
-                }`}
-                onClick={() => {
-                  setIsScientificDegrees(false);
-                  setIsHonorTitles(false);
-                  setIsAbilities(false);
-                  setIsForeignLanguages(false);
-                  setIsRanks(false);
-                  setIsRents(false);
-                  setIsDiscount(true);
-                }}
-              >
-                Güzəştlər
-              </button>
+            <div className="mt-4">
+              <div style={{ overflowX: "auto" }}>
+                {isScientificDegrees && (
+                  <TableLayout
+                    isEditable={true}
+                    data={rowsOfScientificDegrees}
+                    add={addRow}
+                    select={selectRow}
+                    save={saveRow}
+                    delete={deleteRow}
+                    change={changeRow}
+                    columns={scientificDegreesColumns}
+                  ></TableLayout>
+                )}
+                {isHonorTitles && (
+                  <TableLayout
+                    isEditable={true}
+                    data={rowsOfHonorTitles}
+                    add={addRow}
+                    select={selectRow}
+                    save={saveRow}
+                    delete={deleteRow}
+                    change={changeRow}
+                    columns={honorTitlesColumns}
+                  ></TableLayout>
+                )}
+                {isAbilities && (
+                  <TableLayout
+                    isEditable={true}
+                    data={rowsOfAbilities}
+                    add={addRow}
+                    select={selectRow}
+                    save={saveRow}
+                    delete={deleteRow}
+                    change={changeRow}
+                    columns={abilitiesColumns}
+                  ></TableLayout>
+                )}
+                {isForeignLanguages && (
+                  <TableLayout
+                    isEditable={true}
+                    data={rowsOfForeignLanguages}
+                    add={addRow}
+                    select={selectRow}
+                    save={saveRow}
+                    delete={deleteRow}
+                    change={changeRow}
+                    columns={foreignLanguagesColumns}
+                  ></TableLayout>
+                )}
+                {isRanks && (
+                  <TableLayout
+                    isEditable={true}
+                    data={rowsOfRanks}
+                    add={addRow}
+                    select={selectRow}
+                    save={saveRow}
+                    delete={deleteRow}
+                    change={changeRow}
+                    columns={ranksColumns}
+                  ></TableLayout>
+                )}
+                {isRents && (
+                  <TableLayout
+                    isEditable={true}
+                    data={rowsOfRents}
+                    add={addRow}
+                    select={selectRow}
+                    save={saveRow}
+                    delete={deleteRow}
+                    change={changeRow}
+                    columns={rentsColumns}
+                  ></TableLayout>
+                )}
+                {isDiscount && (
+                  <TableLayout
+                    className="text-nowrap"
+                    isEditable={true}
+                    data={rowsOfDiscounts}
+                    add={addRow}
+                    select={selectRow}
+                    save={saveRow}
+                    change={changeRow}
+                    columns={discounts}
+                  ></TableLayout>
+                )}
+              </div>
             </div>
           </div>
-          <div className="mt-4">
-            <div style={{ overflowX: "auto" }}>
-              {isScientificDegrees && (
-                <TableLayout
-                  isEditable={true}
-                  data={rowsOfScientificDegrees}
-                  add={addRow}
-                  select={selectRow}
-                  save={saveRow}
-                  delete={deleteRow}
-                  change={changeRow}
-                  columns={scientificDegreesColumns}
-                ></TableLayout>
-              )}
-              {isHonorTitles && (
-                <TableLayout
-                  isEditable={true}
-                  data={rowsOfHonorTitles}
-                  add={addRow}
-                  select={selectRow}
-                  save={saveRow}
-                  delete={deleteRow}
-                  change={changeRow}
-                  columns={honorTitlesColumns}
-                ></TableLayout>
-              )}
-              {isAbilities && (
-                <TableLayout
-                  isEditable={true}
-                  data={rowsOfAbilities}
-                  add={addRow}
-                  select={selectRow}
-                  save={saveRow}
-                  delete={deleteRow}
-                  change={changeRow}
-                  columns={abilitiesColumns}
-                ></TableLayout>
-              )}
-              {isForeignLanguages && (
-                <TableLayout
-                  isEditable={true}
-                  data={rowsOfForeignLanguages}
-                  add={addRow}
-                  select={selectRow}
-                  save={saveRow}
-                  delete={deleteRow}
-                  change={changeRow}
-                  columns={foreignLanguagesColumns}
-                ></TableLayout>
-              )}
-              {isRanks && (
-                <TableLayout
-                  isEditable={true}
-                  data={rowsOfRanks}
-                  add={addRow}
-                  select={selectRow}
-                  save={saveRow}
-                  delete={deleteRow}
-                  change={changeRow}
-                  columns={ranksColumns}
-                ></TableLayout>
-              )}
-              {isRents && (
-                <TableLayout
-                  isEditable={true}
-                  data={rowsOfRents}
-                  add={addRow}
-                  select={selectRow}
-                  save={saveRow}
-                  delete={deleteRow}
-                  change={changeRow}
-                  columns={rentsColumns}
-                ></TableLayout>
-              )}
-              {isDiscount && (
-                <TableLayout
-                  className="text-nowrap"
-                  isEditable={true}
-                  data={rowsOfDiscounts}
-                  add={addRow}
-                  select={selectRow}
-                  save={saveRow}
-                  change={changeRow}
-                  columns={discounts}
-                ></TableLayout>
-              )}
-            </div>
-          </div>
-        </div>
+        )}
       </div>
     </>
   );

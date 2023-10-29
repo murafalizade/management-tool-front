@@ -14,6 +14,7 @@ interface IEmployee {
   fin: string;
   injuranceNo: string;
   phone:string;
+  workExperience: number;
 }
 
 export default function CreateEmployeeModal() {
@@ -31,7 +32,8 @@ export default function CreateEmployeeModal() {
     birthDate: "",
     fin: "",
     injuranceNo: "",
-    phone:""
+    phone:"",
+    workExperience: 0
   });
 
   // handle change event of input
@@ -214,6 +216,24 @@ export default function CreateEmployeeModal() {
                 value={employee.fin}
                 maxLength={7}
                 id="fin"
+                className="form-control"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="row my-2 g-3 align-items-center">
+            <div className="col-4">
+              <label htmlFor="fin" className="col-form-label">
+                Xidmət illəri
+              </label>
+            </div>
+            <div className="col-8">
+              <input
+                type="number"
+                onChange={handleInputChange}
+                value={employee.workExperience}
+                id="workExperience"
                 className="form-control"
                 required
               />

@@ -340,7 +340,8 @@ namespace WebApplication1.Models
             {
                 if (value == 0 && Discount != null)
                 {
-                    _tax = TotalIncome * Discount.TaxPercentage / 100;
+                    double amount = _rankSalary + _positionSalary - Discount.MinWage > 0 ? _rankSalary + _positionSalary - Discount.MinWage : 0;
+                    _tax = amount * Discount.TaxPercentage / 100;
                     if (IsVeteran)
                     {
                         _tax = _tax - Discount.VeteranTaxDiscount > 0 ? _tax - Discount.VeteranTaxDiscount : 0;
@@ -363,7 +364,7 @@ namespace WebApplication1.Models
             {
                 if (value == 0 && Discount != null)
                 {
-                    _dSMF = TotalIncome * Discount.Dsmf / 100;
+                    _dSMF = (_rankSalary + _positionSalary) * Discount.Dsmf / 100;
                 }
                 else
                 {
@@ -383,7 +384,7 @@ namespace WebApplication1.Models
             {
                 if (Discount != null && value == 0)
                 {
-                    _healthInsurance = TotalIncome * Discount.HealthInjurance / 100;
+                    _healthInsurance = (_rankSalary + _positionSalary) * Discount.HealthInjurance / 100;
                 }
                 else
                 {
@@ -404,7 +405,7 @@ namespace WebApplication1.Models
             {
                 if (value == 0)
                 {
-                    _alimony = (TotalIncome - _tax) * AlimonyPercentage / 100;
+                    _alimony = (_rankSalary + _positionSalary - _tax) * AlimonyPercentage / 100;
                 }
                 else
                 {

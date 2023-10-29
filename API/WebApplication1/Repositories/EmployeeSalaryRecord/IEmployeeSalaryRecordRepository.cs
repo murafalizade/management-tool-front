@@ -19,5 +19,6 @@ namespace WebApplication1.Repositories
         Task AddBPMQat (int bpmQat);
         Task<EmployeeSalaryRecord> GetLastEmployeeRecord();
         Task<EmployeeAidStatusDto> GetAidStatus(int recordId);
+        Task<List<EmployeeSalaryRecord>> GetUniqueEmployees(int year, string search);
     }
 }

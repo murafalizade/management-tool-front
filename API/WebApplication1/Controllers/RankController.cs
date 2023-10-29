@@ -30,24 +30,16 @@ namespace WebApplication1.Controllers
             return BadRequest(obj.data);
         }
 
-        // [HttpGet("{id}")]
-        // public async Task<ActionResult> GetRankById(int id)
-        // {
-        //     ErrorHandelerDto obj = await _RankService.GetRankById(id);
-        //     if (obj.isError == true)
-        //     {
-        //         switch (obj.StatusCode)
-        //         {
-        //             case 400:
-        //                 return BadRequest(obj.data);
-        //             case 404:
-        //                 return NotFound(obj.data);
-        //             default:
-        //                 return BadRequest(obj.data);
-        //         }
-        //     }
-        //     return Ok(obj.data);
-        // }
+        [HttpGet("statistics/{year}")]
+        public async Task<ActionResult> GetRankById(int year)
+        {
+            ErrorHandelerDto obj = await _RankService.GetRankStatistics(year);
+            if (obj.isError == true)
+            {               
+                return BadRequest(obj.data);
+            }
+            return Ok(obj.data);
+        }
 
         [HttpPost]
         public async Task<ActionResult> AddRank([FromBody] Rank Rank)

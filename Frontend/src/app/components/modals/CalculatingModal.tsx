@@ -3,7 +3,7 @@ import "../../styles/modal.scss";
 import { Button, Col, Container, Modal, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { hideModal } from "../../redux/showModalSlice";
+import { hideModal, showModal } from "../../redux/showModalSlice";
 import EmployeeService from "../../api/employeeService";
 import { MONTHS } from "../../constants/months";
 import moment from "moment";
@@ -15,16 +15,7 @@ const CalculatingModal = () => {
   const state = useSelector((state: RootState) => state.showModal);
   const dispatch = useDispatch();
 
-  const [info, setInfo] = useState<any>({
-    takenByHand: false,
-    rankSalaryByHand: false,
-    positionSalaryByHand: false,
-    additionalServiceByHand: false,
-    languageSkillByHand: false,
-    discoveryByHand: false,
-    qatByHand: false,
-    rentByHand: false,
-  });
+  const [info, setInfo] = useState<any>({});
 
   const [rents, setRents] = useState<any[]>([]);
 
@@ -187,6 +178,7 @@ const CalculatingModal = () => {
       ...record,
       permanentRankSalary: record.rankSalary,
       permanentPositionSalary: record.positionSalary,
+      isChanged:true
     });
 
     // Get rank list
@@ -228,7 +220,6 @@ const CalculatingModal = () => {
     // Get Abilities
     const abilities = await OperationService.getMeharet();
     setAbilities(abilities);
-
   };
 
   const getRent = async () => {
@@ -239,12 +230,20 @@ const CalculatingModal = () => {
 
   useEffect(() => {
     if (state.show === 0) return;
-    getRecord();
+    getRecord()
     getRent();
+
   }, [state.show]);
 
+  useEffect(() => {
+    if (!info.isChanged) return;
+
+    calculate();
+  }, [info.isChanged]);
+
+
   // Calculation all total salary and other stuffs
-  const calculate = () => {
+  const calculate = () => { 
     const food = info.foodGiven
       ? info?.food == 0
         ? info.discountFood
@@ -318,6 +317,7 @@ const CalculatingModal = () => {
       bpm,
       qat,
       bpmdsmf,
+      isChanged:false
     });
 
     setTotalAddition(info.rentPrice + food);
@@ -342,16 +342,17 @@ const CalculatingModal = () => {
     setTotalGiven(totalGivens);
 
     const dsmf = !info.isPayerHand
-      ? (info.discountDsmf * totalGivens) / 100.0
+      ? (info.discountDsmf* (rankSalary + positionSalary)) / 100.0
       : info.dsmf;
 
     const injurance = !info.isPayerHand
-      ? (info.discountHealthInjurance * totalGivens) / 100.0
+      ? (info.discountHealthInjurance * (rankSalary + positionSalary)) / 100.0
       : info.healthInsurance;
 
+      let taxAmount = rankSalary + positionSalary - info.discountMinWage ? rankSalary + positionSalary - info.discountMinWage : 0;
     const tax = !info.isPayerHand
       ? // Add other calculation here VeteranTaxDiscount
-        (info.discountTaxPercentage * totalGivens) / 100
+        (info.discountTaxPercentage * taxAmount) / 100
       : info.tax;
 
     const rentPrice = !info.isRentHand
@@ -401,10 +402,8 @@ const CalculatingModal = () => {
   const updateRecord = async () => {
     await EmployeeService.updateEmployeeSalaryRecord(info);
     dispatch(hideModal());
-
-    toast.success("Əməliyyat uğurla yerinə yetirildi", () =>
-      window.location.reload()
-    );
+    dispatch(showModal(0))
+    toast.success("Əməliyyat uğurla yerinə yetirildi");
   };
 
   return (

@@ -19,18 +19,22 @@ export default function Departments() {
   const [newEdit, setNewEdit] = useState<boolean>(false);
   const [choosenOrganization, setChoosenOrganizetion] = useState<any>(null);
   const [choosenDepartment, setChoosenDepartment] = useState<any>(null);
+  const [isChanged, setIsChanged] = useState<boolean>(true)
 
   const toast = new Toastify();
 
   const departmentsData = useSelector(
     (state: any) => state.organization
   ).departments;
+
   const positionsData = useSelector(
     (state: any) => state.organization
   ).positions;
+
   const employeesData = useSelector(
     (state: any) => state.organization
   ).employees;
+  
   const dispatch = useDispatch();
 
   const getOrganizationData = async () => {
@@ -106,6 +110,8 @@ export default function Departments() {
         dispatch(setDepartment(newDepartments));
       }
     }, "Bölməni silmək istəyirsinizmi?");
+
+    setIsChanged(true);
   };
 
   // bolmeni deyismek ucun
@@ -132,6 +138,8 @@ export default function Departments() {
     } catch (err) {
       toast.error("Bölmələr yadda saxlanılmadı");
     }
+
+    setIsChanged(true);
   };
 
   // vezifeni silmek ucun
@@ -153,6 +161,8 @@ export default function Departments() {
         dispatch(setPositions(newPositions));
       }
     }, "Vəzifəni silmək istəyirsinizmi?");
+
+    setIsChanged(true);
   };
 
   // vezife elave etmek ucun
@@ -195,6 +205,7 @@ export default function Departments() {
     await OperationService.savePosition(positionsData);
     toast.success("Vəzifələr yadda saxlanıldı");
     setNewEdit(false);
+    setIsChanged(true);
   };
 
   // vezifeni secdikde
@@ -205,12 +216,14 @@ export default function Departments() {
   };
 
   useEffect(() => {
+    if(!isChanged) return;
     const gettingData = async () => {
       const org = await getOrganizationData();
       setOrganization(org);
     };
     gettingData();
-  }, []);
+    setIsChanged(false);
+  }, [isChanged]);
 
   return (
     <Container>

@@ -10,6 +10,7 @@ import HomeFilter from "./app/pages/HomeFilter";
 import NotFound from "./app/pages/NotFound";
 import Profile from "./app/pages/Profile";
 import Statistics from "./app/pages/Statistics";
+import AddUser from "./app/pages/AddUser";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/statistics" element={<Statistics />} />
+        <Route path="/add-user" element={<AddUser />} />
       </Routes>
     </Router>
   );

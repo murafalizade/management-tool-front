@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import OperationService from "../../api/operationService";
-import Swal from "sweetalert2";
 import Toastify from "../../utility/Toastify";
 
 const Organizations = () => {
   const [organizations, setOrganizations] = useState<any[]>([]);
   const [selectedOrganization, setSelectedOrganization] = useState<any>(null);
+  const [isChanged, setIsChanged] = useState<boolean>(true);
 
   const getData = async () => {
     const res = await OperationService.getAdminstration();
@@ -17,12 +17,16 @@ const Organizations = () => {
   const toast = new Toastify();
 
   useEffect(() => {
+    if(!isChanged) return;
+
     const gettingData = async () => {
       const departments = await getData();
       setOrganizations(departments);
     };
+
     gettingData();
-  }, []);
+    setIsChanged(false);
+  }, [isChanged]);
 
   // Idare elave etmek
   const addOrganization = () => {
@@ -41,7 +45,6 @@ const Organizations = () => {
       return;
     }
     toast.warning(async (result: any) => {
-      /* Read more about isConfirmed, isDenied below */
       const newOrganizations = organizations.filter(
         (organization) => organization.id !== id
       );
@@ -55,6 +58,8 @@ const Organizations = () => {
         toast.info();
       }
     }, "Silmək istədiyinizə əminsinizmi?");
+
+    setIsChanged(true);
   };
 
   // Idareni secmek klikle
@@ -84,6 +89,7 @@ const Organizations = () => {
   const saveOrganization = async () => {
     await OperationService.saveAdminstration(organizations);
     toast.success("Idarələr yadda saxlanıldı");
+    setIsChanged(true);
   };
 
   return (
