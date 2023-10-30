@@ -166,7 +166,7 @@ function Create() {
         <Button className="mx-2">B3 forma</Button> 
       </div>
 
-      <div className="employee-container ">
+      <div style={{maxHeight:"82vh"}} className="main-table-wrapper employee-container ">
         <Table className="employee-table " bordered hover {...getTableProps()}>
           <thead>
             <tr className="text-center" style={{ backgroundColor: "#f4f4f4" }}>

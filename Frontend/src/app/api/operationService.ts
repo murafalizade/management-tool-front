@@ -10,7 +10,7 @@ export default class OperationService {
   }
 
   static async update(data: any): Promise<any> {
-    return await fetch.put(`/api`, data);
+    return await fetch.put(`/api/change-password`, data);
   }
 
   static async getFexriAd(): Promise<any> {
@@ -209,5 +209,9 @@ export default class OperationService {
 
   static async getEmployeeStatistic(year:number): Promise<any> {
     return await fetch.get(`/api/employee/salary/record/statistics?year=${year}`);
+  }
+
+  static async getUser(): Promise<any> {
+    return await fetch.get(`/api/user`);
   }
 }

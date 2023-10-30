@@ -72,4 +72,5 @@ export type SalaryRecordData = {
   desert: number;
   exitAid: number;
   employeeFin:string;
+  employeeId:string
 };

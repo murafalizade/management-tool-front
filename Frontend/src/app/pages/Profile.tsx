@@ -26,7 +26,7 @@ const Profile = () => {
   const [rowsOfDiscounts, setRowsOfDiscounts] = useState<any>([]);
   const [newEdit, setNewEdit] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<any>(null);
-
+  const [user, setUser] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const scientificDegreesColumns = [
@@ -168,9 +168,20 @@ const Profile = () => {
     setIsLoading(false);
 
   }
+
+  const fetchUser = async () => {
+    try {
+      const res = await OperationService.getUser();
+      setUser(res);
+    } catch (error) {
+      const err = error as AxiosError;
+      toast.error((err.response?.data as string) || "Xəta baş verdi!");
+    }
+  }
   
   useEffect(() => {
     fetchAllData();
+    fetchUser();
   }, []);
 
   // Delete a row from a table
@@ -364,7 +375,7 @@ const Profile = () => {
   const [password, setPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [updatedUser, setUpdatedUser] = useState({
-    email: "admin@gmail.com",
+    email: user?.email,
     password: "",
     newPassword: "",
   });
@@ -392,7 +403,7 @@ const Profile = () => {
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!email || !password || !newPassword) {
+    if (!password || !newPassword) {
       toast.error("Xahiş olunur bütün xanaları doldurun!");
       return;
     }
@@ -420,7 +431,7 @@ const Profile = () => {
           {isShowBtn && (
             <div className="my-3">
               <p>
-                <b>Email: </b>admin@gmail.com
+                <b>Email: </b>{user?.email || ""}
               </p>
             </div>
           )}

@@ -13,12 +13,10 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
   {
     Header: "idarə",
     accessor: "positionDepartmentAdminstrationName",
-    width: 245
   },
   {
     Header: "Şöbə, bölmə",
     accessor: "positionDepartmentName",
-    width: 245
   },
   {
     Header: "Vəzifə",
@@ -31,7 +29,6 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
   {
     Header: "S.A.A.",
     accessor: "fullName",
-    width: 245
   },
   {
     Header: "FIN",
@@ -268,13 +265,14 @@ const salaryRecordHeaders: Column<SalaryRecordData>[] = [
   {
     Header: "Məh. %",
     accessor: (row: SalaryRecordData) =>
-      (row.abilityPrice * 100) / row.positionSalary,
+      ((row.abilityPrice * 100) / row.positionSalary) || 0,
   },
   {
     Header: "HA_ID",
   },
   {
     Header: "H_ID",
+    accessor:"employeeId"
   },
   {
     Header: "V2F_ID",

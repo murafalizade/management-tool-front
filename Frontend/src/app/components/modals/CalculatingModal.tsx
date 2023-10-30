@@ -280,6 +280,8 @@ const CalculatingModal = () => {
         ? info.abilityPrice
         : (positionSalary * selectedOptions.ability) / 100;
 
+    const xiMoney = positionSalary * (info.xiPercent / 100);
+
     // according which extra income is given calculate extras, dsmf and total given
     let vacation = 0,
       vacationDSMF = 0,
@@ -290,10 +292,10 @@ const CalculatingModal = () => {
       bpmdsmf = 0;
 
     if (info.isFinancialAidGiven) {
-      financialAid = info.financialAid || positionSalary;
+      financialAid = info.financialAid || positionSalary + rankSalary;
     }
     if (info.isVacationGiven) {
-      vacation = info.vacation || 2 * positionSalary;
+      vacation = info.vacation || positionSalary;
       vacationDSMF = info.vacationDSMF || (vacation * info.discountDsmf) / 100;
     }
     if (info.isExitAidGiven) {
@@ -315,6 +317,7 @@ const CalculatingModal = () => {
       bpm,
       qat,
       bpmdsmf,
+      xiMoney,
       isChanged: false,
     });
 
@@ -334,7 +337,7 @@ const CalculatingModal = () => {
       honorTitleSalary +
       info.extraMoney +
       info.extraMoney2 +
-      info.xiMoney +
+      xiMoney +
       qat;
 
     setTotalGiven(totalGivens);
@@ -407,8 +410,6 @@ const CalculatingModal = () => {
     toast.success("Əməliyyat uğurla yerinə yetirildi");
   };
 
-
-  console.log("position",selectedOptions.position, info.positionSalary,info.positionSalary);
   return (
     <>
       {state.show === 0 ? null : (

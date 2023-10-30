@@ -237,7 +237,7 @@ function Home() {
         </div>
       </div>
 
-      <div style={{ overflow: "scroll", maxHeight: "79vh" }}>
+      <div className="main-table-wrapper">
         <Table
           className="position-relative main-table"
           bordered
@@ -309,7 +309,7 @@ function Home() {
             <tr className="text-center">
               <th colSpan={4}><span></span></th> 
               <th>S.A.A</th>
-              <th colSpan={4}><span></span></th>
+              <th colSpan={5}><span></span></th>
               {totalSalaryRecordHeaders.map((column: any, i: number) => (
                 <th key={`TH-${i}`}>{column.Header}</th>
               ))}
@@ -317,7 +317,7 @@ function Home() {
             <tr>
               <td colSpan={4}></td>
               <td>{totalValue.fullName}</td>
-              <td colSpan={4}></td>
+              <td colSpan={5}></td>
               {totalSalaryRecordHeaders.map((column: any, index:number) => (
                 <td key={index}>{Helper.FormatNumber(totalValue[column.accessor])}</td>
               ))}

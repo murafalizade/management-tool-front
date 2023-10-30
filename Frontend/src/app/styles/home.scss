@@ -4,6 +4,10 @@
     font-size: 12px;
     margin-right: 5px;
 }
+.main-table-wrapper{
+    overflow: scroll;
+    max-height: 78vh;
+}
 
 .main-table{
     th, td{
