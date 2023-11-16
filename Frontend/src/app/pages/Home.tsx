@@ -38,7 +38,7 @@ function Home() {
 
   // fetch employees from API
   const getEmployees = async () => {
-    setIsLoading(true);
+    //setIsLoading(true);
     try {
       const response = await EmployeeService.getEmployeeSalaryRecord(
         month,
