@@ -7,9 +7,9 @@ const withAuth = (Component: React.FunctionComponent) => {
     let nav = useNavigate();
     useEffect(() => {
       const token = Cookie.getCookie(process.env.REACT_APP_SECRET_TOKEN_KEY!);
-      if (!token) {
-        nav("/login");
-      }
+     // if (!token) {
+       // nav("/login");
+      //}
     }, []);
 
     return <Component />;
