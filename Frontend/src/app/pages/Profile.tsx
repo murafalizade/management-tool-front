@@ -5,6 +5,7 @@ import Toastify from "../utility/Toastify";
 import OperationService from "../api/operationService";
 import { AxiosError } from "axios";
 import Loading from "../components/layouts/Loading";
+import Cookie from "../utility/Cookie";
 
 const Profile = () => {
   const [isShowBtn, setIsShowBtn] = useState<boolean>(true);
@@ -147,38 +148,40 @@ const Profile = () => {
     minWage: 0,
   };
   const toast = new Toastify();
-  
+
   // Get table datas
-  const fetchAllData = async () =>{
+  const fetchAllData = async () => {
     setIsLoading(true);
     const res = await OperationService.getElmiDerece();
     setRowsOfScientificDegrees(res);
     const res1 = await OperationService.getFexriAd();
-      setRowsOfHonorTitles(res1);
-      const res2 = await OperationService.getMeharet();
-      setRowsOfAbilities(res2);
-      const res3 = await OperationService.getXariciDil();
-      setRowsOfForeignLanguages(res3);
-      const res4 = await OperationService.getRanks();
-      setRowsOfRanks(res4);
-      const res5 = await OperationService.getKiraye();
-      setRowsOfRents(res5);
-      const res6 = await OperationService.getDiscounts();
-      setRowsOfDiscounts(res6.data);
+    setRowsOfHonorTitles(res1);
+    const res2 = await OperationService.getMeharet();
+    setRowsOfAbilities(res2);
+    const res3 = await OperationService.getXariciDil();
+    setRowsOfForeignLanguages(res3);
+    const res4 = await OperationService.getRanks();
+    setRowsOfRanks(res4);
+    const res5 = await OperationService.getKiraye();
+    setRowsOfRents(res5);
+    const res6 = await OperationService.getDiscounts();
+    setRowsOfDiscounts(res6.data);
     setIsLoading(false);
-
-  }
+  };
 
   const fetchUser = async () => {
     try {
       const res = await OperationService.getUser();
       setUser(res);
+      setUpdatedUser((pre) => {
+        return { ...pre, email: res.email };
+      });
     } catch (error) {
       const err = error as AxiosError;
       toast.error((err.response?.data as string) || "Xəta baş verdi!");
     }
-  }
-  
+  };
+
   useEffect(() => {
     fetchAllData();
     fetchUser();
@@ -299,7 +302,7 @@ const Profile = () => {
       rowsOfTable.map(async (row: any) => {
         if (row.id < 0) {
           row.id = 0;
-          res =  isScientificDegrees
+          res = isScientificDegrees
             ? await OperationService.AddScientificDegree(row)
             : isHonorTitles
             ? await OperationService.AddHonorTitle(row)
@@ -328,7 +331,7 @@ const Profile = () => {
             : await OperationService.UpdateRent(row);
         }
       });
-      selectRow(res)
+      selectRow(res);
       fetchAllData();
       toast.success();
     } catch (err) {
@@ -410,6 +413,8 @@ const Profile = () => {
     try {
       const res = await OperationService.update(updatedUser);
       toast.success("Şifrə yeniləndi");
+      Cookie.eraseCookie("token");
+      window.location.href = "/login";
     } catch (error) {
       const err = error as AxiosError;
       toast.error((err.response?.data as string) || "Xəta baş verdi!");
@@ -431,7 +436,8 @@ const Profile = () => {
           {isShowBtn && (
             <div className="my-3">
               <p>
-                <b>Email: </b>{user?.email || ""}
+                <b>Email: </b>
+                {user?.email || ""}
               </p>
             </div>
           )}
@@ -446,7 +452,9 @@ const Profile = () => {
                 >
                   Şifrəni dəyişdir
                 </button>
-                <a href="/add-user" className="btn btn-danger ms-2">İstifadəçi əlavə et</a>
+                <a href="/add-user" className="btn btn-danger ms-2">
+                  İstifadəçi əlavə et
+                </a>
               </div>
             )}
             {!isShowBtn && (
