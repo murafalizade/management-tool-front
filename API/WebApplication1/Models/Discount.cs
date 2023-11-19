@@ -10,16 +10,16 @@ namespace WebApplication1.Models
         public int TaxPercentage { get; set; }
         public int Dsmf { get; set; }
         public int HealthInjurance { get; set; }
-        public double Food { get; set; }
-        public double Veteran { get; set; }
-        public double Disability { get; set; }
-        public double Refugee { get; set; }
-        public double Chernobyl { get; set; }
-        public double Martyr { get; set; }
-        public double Owner { get; set; }
-        public double Desert { get; set; }
-        public double VeteranTaxDiscount { get; set; }
-        public double MinWage { get; set; } = 0;
+        public decimal Food { get; set; }
+        public decimal Veteran { get; set; }
+        public decimal Disability { get; set; }
+        public decimal Refugee { get; set; }
+        public decimal Chernobyl { get; set; }
+        public decimal Martyr { get; set; }
+        public decimal Owner { get; set; }
+        public decimal Desert { get; set; }
+        public decimal VeteranTaxDiscount { get; set; }
+        public decimal MinWage { get; set; } = 0;
 
         public ICollection<EmployeeSalaryRecord> EmployeeSalaryRecords { get; set; }
     }

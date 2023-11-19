@@ -363,7 +363,7 @@ namespace WebApplication1.Repositories
                     { "elaveGvti", x => x.ExtraMoney2 > 0 },
                     {"esas", x=> true}
                 };
-            var searchValue = new Dictionary<string, Expression<Func<EmployeeSalaryRecord, double>>>
+            var searchValue = new Dictionary<string, Expression<Func<EmployeeSalaryRecord, decimal>>>
                 {
                     { "aliment", x => x.Alimony },
                     { "extra211100", x => x.Extra211100 },

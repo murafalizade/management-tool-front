@@ -48,18 +48,18 @@ namespace WebApplication1.Helpers
                     var firstDiscount = discounts[0];
                     Discount discount = new()
                     {
-                        Chernobyl = (double)firstDiscount["Chernobyl"],
-                        Desert = (double)firstDiscount["Desert"],
-                        Food = (double)firstDiscount["Food"],
+                        Chernobyl = (decimal)firstDiscount["Chernobyl"],
+                        Desert = (decimal)firstDiscount["Desert"],
+                        Food = (decimal)firstDiscount["Food"],
                         TaxPercentage = (int)firstDiscount["TaxPercentage"],
-                        Veteran = (double)firstDiscount["Veteran"],
+                        Veteran = (decimal)firstDiscount["Veteran"],
                         Dsmf = (int)firstDiscount["Dsmf"],
-                        Disability = (double)firstDiscount["Disability"],
-                        Martyr = (double)firstDiscount["Martyr"],
-                        Refugee = (double)firstDiscount["Refugee"],
+                        Disability = (decimal)firstDiscount["Disability"],
+                        Martyr = (decimal)firstDiscount["Martyr"],
+                        Refugee = (decimal)firstDiscount["Refugee"],
                         HealthInjurance = (int)firstDiscount["HealthInjurance"],
-                        Owner = (double)firstDiscount["Owner"],
-                        VeteranTaxDiscount = (double)firstDiscount["VeteranTaxDiscount"],
+                        Owner = (decimal)firstDiscount["Owner"],
+                        VeteranTaxDiscount = (decimal)firstDiscount["VeteranTaxDiscount"],
                         MinWage = (int)firstDiscount["MinWage"],
                     };
                     dbContext.Discounts.Add(discount);
@@ -89,7 +89,7 @@ namespace WebApplication1.Helpers
                     Rent rent = new()
                     {
                         Name = (string)firstRent["Name"],
-                        Price = (double)firstRent["Price"],
+                        Price = (decimal)firstRent["Price"],
                     };
                     dbContext.Rents.Add(rent);
                     Console.WriteLine("Rents created");

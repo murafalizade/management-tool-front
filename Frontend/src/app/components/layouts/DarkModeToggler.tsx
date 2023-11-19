@@ -4,7 +4,7 @@ import "../../styles/toggler.scss";
 
 const DarkModeToggler = () => {
   const [theme, setTheme] = useState("");
-  const [checked, setChecked] = useState(theme === "dark" ? true : false);
+  const [checked, setChecked] = useState(theme === "dark");
 
   useEffect(() => {
     // get theme from cookie
@@ -19,11 +19,10 @@ const DarkModeToggler = () => {
     // set theme to local storage
     localStorage.setItem("theme", checked ? "ligth" : "dark");
     if (!checked) {
-        document.body.classList.add("inverse");
-    }
-    else{
-        document.body.classList.remove("inverse");
-    }    // toggle checked state
+      document.body.classList.add("inverse");
+    } else {
+      document.body.classList.remove("inverse");
+    } // toggle checked state
     setChecked(!checked);
   };
 

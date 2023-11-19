@@ -73,7 +73,6 @@ namespace WebApplication1.Services
 
                 foreach (RankDto rank in ranks)
                 {
-                    System.Console.WriteLine(rank.Name);
                     var count = rank.EmployeeSalaryRecords.Count(x => x.RecordDate.Year == year);
                     statistics.Add(rank.Name, count);
                 }

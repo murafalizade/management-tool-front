@@ -17,9 +17,9 @@ namespace WebApplication1.Dtos
     public int? RentId { get; set; }
     public int XIYears { get; set; }
     public int XIPercent { get; set; }
-    public double XIMoney { get; set; }
+    public decimal XIMoney { get; set; }
     public string RecordDateYear { get; set; }
-    public double PTMoney { get; set; }
+    public decimal PTMoney { get; set; }
     public int PTQat { get; set; }
     public bool IsEternalQat { get; set; }
     public DateTime EmployeeStartDate { get; set; }
@@ -27,7 +27,7 @@ namespace WebApplication1.Dtos
     public string PositionName { get; set; }
     public int RankId { get; set; }
     public string RankName { get; set; }
-    public double PositionSalary { get; set; }
+    public decimal PositionSalary { get; set; }
     public int PositionDepartmentId { get; set; }
     public string PositionDepartmentName { get; set; }
     public DateTime EmployeePositionStartDate { get; set; }
@@ -35,39 +35,39 @@ namespace WebApplication1.Dtos
     public int PositionDepartmentAdminstrationId { get; set; }
     public string FullName { get; set; }
     public DateTime RecordDate { get; set; }
-    public double RankSalary { get; set; }
-    public double AbilityPrice { get; set; }
-    public double Representing { get; set; }
+    public decimal RankSalary { get; set; }
+    public decimal AbilityPrice { get; set; }
+    public decimal Representing { get; set; }
     public int RepresentingPercentage { get; set; }
-    public double Confidentiality { get; set; }
+    public decimal Confidentiality { get; set; }
     public int ConfidentialityPercentage { get; set; }
-    public double CyberSecurity { get; set; }
-    public double Harmfulness { get; set; }
+    public decimal CyberSecurity { get; set; }
+    public decimal Harmfulness { get; set; }
     public int HarmfulnessPercentage { get; set; }
-    public double ForeignLanguagePrice { get; set; }
-    public double ExploretionPrice { get; set; }
-    public double ScientificDegreePrice { get; set; }
-    public double HonorTitlePrice { get; set; }
-    public double ExtraMoney { get; set; }
-    public double ExtraMoney2 { get; set; }
+    public decimal ForeignLanguagePrice { get; set; }
+    public decimal ExploretionPrice { get; set; }
+    public decimal ScientificDegreePrice { get; set; }
+    public decimal HonorTitlePrice { get; set; }
+    public decimal ExtraMoney { get; set; }
+    public decimal ExtraMoney2 { get; set; }
     public string Comment { get; set; }
-    public double TotalIncome { get; set; }
-    public double Tax { get; set; }
-    public double DSMF { get; set; }
-    public double Fails { get; set; }
-    public double AlimonyPercentage { get; set; }
-    public double Alimony { get; set; }
-    public double RentPrice { get; set; }
+    public decimal TotalIncome { get; set; }
+    public decimal Tax { get; set; }
+    public decimal DSMF { get; set; }
+    public decimal Fails { get; set; }
+    public decimal AlimonyPercentage { get; set; }
+    public decimal Alimony { get; set; }
+    public decimal RentPrice { get; set; }
     public int FamilyCount { get; set; }
     public int RentQat { get; set; }
     public string RentName { get; set; }
-    public double HealthInsurance { get; set; }
-    public double Extra211100 { get; set; }
-    public double Food { get; set; }
-    public double TotalDiscount { get; set; }
-    public double DiscountFood { get; set; }
-    public double VacationDSMF { get; set; }
-    public double ExitAidDSMF { get; set; }
+    public decimal HealthInsurance { get; set; }
+    public decimal Extra211100 { get; set; }
+    public decimal Food { get; set; }
+    public decimal TotalDiscount { get; set; }
+    public decimal DiscountFood { get; set; }
+    public decimal VacationDSMF { get; set; }
+    public decimal ExitAidDSMF { get; set; }
     public int DiscountChernobil { get; set; }
     public int DiscountDsmf { get; set; }
     public int DiscountVeteranTaxDiscount { get; set; }
@@ -79,34 +79,34 @@ namespace WebApplication1.Dtos
     public int DiscountTaxPercentage { get; set; }
     public int DiscountHealthInjurance { get; set; }
     public int DiscountQachqin { get; set; }
-    public double Muavin { get; set; }
-    public double DesertPrice { get; set; }
-    public double YukPulu { get; set; }
-    public double KesfXeste { get; set; }
-    public double TripExpense { get; set; }
+    public decimal Muavin { get; set; }
+    public decimal DesertPrice { get; set; }
+    public decimal YukPulu { get; set; }
+    public decimal KesfXeste { get; set; }
+    public decimal TripExpense { get; set; }
     public bool IsMatry { get; set; }
     public bool IsChernobyl { get; set; }
     public bool IsVeteran { get; set; }
     public bool IsDisabled { get; set; }
     public bool IsOwner { get; set; }
     public bool IsRefugee { get; set; }
-    public double FinancialAid { get; set; }
-    public double BusinessTrip { get; set; }
-    public double KesfMezun { get; set; }
-    public double ExitAid { get; set; }
-    public double Vacation { get; set; }
-    public double TotalGiven { get; set; }
-    public double TotalTaken { get; set; }
-    public double TotalDSMF { get; set; }
-    public double TotalSalary { get; set; }
+    public decimal FinancialAid { get; set; }
+    public decimal BusinessTrip { get; set; }
+    public decimal KesfMezun { get; set; }
+    public decimal ExitAid { get; set; }
+    public decimal Vacation { get; set; }
+    public decimal TotalGiven { get; set; }
+    public decimal TotalTaken { get; set; }
+    public decimal TotalDSMF { get; set; }
+    public decimal TotalSalary { get; set; }
     public bool IsNotGiven { get; set; }
     public bool FoodGiven { get; set; }
 
     public bool IsFinancialAidGiven { get; set; }
-    public double FinancialAidDSMF { get; set; }
+    public decimal FinancialAidDSMF { get; set; }
     public bool IsExitAidGiven { get; set; }
-    public double BPM { get; set; }
-    public double BPMDSMF { get; set; }
+    public decimal BPM { get; set; }
+    public decimal BPMDSMF { get; set; }
     public int BPMQat { get; set; }
     public bool IsVacationGiven { get; set; }
     public bool IsBPMGiven { get; set; }

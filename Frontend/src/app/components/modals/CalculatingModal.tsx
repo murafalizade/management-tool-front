@@ -213,9 +213,9 @@ const CalculatingModal = () => {
     // const organization = await OperationService.getOrganization();
     // setOrganizations(organization.data);
 
-    // // Get Positions
-    // const position = await OperationService.getPosition();
-    // setPositions(position);
+    // Get Positions
+    const position = await OperationService.getPosition();
+    setPositions(position);
 
     // Get Abilities
     const abilities = await OperationService.getMeharet();

@@ -38,8 +38,8 @@ namespace WebApplication1.Models
                 }
             }
         }
-        private double _rankSalary = 0;
-        public double RankSalary
+        private decimal _rankSalary = 0;
+        public decimal RankSalary
         {
             get => _rankSalary;
 
@@ -55,8 +55,8 @@ namespace WebApplication1.Models
                 }
             }
         }
-        private double _positionSalary = 0;
-        public double PositionSalary
+        private decimal _positionSalary = 0;
+        public decimal PositionSalary
         {
             set
             {
@@ -129,8 +129,8 @@ namespace WebApplication1.Models
 
             }
         }
-        private double _xIMoney = 0;
-        public double XIMoney
+        private decimal _xIMoney = 0;
+        public decimal XIMoney
         {
             get => _xIMoney;
             
@@ -146,10 +146,10 @@ namespace WebApplication1.Models
                 }
             }
         }
-        private double pTMoney = 0;
+        private decimal pTMoney = 0;
         public int PTQat { get; set; } = 0;
         public bool IsEternalQat { get; set; } = false;
-        public double PTMoney
+        public decimal PTMoney
         {
             get => pTMoney;
             set
@@ -166,8 +166,8 @@ namespace WebApplication1.Models
         }
         public DateTime RecordDate { get; set; } = DateTime.Now;
 
-        private double _abilityPrice = 0;
-        public double AbilityPrice
+        private decimal _abilityPrice = 0;
+        public decimal AbilityPrice
         {
             set
             {
@@ -202,7 +202,7 @@ namespace WebApplication1.Models
             }
         }
         public int RepresentingPercentage { get; set; } = 0;
-        public double Representing
+        public decimal Representing
         {
             get
             {
@@ -210,7 +210,7 @@ namespace WebApplication1.Models
             }
         }
         public int ConfidentialityPercentage { get; set; } = 0;
-        public double Confidentiality
+        public decimal Confidentiality
         {
             get
             {
@@ -218,15 +218,15 @@ namespace WebApplication1.Models
             }
         }
         public int HarmfulnessPercentage { get; set; } = 0;
-        public double Harmfulness
+        public decimal Harmfulness
         {
             get
             {
                 return _positionSalary * HarmfulnessPercentage / 100;
             }
         }
-        private double _foreignLanguagePrice = 0;
-        public double ForeignLanguagePrice
+        private decimal _foreignLanguagePrice = 0;
+        public decimal ForeignLanguagePrice
         {
             set
             {
@@ -245,16 +245,16 @@ namespace WebApplication1.Models
             }
         }
         public int CyberSecurityPercentage { get; set; } = 0;
-        public double CyberSecurity
+        public decimal CyberSecurity
         {
             get
             {
                 return _positionSalary * CyberSecurityPercentage / 100;
             }
         }
-        public double ExploretionPrice { get; set; } = 0;
-        private double _scientificDegreePrice = 0;
-        public double ScientificDegreePrice
+        public decimal ExploretionPrice { get; set; } = 0;
+        private decimal _scientificDegreePrice = 0;
+        public decimal ScientificDegreePrice
         {
             set
             {
@@ -293,8 +293,8 @@ namespace WebApplication1.Models
                 return _scientificDegreePrice;
             }
         }
-        private double _honorTitlePrice = 0;
-        public double HonorTitlePrice
+        private decimal _honorTitlePrice = 0;
+        public decimal HonorTitlePrice
         {
             set
             {
@@ -312,8 +312,8 @@ namespace WebApplication1.Models
                 return _honorTitlePrice;
             }
         }
-        public double ExtraMoney { get; set; } = 0;
-        public double ExtraMoney2 { get; set; } = 0;
+        public decimal ExtraMoney { get; set; } = 0;
+        public decimal ExtraMoney2 { get; set; } = 0;
         public bool IsMatry { get; set; } = false;
         public bool IsChernobyl { get; set; } = false;
         public bool IsVeteran { get; set; } = false;
@@ -321,21 +321,21 @@ namespace WebApplication1.Models
         public bool IsOwner { get; set; } = false;
         public bool IsRefugee { get; set; } = false;
 
-        private double _tax = 0;
+        private decimal _tax = 0;
         public int VeteranQat { get; set; } = 1;
-        public double TotalIncome =>
+        public decimal TotalIncome =>
             XIMoney + pTMoney + _rankSalary + _positionSalary + _abilityPrice + Representing + Confidentiality + Harmfulness +
             _foreignLanguagePrice + CyberSecurity + ExploretionPrice + _scientificDegreePrice + _honorTitlePrice + ExtraMoney +
             ExtraMoney2;
 
-        public double Tax
+        public decimal Tax
         {
             get => _tax;
             set
             {
                 if (value == 0 && Discount != null)
                 {
-                    double amount = _rankSalary + _positionSalary - Discount.MinWage > 0 ? _rankSalary + _positionSalary - Discount.MinWage : 0;
+                    decimal amount = _rankSalary + _positionSalary - Discount.MinWage > 0 ? _rankSalary + _positionSalary - Discount.MinWage : 0;
                     _tax = amount * Discount.TaxPercentage / 100;
                     if (IsVeteran)
                     {
@@ -348,8 +348,8 @@ namespace WebApplication1.Models
                 }
             }
         }
-        private double _dSMF = 0;
-        public double DSMF
+        private decimal _dSMF = 0;
+        public decimal DSMF
         {
             get
             {
@@ -368,8 +368,8 @@ namespace WebApplication1.Models
             }
         }
 
-        private double _healthInsurance = 0;
-        public double HealthInsurance
+        private decimal _healthInsurance = 0;
+        public decimal HealthInsurance
         {
             get
             {
@@ -387,10 +387,10 @@ namespace WebApplication1.Models
                 }
             }
         }
-        public double Fails { get; set; }
-        public double AlimonyPercentage { get; set; }
-        private double _alimony = 0;
-        public double Alimony
+        public decimal Fails { get; set; }
+        public decimal AlimonyPercentage { get; set; }
+        private decimal _alimony = 0;
+        public decimal Alimony
         {
             get
             {
@@ -408,11 +408,11 @@ namespace WebApplication1.Models
                 }
             }
         }
-        public double Extra211100 { get; set; } = 0;
-        public double ExtraGivenMoney { get; set; }
+        public decimal Extra211100 { get; set; } = 0;
+        public decimal ExtraGivenMoney { get; set; }
         public bool FoodGiven { get; set; } = false;
-        private double food = 0;
-        public double Food
+        private decimal food = 0;
+        public decimal Food
         {
             get
             {
@@ -434,8 +434,8 @@ namespace WebApplication1.Models
                 }
             }
         }
-        private double muavin = 0;
-        public double Muavin
+        private decimal muavin = 0;
+        public decimal Muavin
         {
             set
             {
@@ -455,8 +455,8 @@ namespace WebApplication1.Models
             }
         }
         public bool IsVacationGiven { get; set; } = false;
-        double _vacation = 0;
-        public double Vacation
+        decimal _vacation = 0;
+        public decimal Vacation
         {
             get
             {
@@ -478,8 +478,8 @@ namespace WebApplication1.Models
                 }
             }
         }
-        double _vacationDSMF = 0;
-        public double VacationDSMF
+        decimal _vacationDSMF = 0;
+        public decimal VacationDSMF
         {
             get
             {
@@ -497,12 +497,12 @@ namespace WebApplication1.Models
                 }
             }
         }
-        public double KesfMezun { get; set; }
-        public double KesfXeste { get; set; }
-        public int FamilyCount { get; set; } = 0;
-        public int RentQat { get; set; } = 1;
-        private double _rentPrice = 0;
-        public double RentPrice
+        public decimal KesfMezun { get; set; }
+        public decimal KesfXeste { get; set; }
+        public decimal FamilyCount { get; set; } = 0;
+        public decimal RentQat { get; set; } = 1;
+        private decimal _rentPrice = 0;
+        public decimal RentPrice
         {
             get
             {
@@ -512,7 +512,7 @@ namespace WebApplication1.Models
             {
                 if (value == 0 && Rent != null)
                 {
-                    _rentPrice = Rent.Price * RentQat * (1 + FamilyCount * 0.5);
+                    _rentPrice = Rent.Price * RentQat * (1 + (FamilyCount * 0.5m));
                 }
                 else
                 {
@@ -521,8 +521,8 @@ namespace WebApplication1.Models
             }
         }
         public bool IsFinancialAidGiven { get; set; } = false;
-        double _financialAid = 0;
-        public double FinancialAid
+        decimal _financialAid = 0;
+        public decimal FinancialAid
         {
             get
             {
@@ -544,8 +544,8 @@ namespace WebApplication1.Models
                 }
             }
         }
-        double _financialAidDSMF = 0;
-        public double FinancialAidDSMF
+        decimal _financialAidDSMF = 0;
+        public decimal FinancialAidDSMF
         {
             get
             {
@@ -568,9 +568,9 @@ namespace WebApplication1.Models
             }
         }
 
-        public double BusinessTrip { get; set; }
-        private double _desertPrice = 0;
-        public double DesertPrice
+        public decimal BusinessTrip { get; set; }
+        private decimal _desertPrice = 0;
+        public decimal DesertPrice
         {
             set
             {
@@ -588,11 +588,11 @@ namespace WebApplication1.Models
                 return _desertPrice;
             }
         }
-        public double TripExpense { get; set; }
-        public double YukPulu { get; set; }
+        public decimal TripExpense { get; set; }
+        public decimal YukPulu { get; set; }
         public bool IsExitAidGiven { get; set; } = false;
-        double _exitAid = 0;
-        public double ExitAid
+        decimal _exitAid = 0;
+        public decimal ExitAid
         {
             get
             {
@@ -614,8 +614,8 @@ namespace WebApplication1.Models
                 }
             }
         }
-        double _exitAidDSMF = 0;
-        public double ExitAidDSMF
+        decimal _exitAidDSMF = 0;
+        public decimal ExitAidDSMF
         {
             get
             {
@@ -640,9 +640,9 @@ namespace WebApplication1.Models
             }
         }
         public int BPMQat { get; set; } = 1;
-        double _bPM = 0;
+        decimal _bPM = 0;
         public bool IsBPMGiven { get; set; } = false;
-        public double BPM
+        public decimal BPM
         {
             get
             {
@@ -660,8 +660,8 @@ namespace WebApplication1.Models
                 }
             }
         }
-        double _bPMDSMF = 0;
-        public double BPMDSMF
+        decimal _bPMDSMF = 0;
+        public decimal BPMDSMF
         {
             get
             {
@@ -680,11 +680,11 @@ namespace WebApplication1.Models
             }
         }
         // Totals
-        public double TotalDiscount
+        public decimal TotalDiscount
         {
             get
             {
-                double totalDiscount = 0;
+                decimal totalDiscount = 0;
 
                 if (IsMatry)
                 {
@@ -714,28 +714,28 @@ namespace WebApplication1.Models
                 return totalDiscount;
             }
         }
-        public double TotalDSMF
+        public decimal TotalDSMF
         {
             get
             {
                 return VacationDSMF + FinancialAidDSMF + BPMDSMF + ExitAidDSMF;
             }
         }
-        public double TotalTaken
+        public decimal TotalTaken
         {
             get
             {
                 return _tax + DSMF + HealthInsurance + Fails + Alimony + Extra211100 + ExtraGivenMoney;
             }
         }
-        public double TotalGiven
+        public decimal TotalGiven
         {
             get
             {
                 return TotalIncome + TotalDiscount - TotalTaken;
             }
         }
-        public double TotalSalary
+        public decimal TotalSalary
         {
             get
             {
