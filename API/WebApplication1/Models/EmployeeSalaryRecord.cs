@@ -47,7 +47,7 @@ namespace WebApplication1.Models
             {
                 if (value == 0 && Rank != null)
                 {
-                    _rankSalary = 100;
+                    _rankSalary = Rank.Salary;
                 }
                 else
                 {
@@ -288,10 +288,8 @@ namespace WebApplication1.Models
                     _scientificDegreePrice = value;
                 }
             }
-            get
-            {
-                return _scientificDegreePrice;
-            }
+            get => _scientificDegreePrice;
+            
         }
         private decimal _honorTitlePrice = 0;
         public decimal HonorTitlePrice
@@ -307,10 +305,8 @@ namespace WebApplication1.Models
                     _honorTitlePrice = value;
                 }
             }
-            get
-            {
-                return _honorTitlePrice;
-            }
+            get => _honorTitlePrice;
+        
         }
         public decimal ExtraMoney { get; set; } = 0;
         public decimal ExtraMoney2 { get; set; } = 0;
