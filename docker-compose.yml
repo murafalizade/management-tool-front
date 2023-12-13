@@ -1,21 +1,22 @@
 version: '3.8'
 
 services:
-  aspnet-app:
-    image: your-aspnet-app
-    ports:
-      - "80:80"
-    depends_on:
-      - mssql-server
-
-  mssql-server:
-    image: your-mssql-server
+  sql-server:
+    build:
+      context: ./Database/Dockerfile
     ports:
       - "1433:1433"
 
-  react-app:
-    image: your-react-app
+  dotnet-core:
+    build:
+      context: ./API/Dockerfile
     ports:
-      - "3000:3000"
+      - "5000:5000"  # Adjust the port based on your ASP.NET Core app configuration
     depends_on:
-      - aspnet-app
+      - sql-server
+
+  react-app:
+    build:
+      context: ./Frontend/Dockerfile
+    ports:
+      - "3000:3000"  # Adjust the port based on your React.js app configuration

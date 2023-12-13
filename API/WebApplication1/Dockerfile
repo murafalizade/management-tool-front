@@ -1,14 +1,18 @@
-# Use the official ASP.NET Core image
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+# Use the official .NET SDK image
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 
-# Set the working directory
 WORKDIR /app
 
-# Copy the published output of the ASP.NET Core app to the container
-COPY bin/Release/netcoreapp3.1/publish/ .
+# Copy csproj and restore as distinct layers
+COPY *.csproj ./
+RUN dotnet restore
 
-# Expose the port that the app will run on
-EXPOSE 80
+# Copy everything else and build
+COPY . ./
+RUN dotnet publish -c Release -o out
 
-# Start the ASP.NET Core app
-ENTRYPOINT ["dotnet", "YourAspNetApp.dll"]
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:5.0
+WORKDIR /app
+COPY --from=build /app/out .
+ENTRYPOINT ["dotnet", "WebApplication1.dll"]

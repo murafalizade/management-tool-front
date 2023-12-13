@@ -17,8 +17,8 @@ import Toastify from "../../utility/Toastify";
 export default function Departments() {
   const [organization, setOrganization] = useState<any[]>([]);
   const [newEdit, setNewEdit] = useState<boolean>(false);
-  const [choosenOrganization, setChoosenOrganizetion] = useState<any>(null);
-  const [choosenDepartment, setChoosenDepartment] = useState<any>(null);
+  const [chosenOrganization, setChosenOrganization] = useState<any>(null);
+  const [chosenDepartment, setChosenDepartment] = useState<any>(null);
   const [isChanged, setIsChanged] = useState<boolean>(true)
 
   const toast = new Toastify();
@@ -57,9 +57,9 @@ export default function Departments() {
       }, "Yadda saxlamaq istəyirsinizmi?");
     }
     const res = await OperationService.getAdminstrationById(id);
-    setChoosenOrganizetion(res);
+    setChosenOrganization(res);
     dispatch(setPositions([]));
-    setChoosenDepartment(null);
+    setChosenDepartment(null);
     dispatch(setDepartment(res.departments));
   };
 
@@ -68,7 +68,7 @@ export default function Departments() {
     try {
       const res = await OperationService.getOrganizationById(id);
       const org = res.data;
-      setChoosenDepartment(org);
+      setChosenDepartment(org);
       dispatch(setPositions(org.positions));
     } catch (err) {
       toast.error("Bölmə seçilmədi");
@@ -77,14 +77,14 @@ export default function Departments() {
 
   // bolme elave etmek ucun
   const addDepartments = () => {
-    if (!choosenOrganization) {
+    if (!chosenOrganization) {
       toast.info("Zəhmət olmasa ilk öncə idarəni seçin");
       return;
     }
     const newDepartment = {
       id: -(Math.abs(departmentsData.length) + 1),
       name: "",
-      adminstrationId: choosenOrganization.id,
+      adminstrationId: chosenOrganization.id,
     };
     dispatch(addDepartment(newDepartment));
     setNewEdit(true);
@@ -167,11 +167,11 @@ export default function Departments() {
 
   // vezife elave etmek ucun
   const addPositions = () => {
-    if (!choosenDepartment) {
+    if (!chosenDepartment) {
       toast.info("Zəhmət olmasa ilk öncə şöbə və bölmə seçin");
       return;
     }
-    if (choosenDepartment.id < 0) {
+    if (chosenDepartment.id < 0) {
       toast.info("Zəhmət olmasa ilk öncə secdiyiniz şöbə və bölməni yadda saxlayin");
       return;
     }
@@ -179,7 +179,7 @@ export default function Departments() {
       id: -(Math.abs(positionsData.length) + 1),
       name: "",
       salary: 0,
-      departmentId: choosenDepartment.id,
+      departmentId: chosenDepartment.id,
     };
     dispatch(addPosition(newPosition));
     setNewEdit(true);

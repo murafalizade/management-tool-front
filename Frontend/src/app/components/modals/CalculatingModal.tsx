@@ -447,7 +447,7 @@ const CalculatingModal = () => {
                   <li className="list-group-item mt-3 d-flex align-items-center">
                     Vəzifə:
                     <select
-                      className="form-control w-50 ms-3"
+                      className={"form-control w-50 ms-3"}
                       value={info.positionId}
                       name="position"
                       onChange={handleSelectInput}
